@@ -1,0 +1,9 @@
+# VSCodium settings
+/.vscode
+
+# Build files
+/build
+
+# RenPy bytecode
+*.rpyc
+*.rpymc
