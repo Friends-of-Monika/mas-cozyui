@@ -1,0 +1,25 @@
+{
+    "name": "Default",
+    "id": "default",
+    "button_rounding": 3,
+    "frame_rounding": 3,
+    "dialogue_rounding": 10,
+    "menu_pattern_shape": "dot",
+    "dialogue_pattern_shape": "dot",
+    "main_font":
+    {
+        "regular": "%SUBMOD_DIR%/fonts/Nunito-SemiBold.ttf",
+        "italic": "%SUBMOD_DIR%/fonts/Nunito-SemiBoldItalic.ttf",
+        "bold": "%SUBMOD_DIR%/fonts/Nunito-Bold.ttf",
+        "bold_italic": "%SUBMOD_DIR%/fonts/Nunito-BoldItalic.ttf"
+    },
+    "menu_font": "gui/font/RifficFree-Bold.ttf",
+    "option_font": "gui/font/Halogen.ttf",
+    "main_font_kerning": 0.0,
+    "dialogue_vertical_offset": -3,
+    "dialogue_line_spacing": -1,
+    "button_height_adjustment": -4,
+    "button_text_vertical_offset": 1,
+    "primary_color": { "h": null, "s": null, "l": null },
+    "secondary_color": { "h": null, "s": null, "l": null }
+}

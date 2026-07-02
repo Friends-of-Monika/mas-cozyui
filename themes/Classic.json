@@ -1,0 +1,25 @@
+{
+    "name": "Classic",
+    "id": "classic",
+    "button_rounding": 0,
+    "frame_rounding": 0,
+    "dialogue_rounding": 12,
+    "menu_pattern_shape": "dot",
+    "dialogue_pattern_shape": "dot",
+    "main_font":
+    {
+        "regular": "%SUBMOD_DIR%/fonts/Asap-Medium.ttf",
+        "italic": "%SUBMOD_DIR%/fonts/Asap-MediumItalic.ttf",
+        "bold": "%SUBMOD_DIR%/fonts/Asap-Bold.ttf",
+        "bold_italic": "%SUBMOD_DIR%/fonts/Asap-BoldItalic.ttf"
+    },
+    "menu_font": "gui/font/RifficFree-Bold.ttf",
+    "option_font": "gui/font/Halogen.ttf",
+    "main_font_kerning": 0.0,
+    "dialogue_vertical_offset": -1,
+    "dialogue_line_spacing": 2,
+    "button_height_adjustment": 1,
+    "button_text_vertical_offset": 0,
+    "primary_color": { "h": null, "s": null, "l": null },
+    "secondary_color": { "h": null, "s": null, "l": null }
+}

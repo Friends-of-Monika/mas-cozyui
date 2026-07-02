@@ -1,0 +1,23 @@
+<!--============================================================================
+=
+= Copyright (c) 2020–2021 Dominus Iniquitatis <zerosaiko@gmail.com>
+=
+= See LICENSE file for the licensing information
+=
+=============================================================================-->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="278" height="355">
+    <defs>
+        <filter id="pencil" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feTurbulence baseFrequency="0.008" numOctaves="3" result="turbulenceCoarse" />
+            <feTurbulence baseFrequency="0.8" numOctaves="6" result="turbulenceFine" />
+            <feDisplacementMap in="SourceGraphic" in2="turbulenceCoarse" result="displaceCoarse" scale="4.0" xChannelSelector="R" yChannelSelector="A" />
+            <feDisplacementMap in="displaceCoarse" in2="turbulenceFine" result="displaceFine" scale="1.5" xChannelSelector="R" yChannelSelector="A" />
+        </filter>
+    </defs>
+    <g fill="none" filter="url(#pencil)" stroke="rgb(80, 80, 80)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+        <path d="M 39 60 L 39 30 L 160 30 L 160 322 M 70 322 L 254 322" />
+        <circle cx="39" cy="91" r="31" />
+        <path d="M 39 123 L 39 212" />
+        <path d="M 39 139 L 5 174 M 39 139 L 71 175 M 39 212 L 5 280" />
+    </g>
+</svg>

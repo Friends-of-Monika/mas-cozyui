@@ -104,6 +104,23 @@ Copy-Item -Recurse "$Dir\$ProjectModDir" "$Mod"
 if (Test-Path -Path "$Dir\$ProjectLibDir") {
     Copy-Item -Recurse "$Dir\$ProjectLibDir" "$Mod" }
 
+# Remove theme templates (build-time input for scripts/build-themes.py,
+# never shipped raw; built theme archives are copied below instead)
+Remove-Item -Force -Recurse "$Mod\theme"
+
+# Copy shipped fonts
+Copy-Item -Recurse "$Dir\fonts" "$Mod\fonts"
+
+# Copy built theme archives (produced by scripts/build-themes.py)
+$ThemesDir = "$Dir\$ProjectBuildDir\themes"
+if (Test-Path -Path "$ThemesDir") {
+    New-Item -ItemType Directory -Force -Path "$Mod\themes" > $null
+    Copy-Item "$ThemesDir\*.zip" "$Mod\themes"
+} else {
+    Write-Warning "No built theme archives in $ProjectBuildDir\themes;"
+    Write-Warning "run scripts/build-themes.py first. Packaging without themes."
+}
+
 # Remove .gitkeep and README.md
 Get-ChildItem -Path $Temp -Recurse -Include ".gitkeep", "README.md" `
     | Remove-Item -Force

@@ -1,0 +1,25 @@
+{
+    "name": "Chocolate",
+    "id": "chocolate",
+    "button_rounding": 2,
+    "frame_rounding": 2,
+    "dialogue_rounding": 6,
+    "menu_pattern_shape": "rhombus",
+    "dialogue_pattern_shape": "rhombus",
+    "main_font":
+    {
+        "regular": "%SUBMOD_DIR%/fonts/Asap-Medium.ttf",
+        "italic": "%SUBMOD_DIR%/fonts/Asap-MediumItalic.ttf",
+        "bold": "%SUBMOD_DIR%/fonts/Asap-Bold.ttf",
+        "bold_italic": "%SUBMOD_DIR%/fonts/Asap-BoldItalic.ttf"
+    },
+    "menu_font": "gui/font/RifficFree-Bold.ttf",
+    "option_font": "gui/font/Halogen.ttf",
+    "main_font_kerning": 0.0,
+    "dialogue_vertical_offset": -1,
+    "dialogue_line_spacing": 2,
+    "button_height_adjustment": 1,
+    "button_text_vertical_offset": 0,
+    "primary_color": { "h": 24, "s": 0.35, "l": 0.0 },
+    "secondary_color": { "h": 24, "s": 0.4, "l": -0.04 }
+}

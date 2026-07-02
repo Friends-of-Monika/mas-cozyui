@@ -7,3 +7,6 @@
 # RenPy bytecode
 *.rpyc
 *.rpymc
+
+# Python bytecode
+__pycache__
