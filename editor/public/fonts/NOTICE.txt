@@ -1,0 +1,10 @@
+Fonts bundled for the theme preview, each under its own license:
+
+Nunito  - (c) 2014 The Nunito Project Authors   - SIL OFL 1.1 (see OFL.txt)
+Asap    - (c) 2018 The Asap Project Authors     - SIL OFL 1.1 (see OFL.txt)
+Riffic  - (c) 2016 Inkyotter Design             - free (personal + commercial)
+Halogen - JLH Fonts                             - public domain
+Aller   - (c) 2008 Dalton Maag Ltd              - Aller free license
+
+Riffic, Halogen and Aller are Doki Doki Literature Club base-game fonts,
+bundled here only for the preview.

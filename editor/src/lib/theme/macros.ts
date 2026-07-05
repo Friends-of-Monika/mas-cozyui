@@ -1,0 +1,88 @@
+import { type ColorModulation, modulate } from "#lib/preview/colors";
+
+/**
+ * Values fed to the CUI_* template macros, mirroring the fields of the theme
+ * definition JSONs. This is the browser port of the substitution done by
+ * scripts/build-themes.py (preprocess_text_file): CUI_PRM_COLOR / CUI_SCD_COLOR
+ * modulate a base RGB through the primary/secondary color, the rest are plain
+ * scalar substitutions.
+ */
+export interface MacroParams {
+	primary: ColorModulation;
+	secondary: ColorModulation;
+	buttonRounding: number;
+	frameRounding: number;
+	dialogueRounding: number;
+	menuPatternShape: string;
+	dialoguePatternShape: string;
+	// Font/offset macros (only needed when processing .rpy for export)
+	mainFontRegular?: string;
+	mainFontItalic?: string;
+	mainFontBold?: string;
+	mainFontBoldItalic?: string;
+	mainFontName?: string;
+	mainFontKerning?: number;
+	menuFont?: string;
+	optionFont?: string;
+	dialogueVerticalOffset?: number;
+	dialogueLineSpacing?: number;
+	buttonHeightAdjustment?: number;
+	buttonTextVerticalOffset?: number;
+	themeId?: string;
+	themeName?: string;
+	scale?: number;
+}
+
+/**
+ * 9-slice border for the button backgrounds. Must be >= the rounding so the
+ * stretched middle stays within the flat edge region (otherwise a curved strip
+ * gets stretched and the corners warp). Clamped to the 35px source, and kept
+ * >= 5 to preserve the original look at small roundings.
+ */
+export function buttonSlice(rounding: number): number {
+	return Math.min(Math.max(rounding + 1, 5), 16);
+}
+
+function colorMacro(argStr: string, mod: ColorModulation): string {
+	const parts = argStr.split(",").map((s) => parseInt(s.trim(), 10));
+	const [r, g, b, a] = parts;
+	return modulate(r, g, b, mod, parts.length === 4 ? a : undefined);
+}
+
+/** Applies the CUI_* macros in a template string, returning the final text. */
+export function applyMacros(text: string, p: MacroParams): string {
+	text = text.replace(/CUI_PRM_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p.primary));
+	text = text.replace(/CUI_SCD_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p.secondary));
+
+	const scale = p.scale ?? 1;
+	const scalars: Record<string, string | number | undefined> = {
+		"CUI_BTN_ROUNDING()": p.buttonRounding,
+		"CUI_BTN_SLICE()": buttonSlice(p.buttonRounding),
+		"CUI_FRM_ROUNDING()": p.frameRounding,
+		"CUI_DLG_ROUNDING()": p.dialogueRounding,
+		"CUI_MNU_PTSHAPE()": p.menuPatternShape,
+		"CUI_DLG_PTSHAPE()": p.dialoguePatternShape,
+		"CUI_SCALE()": scale,
+		"CUI_SCALE_INV()": 1 / scale,
+		"CUI_MAIN_FONT_REGULAR()": p.mainFontRegular,
+		"CUI_MAIN_FONT_ITALIC()": p.mainFontItalic,
+		"CUI_MAIN_FONT_BOLD()": p.mainFontBold,
+		"CUI_MAIN_FONT_BOLD_ITALIC()": p.mainFontBoldItalic,
+		"CUI_MAIN_FONT_NAME()": p.mainFontName,
+		"CUI_MAIN_FONT_KERNING()": p.mainFontKerning,
+		"CUI_MENU_FONT()": p.menuFont,
+		"CUI_OPTION_FONT()": p.optionFont,
+		"CUI_DLG_VERT_OFFSET()": p.dialogueVerticalOffset,
+		"CUI_DLG_LINE_SPACING()": p.dialogueLineSpacing,
+		"CUI_BTN_HEIGHT_ADJUSTMENT()": p.buttonHeightAdjustment,
+		"CUI_BTN_TEXT_VERT_OFFSET()": p.buttonTextVerticalOffset,
+		"CUI_THEME_ID()": p.themeId,
+		"CUI_THEME_NAME()": p.themeName
+	};
+
+	for (const [macro, value] of Object.entries(scalars)) {
+		if (value === undefined) continue;
+		text = text.split(macro).join(String(value));
+	}
+	return text;
+}

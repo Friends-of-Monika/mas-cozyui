@@ -2,6 +2,7 @@ init -990 python:
     store.mas_submod_utils.Submod(
         author="Friends of Monika",
         coauthors=["Dominus Iniquitatis"],
+# Copyright (c) 2026 Friends of Monika
         name="CozyUI",
         description=_("Smooth and customizable UI add-on, overhauled."),
         version="3.0.0",

@@ -169,6 +169,10 @@ def preprocess_text_file(in_path, out_path, theme, scale):
         "CUI_THEME_ID":              stringize(("%s" if scale == 1 else "%s_hidpi") % theme["id"]),
         "CUI_THEME_NAME":            stringize(("%s" if scale == 1 else "%s (HiDPI)") % theme["name"]),
         "CUI_BTN_ROUNDING":          stringize(theme["button_rounding"]),
+        # Frame slice for 9-sliced button backgrounds: must be >= the rounding
+        # so the stretched middle stays in the flat edge region (clean corners),
+        # capped by the 35px source. Kept >= 5 to match the original look.
+        "CUI_BTN_SLICE":             stringize(min(max(int(theme["button_rounding"]) + 1, 5), 16)),
         "CUI_FRM_ROUNDING":          stringize(theme["frame_rounding"]),
         "CUI_DLG_ROUNDING":          stringize(theme["dialogue_rounding"]),
         "CUI_MNU_PTSHAPE":           stringize(theme["menu_pattern_shape"]),

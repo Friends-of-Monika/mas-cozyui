@@ -1,6 +1,7 @@
 ################################################################################
 #
 # Copyright (c) 2020-2021 Dominus Iniquitatis <zerosaiko@gmail.com>
+# Copyright (c) 2026 Friends of Monika
 #
 # See LICENSE file for the licensing information
 #
@@ -57,8 +58,8 @@ init 999 style generic_fancy_check_button:
     ysize               36
     foreground          Transform("mod_assets/buttons/checkbox/[prefix_]fancy_check.png", yalign = 0.5)
     idle_background     Null()
-    hover_background    Frame("mod_assets/buttons/checkbox/fancy_check_bg.png", Borders(5, 5, 5, 5))
-    selected_background Frame("mod_assets/buttons/checkbox/fancy_check_bg.png", Borders(5, 5, 5, 5))
+    hover_background    Frame("mod_assets/buttons/checkbox/fancy_check_bg.png", Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
+    selected_background Frame("mod_assets/buttons/checkbox/fancy_check_bg.png", Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style generic_fancy_check_button_dark:
     ysize               36
@@ -304,11 +305,11 @@ init 999 style confirm_prompt_text_dark:
 ################################################################################
 init 999 style choice_button:
     xpadding   25
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style choice_button_dark:
     xpadding   25
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style choice_button_text:
     idle_color        cozy_ui.button_text.light.idle_color
@@ -330,10 +331,10 @@ init 999 style choice_button_text_dark:
 # Scrollable menu
 ################################################################################
 init 999 style scrollable_menu_button:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style scrollable_menu_button_dark:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style scrollable_menu_button_text:
     idle_color        cozy_ui.button_text.light.idle_color
@@ -355,10 +356,10 @@ init 999 style scrollable_menu_button_text_dark:
 # Two-pane scrollable menu
 ################################################################################
 init 999 style twopane_scrollable_menu_button:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style twopane_scrollable_menu_button_dark:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style twopane_scrollable_menu_button_text:
     idle_color        cozy_ui.button_text.light.idle_color
@@ -380,10 +381,10 @@ init 999 style twopane_scrollable_menu_button_text_dark:
 # Talk choice menu
 ################################################################################
 init 999 style talk_choice_button:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style talk_choice_button_dark:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style talk_choice_button_text:
     idle_color        cozy_ui.button_text.light.idle_color
@@ -405,10 +406,10 @@ init 999 style talk_choice_button_text_dark:
 # Hotkey button menu
 ################################################################################
 init 999 style hkb_button:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style hkb_button_dark:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style hkb_button_text:
     align             (0.5, 0.5)
@@ -434,10 +435,10 @@ init 999 style hkb_button_text_dark:
 # Island buttons
 ################################################################################
 init 999 style island_button:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style island_button_dark:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style island_button_text:
     align             (0.5, 0.5)
@@ -488,10 +489,10 @@ init 999 style mas_adjust_vbar_dark:
     bar_vertical True
 
 init 999 style mas_adjustable_button:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_lt.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style mas_adjustable_button_dark:
-    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(5, 5, 5, 5))
+    background Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/button/[prefix_]bg_dk.png"), Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()))
 
 init 999 style mas_adjustable_button_text:
     align             (0.5, 0.5)
@@ -524,3 +525,17 @@ init 999 image input_caret:
         linear 0.35 alpha 0
         linear 0.35 alpha 1
         repeat
+
+
+
+################################################################################
+# Generic buttons (hotkey buttons)
+################################################################################
+# MAS defines generic_button with a fixed Borders(5, 5, 5, 5), which distorts
+# the corners once the rounding exceeds the slice. Re-declare the background so
+# the slice tracks the rounding (CUI_BTN_SLICE), giving clean rounded corners.
+init 999 style generic_button_light:
+    background Frame("mod_assets/buttons/generic/[prefix_]bg.png", Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()), tile=False)
+
+init 999 style generic_button_dark:
+    background Frame("mod_assets/buttons/generic/[prefix_]bg_d.png", Borders(CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE(), CUI_BTN_SLICE()), tile=False)
