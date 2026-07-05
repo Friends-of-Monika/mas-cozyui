@@ -3,9 +3,11 @@ import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [svelte(), tailwindcss()],
+	plugins: [svelte(), tailwindcss(), cloudflare()],
 	resolve: {
 		alias: {
 			// Repo-root theme sources (templates + definitions), which live
