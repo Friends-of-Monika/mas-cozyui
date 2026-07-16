@@ -1,9 +1,8 @@
+import { cloudflare } from "@cloudflare/vite-plugin";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
-
-import { cloudflare } from "@cloudflare/vite-plugin";
 
 // https://vite.dev/config/
 export default defineConfig({

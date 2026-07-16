@@ -25,7 +25,7 @@
 	"importOrderSortSpecifiers": true,
 	"overrides": [
 		{
-			"files": "**/*.{yml,json}",
+			"files": "**/*.{yml,json,jsonc}",
 			"options": {
 				"printWidth": 80,
 				"useTabs": false,

@@ -159,7 +159,9 @@
 						<Menu.Positioner>
 							<Menu.Content class={contentClass}>
 								{#each customFonts as font (font.family)}
-									<Menu.Item value="remove-font:{font.family}" class={itemClass}>{font.family}</Menu.Item>
+									<Menu.Item value="remove-font:{font.family}" class={itemClass}>
+										{font.family}
+									</Menu.Item>
 								{/each}
 							</Menu.Content>
 						</Menu.Positioner>

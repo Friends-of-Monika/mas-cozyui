@@ -38,11 +38,7 @@
 	<img src={skyMask} alt="" class="absolute inset-0" width={STAGE_W} height={STAGE_H} />
 	<img src={room} alt="" class="absolute inset-0" width={STAGE_W} height={STAGE_H} />
 
-	<div
-		class="absolute left-0 flex w-full flex-col items-center"
-		style:top="{TOP}px"
-		style:gap="{SPACING}px"
-	>
+	<div class="absolute left-0 flex w-full flex-col items-center" style:top="{TOP}px" style:gap="{SPACING}px">
 		{#each items as item (item)}
 			<div
 				class="relative"
