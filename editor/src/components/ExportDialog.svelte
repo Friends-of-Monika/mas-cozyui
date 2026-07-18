@@ -34,8 +34,8 @@
 
 <Dialog {open} {onOpenChange} modal closeOnEscape={false} closeOnInteractOutside={false} role="alertdialog">
 	<Portal>
-		<Dialog.Backdrop class="dialog-backdrop fixed inset-0 z-[100] bg-black/50" />
-		<Dialog.Positioner class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+		<Dialog.Backdrop class="dialog-backdrop fixed inset-0 z-100 bg-black/50" />
+		<Dialog.Positioner class="fixed inset-0 z-100 flex items-center justify-center p-4">
 			<Dialog.Content class="dialog-content card bg-surface-100-900 flex w-96 flex-col gap-3 p-6 shadow-xl">
 				<Dialog.Title class="h4">Exporting theme package</Dialog.Title>
 
