@@ -13,11 +13,15 @@
 	import { ui } from "#lib/preview/ui.svelte";
 </script>
 
-<main class="container mx-auto flex flex-col gap-4 p-8">
+<main class="container mx-auto flex h-screen flex-col gap-4 overflow-hidden p-8">
 	<h1 class="h1">{APP_NAME}</h1>
 	<AppMenu />
-	<div class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_20rem]">
-		<Tabs value={ui.tab} onValueChange={(details: { value: string }) => (ui.tab = details.value)} class="min-w-0">
+	<div class="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[1fr_20rem]">
+		<Tabs
+			value={ui.tab}
+			onValueChange={(details: { value: string }) => (ui.tab = details.value)}
+			class="flex min-h-0 min-w-0 flex-col overflow-y-auto"
+		>
 			<div class="border-surface-200-800 mb-4 flex items-end justify-between border-b">
 				<Tabs.List class="relative flex gap-1">
 					{#each [{ value: "scene", label: "Scene" }, { value: "settings", label: "Settings" }, { value: "menu", label: "Menu" }, { value: "modal", label: "Modal" }] as t (t.value)}
@@ -60,7 +64,7 @@
 			</Tabs.Content>
 			<p class="mt-2 text-xs opacity-60">Preview is rendered in the browser and might not be 100% accurate.</p>
 		</Tabs>
-		<aside class="card preset-filled-surface-100-900 h-fit p-4">
+		<aside class="card preset-filled-surface-100-900 min-h-0 overflow-y-auto p-4">
 			<ThemeControls />
 		</aside>
 	</div>

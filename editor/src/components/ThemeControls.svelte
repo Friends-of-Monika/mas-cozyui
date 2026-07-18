@@ -91,6 +91,11 @@
 			<input class="input" type="number" min="0" max="16" bind:value={theme.buttonRounding} />
 		</label>
 		<label class="label">
+			<span>Frame rounding</span>
+			<input class="input" type="number" min="0" max="16" bind:value={theme.frameRounding} />
+			<span class="text-xs opacity-60">Confirm/modal windows</span>
+		</label>
+		<label class="label">
 			<span>Dialogue rounding</span>
 			<input class="input" type="number" min="0" max="36" bind:value={theme.dialogueRounding} />
 		</label>
