@@ -113,6 +113,42 @@ init 999 style mas_selector_sidebar_vbar_dark:
     bar_vertical True
     bar_invert   True
 
+# Generic bars/sliders (Ren'Py base styles). MAS points these at the poem/pencil
+# bar; override the base with the themed straight line + themed thumb so every
+# plain bar/slider matches (specific styles like the ones above set their own
+# base_bar and are unaffected).
+init 999 style bar:
+    ysize    18
+    base_bar Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/scrollbar/horizontal_bar_lt.png"), Borders(4, 4, 4, 4))
+    thumb    cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/slider/horizontal_[prefix_]thumb_lt.png")
+
+init 999 style bar_dark:
+    ysize    18
+    base_bar Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/scrollbar/horizontal_bar_dk.png"), Borders(4, 4, 4, 4))
+    thumb    cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/slider/horizontal_[prefix_]thumb_dk.png")
+
+init 999 style vbar:
+    xsize        18
+    base_bar     Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/scrollbar/vertical_bar_lt.png"), Borders(4, 4, 4, 4))
+    thumb        cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/slider/vertical_[prefix_]thumb_lt.png")
+    bar_vertical True
+
+init 999 style vbar_dark:
+    xsize        18
+    base_bar     Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/scrollbar/vertical_bar_dk.png"), Borders(4, 4, 4, 4))
+    thumb        cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/slider/vertical_[prefix_]thumb_dk.png")
+    bar_vertical True
+
+init 999 style slider:
+    ysize    18
+    base_bar Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/scrollbar/horizontal_bar_lt.png"), Borders(4, 4, 4, 4))
+    thumb    cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/slider/horizontal_[prefix_]thumb_lt.png")
+
+init 999 style slider_dark:
+    ysize    18
+    base_bar Frame(cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/scrollbar/horizontal_bar_dk.png"), Borders(4, 4, 4, 4))
+    thumb    cozy_ui.expand_path("%SUBMOD_DIR%/themes/active/slider/horizontal_[prefix_]thumb_dk.png")
+
 
 
 ################################################################################
