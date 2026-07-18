@@ -8,13 +8,12 @@
 
 	import { Switch, Tabs } from "@skeletonlabs/skeleton-svelte";
 
-	import { APP_NAME } from "#lib/constants";
 	import { theme } from "#lib/preview/theme.svelte";
 	import { ui } from "#lib/preview/ui.svelte";
 </script>
 
 <main class="container mx-auto flex h-screen flex-col gap-4 overflow-hidden p-8">
-	<h1 class="h1">{APP_NAME}</h1>
+	<h1 class="h1">CozyUI Theme Editor</h1>
 	<AppMenu />
 	<div class="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[1fr_20rem]">
 		<Tabs
