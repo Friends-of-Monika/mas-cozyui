@@ -76,6 +76,10 @@ screen cozy_ui_settings_pane():
 
                         textbutton _("HiDPI"):
                             style "check_button"
+                            # Reflect the variant actually used; only toggleable
+                            # when the theme ships both base and HiDPI variants.
+                            selected cozy_ui.theme_mgr.use_hidpi_effective()
+                            sensitive cozy_ui.theme_mgr.current_has_base() and cozy_ui.theme_mgr.current_has_hidpi()
                             action ToggleDict(cozy_ui.theme_mgr.settings, "use_hidpi")
 
                     null height 10

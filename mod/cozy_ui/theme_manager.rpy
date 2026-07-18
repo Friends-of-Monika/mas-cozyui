@@ -55,6 +55,20 @@ init -10 python in cozy_ui:
         def get_theme_count(self):
             return len(self._themes)
 
+        def current_has_base(self):
+            return self.get_current_theme()["path"] is not None
+
+        def current_has_hidpi(self):
+            return self.get_current_theme()["hidpi_path"] is not None
+
+        # Which variant actually gets installed for the current theme: HiDPI when
+        # the user wants it and it exists, or when there is no base variant.
+        def use_hidpi_effective(self):
+            theme = self.get_current_theme()
+            if self.settings["use_hidpi"] and theme["hidpi_path"] is not None:
+                return True
+            return theme["path"] is None
+
         def install(self):
             self._remove_current_theme()
             self._install_theme(self.get_current_theme())
@@ -75,14 +89,28 @@ init -10 python in cozy_ui:
             log_func("[CozyUI] %s" % str(msg))
 
         def _fetch_themes(self):
+            # Group the .zip files by theme id, tracking each variant separately.
+            # A theme may ship only a base variant, only a _hidpi one, or both.
+            variants = {}
             for file_path in os.listdir(_themes_dir):
                 file_name, file_ext = os.path.splitext(file_path)
 
-                if file_ext == ".zip" and not file_name.endswith("_hidpi"):
-                    theme_path = os.path.join(_themes_dir, file_path)
-                    hidpi_path = os.path.join(_themes_dir, "%s_hidpi.zip" % file_name)
-                    theme_info = self._get_theme_info(theme_path, hidpi_path)
-                    self._themes.append(theme_info)
+                if file_ext != ".zip":
+                    continue
+
+                full_path = os.path.join(_themes_dir, file_path)
+
+                if file_name.endswith("_hidpi"):
+                    theme_id = file_name[:-len("_hidpi")]
+                    variants.setdefault(theme_id, {"path": None, "hidpi_path": None})["hidpi_path"] = full_path
+                else:
+                    variants.setdefault(file_name, {"path": None, "hidpi_path": None})["path"] = full_path
+
+            for paths in variants.values():
+                # Read the metadata/preview from whichever variant is present.
+                info_source = paths["path"] or paths["hidpi_path"]
+                theme_info = self._get_theme_info(info_source, paths["path"], paths["hidpi_path"])
+                self._themes.append(theme_info)
 
             # FIXME: there should be a better way to put the Default theme above the others
             def comparator(x):
@@ -97,13 +125,13 @@ init -10 python in cozy_ui:
 
             self._themes.sort(key = comparator)
 
-        def _get_theme_info(self, file_path, hidpi_path):
+        def _get_theme_info(self, info_source, path, hidpi_path):
             result = {
-                "path": file_path,
+                "path": path,
                 "hidpi_path": hidpi_path
             }
 
-            with ZipFile(file_path, "r") as theme_arc:
+            with ZipFile(info_source, "r") as theme_arc:
                 with theme_arc.open("info.json", "r") as info_json:
                     result.update(json.load(info_json))
 
@@ -133,7 +161,12 @@ init -10 python in cozy_ui:
             if not self.settings["use_layout"]:
                 ignored_files.append("layout.rpy")
 
-            theme_path = theme["path"] if not self.settings["use_hidpi"] else theme["hidpi_path"]
+            # Prefer HiDPI when requested and available; otherwise fall back to
+            # whichever variant this theme actually ships.
+            if self.settings["use_hidpi"] and theme["hidpi_path"] is not None:
+                theme_path = theme["hidpi_path"]
+            else:
+                theme_path = theme["path"] or theme["hidpi_path"]
 
             with ZipFile(theme_path, "r") as theme_arc:
                 for file_path in theme_arc.namelist():
