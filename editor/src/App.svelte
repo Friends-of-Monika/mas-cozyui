@@ -23,7 +23,7 @@
 		>
 			<div class="border-surface-200-800 mb-4 flex items-end justify-between border-b">
 				<Tabs.List class="relative flex gap-1">
-					{#each [{ value: "scene", label: "Scene" }, { value: "settings", label: "Settings" }, { value: "menu", label: "Menu" }, { value: "modal", label: "Modal" }] as t (t.value)}
+					{#each [{ value: "scene", label: "Talk" }, { value: "settings", label: "Settings" }, { value: "menu", label: "Menu" }, { value: "modal", label: "Modal" }] as t (t.value)}
 						<Tabs.Trigger
 							value={t.value}
 							class="data-[state=active]:text-primary-500 cursor-pointer px-4 py-2 font-semibold opacity-60 transition-opacity hover:opacity-100 data-[state=active]:opacity-100"
