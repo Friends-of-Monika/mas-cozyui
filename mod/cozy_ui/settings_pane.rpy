@@ -91,12 +91,12 @@ screen cozy_ui_settings_pane():
                         $ apply_glitched = renpy.random.random() < glitch_chance
                         $ apply_name = _("Apply") if not apply_glitched else glitchtext(10)
                         $ apply_width = 100 if not apply_glitched else 150
-                        $ apply_action = Show(screen = "dialog", message = "The game will be restarted.", ok_action = Jump("cozy_ui_apply"))
+                        $ apply_action = Show(screen = "dialog", message = _("Please restart the game."), ok_action = Jump("cozy_ui_apply"))
 
                         $ disable_glitched = renpy.random.random() < glitch_chance
                         $ disable_name = _("Disable") if not disable_glitched else glitchtext(10)
                         $ disable_width = 100 if not disable_glitched else 150
-                        $ disable_action = Show(screen = "dialog", message = "The game will be restarted.", ok_action = Jump("cozy_ui_disable"))
+                        $ disable_action = Show(screen = "dialog", message = _("Please restart the game."), ok_action = Jump("cozy_ui_disable"))
 
                         textbutton apply_name:
                             style "navigation_button"
