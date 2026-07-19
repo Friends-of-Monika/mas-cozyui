@@ -41,6 +41,7 @@
         <svg id="star" width="1" height="1">
             <path d="M 0.5 0.05 l 0.1469463 0.29774575 l 0.32858195 0.0477458 l -0.23776413 0.23176273 l 0.0561285 0.32725426 l -0.29389262 -0.15450851 l -0.29389264 0.15450849 l 0.0561285 -0.32725424 l -0.23776412 -0.23176276 l 0.32858194 -0.0477457 Z" />
         </svg>
+        <svg id="none" width="1" height="1" />
         <pattern id="pattern" x="-10" y="-10" width="46.5" height="46.5" patternUnits="userSpaceOnUse">
             <g fill="CUI_PRM_COLOR(127, 52, 84)" stroke-linejoin="round">
                 <use xlink:href="#CUI_DLG_PTSHAPE()" transform="translate(2 2) scale(18.5)" />

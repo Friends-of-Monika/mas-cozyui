@@ -121,8 +121,18 @@
 				<input class="input" type="number" min="0" max="36" bind:value={theme.dialogueRounding} />
 			</label>
 			<label class="label">
-				<span>Dialogue pattern</span>
-				<SelectMenu bind:value={theme.dialoguePatternShape} options={titleize(patternShapes)} />
+				<span>Pattern</span>
+				<!-- One control for both pattern fields (every theme keeps them equal):
+				     the dialogue textbox and the settings-menu backdrop. -->
+				<SelectMenu
+					value={theme.dialoguePatternShape}
+					options={titleize(patternShapes)}
+					onChange={(v) => {
+						theme.dialoguePatternShape = v;
+						theme.menuPatternShape = v;
+					}}
+				/>
+				<span class="text-xs opacity-60">Dialogue box and settings backdrop</span>
 			</label>
 		</div>
 	</details>

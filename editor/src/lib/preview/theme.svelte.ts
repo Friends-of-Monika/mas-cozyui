@@ -1,6 +1,8 @@
 import { type ColorModulation, modulate } from "./colors";
 
-export const patternShapes = ["dot", "heart", "rhombus", "sparkle", "star"] as const;
+// "none" resolves to an empty #none def in the textbox SVGs -> no pattern, plain
+// primary fill. Only the dialogue selector exposes it (menu_bg has no #none def).
+export const patternShapes = ["none", "dot", "heart", "rhombus", "sparkle", "star"] as const;
 export type PatternShape = (typeof patternShapes)[number];
 
 // Font families registered in app.css; Riffic/Halogen come from a local
