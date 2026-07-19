@@ -133,7 +133,16 @@ function applyGlitch(data: ImageData, glitch: string, scale: number) {
 	}
 }
 
-async function rasterize(svg: string, scale: number, glitch?: string): Promise<Uint8Array> {
+async function canvasToPng(canvas: HTMLCanvasElement): Promise<Uint8Array> {
+	const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+	return new Uint8Array(await blob!.arrayBuffer());
+}
+
+// `scale` is the render (supersample) factor; `outScale` the emitted PNG factor.
+// They match for theme assets. The preview passes outScale=1 so a HiDPI build
+// still renders its crisp 2x image down to the default variant size - otherwise
+// the submod shows a preview.png twice as large as the base theme's.
+async function rasterize(svg: string, scale: number, glitch?: string, outScale = scale): Promise<Uint8Array> {
 	const { width, height } = svgSize(svg);
 	const img = await decodeSvg(svg);
 	const canvas = document.createElement("canvas");
@@ -148,8 +157,17 @@ async function rasterize(svg: string, scale: number, glitch?: string): Promise<U
 		ctx.putImageData(data, 0, 0);
 	}
 
-	const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
-	return new Uint8Array(await blob!.arrayBuffer());
+	if (outScale === scale) return canvasToPng(canvas);
+
+	// Downscale the supersampled render to the requested output size.
+	const out = document.createElement("canvas");
+	out.width = Math.round(width * outScale);
+	out.height = Math.round(height * outScale);
+	const octx = out.getContext("2d")!;
+	octx.imageSmoothingEnabled = true;
+	octx.imageSmoothingQuality = "high";
+	octx.drawImage(canvas, 0, 0, out.width, out.height);
+	return canvasToPng(out);
 }
 
 /**
@@ -184,7 +202,9 @@ export async function exportTheme(name: string, scale: number, onProgress: OnPro
 		const glitchPath = path.replace(/\.svg$/, ".glitch");
 		const macroed = inlineExternalSvgs(applyMacros(template, params), svgs, params);
 		const processed = await embedFont(macroed, params);
-		const png = await rasterize(processed, scale, glitches[glitchPath]);
+		// preview.png must stay at base variant size even in a HiDPI build.
+		const outScale = path.endsWith("preview.svg") ? 1 : scale;
+		const png = await rasterize(processed, scale, glitches[glitchPath], outScale);
 		files[path.replace(/\.svg$/, ".png")] = png;
 		onProgress({ phase: "Rendering images", done: ++rendered, total: svgEntries.length });
 	});

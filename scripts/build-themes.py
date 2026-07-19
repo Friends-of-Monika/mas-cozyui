@@ -240,6 +240,15 @@ def glitch(image_path, glitch_path, scale):
 
         image.save(image_path)
 
+# preview.png must stay at the base variant size even in a HiDPI build, so the
+# submod doesn't display it twice as large as the base theme's. It is rendered
+# at the HiDPI scale for crispness, then downscaled back to default dimensions.
+def downscale_image(image_path, scale):
+    with Image.open(image_path) as image:
+        w, h = image.size
+        resized = image.resize((round(w / scale), round(h / scale)), Image.Resampling.LANCZOS)
+        resized.save(image_path)
+
 def install_fonts(fonts):
     proc = Popen(["inkscape", '--actions=user-data-directory'], stdout = PIPE)
     stdout, _ = proc.communicate()
@@ -281,6 +290,9 @@ def batch_render(images, scale):
         if glitch_path.exists():
             glitch(png_path, glitch_path, scale)
             glitch_path.unlink()
+
+        if scale != 1 and png_path.name == "preview.png":
+            downscale_image(png_path, scale)
 
         svg_path.unlink()
 
