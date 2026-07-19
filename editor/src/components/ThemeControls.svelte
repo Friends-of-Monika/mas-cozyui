@@ -30,20 +30,31 @@
 	function onPick(hex: string | null, current: string, apply: (hex: string) => void) {
 		if (hex && hex.toLowerCase() !== current.toLowerCase()) apply(hex);
 	}
+
+	// Collapsible section header (native <details>/<summary>), chevron rotates via group-open
+	const summaryClass =
+		"flex cursor-pointer list-none items-center justify-between font-bold [&::-webkit-details-marker]:hidden";
 </script>
 
 <div class="flex flex-col gap-4">
-	<fieldset class="flex flex-col gap-2">
-		<legend class="font-bold">Name</legend>
-		<label class="label">
+	<details open class="group flex flex-col gap-2">
+		<summary class={summaryClass}>
+			Name
+			<span class="transition-transform group-open:rotate-90" aria-hidden="true">&rsaquo;</span>
+		</summary>
+		<label class="label pt-2">
 			<span>Theme name</span>
 			<input class="input" type="text" placeholder="Custom" bind:value={theme.name} />
 		</label>
-	</fieldset>
+	</details>
 
-	<fieldset class="flex flex-col gap-2">
-		<legend class="font-bold">Colors</legend>
-		<ColorPicker
+	<details open class="group flex flex-col gap-2">
+		<summary class={summaryClass}>
+			Colors
+			<span class="transition-transform group-open:rotate-90" aria-hidden="true">&rsaquo;</span>
+		</summary>
+		<div class="flex flex-col gap-2 pt-2">
+			<ColorPicker
 			hex={prm(...PRM_ANCHOR)}
 			label="Primary color"
 			isAlpha={false}
@@ -62,46 +73,57 @@
 				onPick(c.hex, scd(...SCD_ANCHOR), (h) =>
 					Object.assign(theme.secondary, modulationFromColor(h, SCD_ANCHOR))
 				)}
-		/>
-	</fieldset>
+			/>
+		</div>
+	</details>
 
-	<fieldset class="flex flex-col gap-2">
-		<legend class="font-bold">Fonts</legend>
-		<label class="label">
-			<span>Main font</span>
-			<SelectMenu bind:value={theme.mainFont} options={mainFontOptions} />
-			<span class="text-xs opacity-60">Dialogue, buttons, menus and the quick menu</span>
-		</label>
-		<label class="label">
-			<span>Menu font</span>
-			<SelectMenu bind:value={theme.menuFont} options={menuFontOptions} />
-			<span class="text-xs opacity-60">Name box and settings menu titles</span>
-		</label>
-		<label class="label">
-			<span>Option font</span>
-			<SelectMenu bind:value={theme.optionFont} options={optionFontOptions} />
-			<span class="text-xs opacity-60">Settings check/radio options</span>
-		</label>
-	</fieldset>
+	<details open class="group flex flex-col gap-2">
+		<summary class={summaryClass}>
+			Fonts
+			<span class="transition-transform group-open:rotate-90" aria-hidden="true">&rsaquo;</span>
+		</summary>
+		<div class="flex flex-col gap-2 pt-2">
+			<label class="label">
+				<span>Main font</span>
+				<SelectMenu bind:value={theme.mainFont} options={mainFontOptions} />
+				<span class="text-xs opacity-60">Dialogue, buttons, menus and the quick menu</span>
+			</label>
+			<label class="label">
+				<span>Menu font</span>
+				<SelectMenu bind:value={theme.menuFont} options={menuFontOptions} />
+				<span class="text-xs opacity-60">Name box and settings menu titles</span>
+			</label>
+			<label class="label">
+				<span>Option font</span>
+				<SelectMenu bind:value={theme.optionFont} options={optionFontOptions} />
+				<span class="text-xs opacity-60">Settings check/radio options</span>
+			</label>
+		</div>
+	</details>
 
-	<fieldset class="flex flex-col gap-2">
-		<legend class="font-bold">Shape</legend>
-		<label class="label">
-			<span>Button rounding</span>
-			<input class="input" type="number" min="0" max="16" bind:value={theme.buttonRounding} />
-		</label>
-		<label class="label">
-			<span>Frame rounding</span>
-			<input class="input" type="number" min="0" max="16" bind:value={theme.frameRounding} />
-			<span class="text-xs opacity-60">Confirm/modal windows</span>
-		</label>
-		<label class="label">
-			<span>Dialogue rounding</span>
-			<input class="input" type="number" min="0" max="36" bind:value={theme.dialogueRounding} />
-		</label>
-		<label class="label">
-			<span>Dialogue pattern</span>
-			<SelectMenu bind:value={theme.dialoguePatternShape} options={titleize(patternShapes)} />
-		</label>
-	</fieldset>
+	<details open class="group flex flex-col gap-2">
+		<summary class={summaryClass}>
+			Shape
+			<span class="transition-transform group-open:rotate-90" aria-hidden="true">&rsaquo;</span>
+		</summary>
+		<div class="flex flex-col gap-2 pt-2">
+			<label class="label">
+				<span>Button rounding</span>
+				<input class="input" type="number" min="0" max="16" bind:value={theme.buttonRounding} />
+			</label>
+			<label class="label">
+				<span>Frame rounding</span>
+				<input class="input" type="number" min="0" max="16" bind:value={theme.frameRounding} />
+				<span class="text-xs opacity-60">Confirm/modal windows</span>
+			</label>
+			<label class="label">
+				<span>Dialogue rounding</span>
+				<input class="input" type="number" min="0" max="36" bind:value={theme.dialogueRounding} />
+			</label>
+			<label class="label">
+				<span>Dialogue pattern</span>
+				<SelectMenu bind:value={theme.dialoguePatternShape} options={titleize(patternShapes)} />
+			</label>
+		</div>
+	</details>
 </div>
