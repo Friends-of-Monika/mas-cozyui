@@ -67,6 +67,10 @@
 
 ## ❓ Installing
 
+> [!WARNING]
+> This submod is **incompatible** with ComfyUI! <br/>
+> In order to install CozyUI, you will need to uninstall ComfyUI entirely.
+
 1. Go to [the latest release page](https://github.com/Friends-of-Monika/mas-cozyui/releases/latest)
    and scroll to Assets section.
 2. Download `cozyui-VERSION.zip` file.
