@@ -7,6 +7,7 @@
 	import { Dialog, Portal } from "@skeletonlabs/skeleton-svelte";
 
 	import type { ExportProgress } from "#lib/theme/export";
+	import ThemedButton from "./preview/ThemedButton.svelte";
 
 	let {
 		open,
@@ -51,7 +52,15 @@
 					</div>
 				{/if}
 
-				<Dialog.CloseTrigger class="btn preset-filled-primary-500 mt-2 w-full disabled:opacity-50" disabled={!done}>
+				<a
+					class="btn preset-outlined-surface-500 mt-2 w-full"
+					href="https://github.com/Friends-of-Monika/mas-cozyui#-custom-themes"
+					target="_blank"
+				>
+					How do I install it?
+				</a>
+
+				<Dialog.CloseTrigger class="btn preset-filled-primary-500 w-full disabled:opacity-50" disabled={!done}>
 					{done ? "Close" : "Exporting…"}
 				</Dialog.CloseTrigger>
 			</Dialog.Content>
