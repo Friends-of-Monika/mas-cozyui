@@ -12,7 +12,7 @@ init -990 python:
         coauthors=["Dominus Iniquitatis"],
         name="CozyUI",
         description=_("Smooth and customizable UI add-on, overhauled."),
-        version="3.0.0",
+        version="3.0.1",
         settings_pane="cozy_ui_settings_pane"
     )
 
