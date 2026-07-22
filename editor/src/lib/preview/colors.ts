@@ -44,13 +44,7 @@ export type ColorChannel = "prm" | "scd";
  * base, within a surface group - so the palette can pin it to an absolute value
  * instead of whatever the modulation would produce.
  */
-export function overrideKey(
-	channel: ColorChannel,
-	group: ColorGroup | null,
-	r: number,
-	g: number,
-	b: number
-): string {
+export function overrideKey(channel: ColorChannel, group: ColorGroup | null, r: number, g: number, b: number): string {
 	return `${channel}:${group ?? "base"}:${r},${g},${b}`;
 }
 

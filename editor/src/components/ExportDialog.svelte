@@ -7,6 +7,7 @@
 	import { Dialog, Portal } from "@skeletonlabs/skeleton-svelte";
 
 	import type { ExportProgress } from "#lib/theme/export";
+
 	import ThemedButton from "./preview/ThemedButton.svelte";
 
 	let {
@@ -48,7 +49,10 @@
 						<span>{percent}%</span>
 					</div>
 					<div class="bg-surface-700 h-2 overflow-hidden rounded-full">
-						<div class="bg-primary-500 h-full transition-[width] duration-150" style:width="{done ? 100 : percent}%"></div>
+						<div
+							class="bg-primary-500 h-full transition-[width] duration-150"
+							style:width="{done ? 100 : percent}%"
+						></div>
 					</div>
 				{/if}
 

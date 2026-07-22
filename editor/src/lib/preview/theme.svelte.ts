@@ -1,12 +1,4 @@
-import {
-	type ColorChannel,
-	type ColorGroup,
-	type ColorModulation,
-	modulate,
-	overrideKey,
-	toHexByte
-} from "./colors";
-
+import { type ColorChannel, type ColorGroup, type ColorModulation, modulate, overrideKey, toHexByte } from "./colors";
 
 // "none" resolves to an empty #none def in the textbox SVGs -> no pattern, plain
 // primary fill. Only the dialogue selector exposes it (menu_bg has no #none def).
@@ -53,14 +45,7 @@ export const theme = $state({
  * One derived color: the pinned override when the palette has one, otherwise
  * the channel's modulation applied to the base.
  */
-function derive(
-	channel: ColorChannel,
-	group: ColorGroup | null,
-	r: number,
-	g: number,
-	b: number,
-	a?: number
-): string {
+function derive(channel: ColorChannel, group: ColorGroup | null, r: number, g: number, b: number, a?: number): string {
 	const pinned = theme.overrides[overrideKey(channel, group, r, g, b)];
 	if (pinned) return a === undefined ? pinned : pinned + toHexByte(a);
 	return modulate(r, g, b, channel === "prm" ? theme.primary : theme.secondary, a);

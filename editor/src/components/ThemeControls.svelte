@@ -5,7 +5,7 @@
 
 	import { modulationFromColor, overrideKey } from "#lib/preview/colors";
 	import { customFonts } from "#lib/preview/fonts.svelte";
-	import { type ColorSlot, colorSlots } from "#lib/preview/slots";
+	import { type ColorSlot, colorSlots, sectionHints } from "#lib/preview/slots";
 	import { grp, mainFonts, menuFonts, optionFonts, patternShapes, prm, scd, theme } from "#lib/preview/theme.svelte";
 
 	// Anchor colors the pickers operate on: the textbox base fill (primary) and
@@ -42,7 +42,29 @@
 
 	// Sections in slot order, so the list can be rendered with headings.
 	const slotSections = $derived([...new Set(colorSlots.map((s) => s.section))]);
-	const pinnedCount = $derived(colorSlots.filter((s) => theme.overrides[slotKey(s)]).length);
+
+	// Two surfaces can be distinct in one mode but share a base in the other -
+	// the dark button idle and disabled fills are both (28, 26, 30). Those are
+	// one color, so they collapse into one control (labelled for both) instead of
+	// two that silently move together.
+	const sectionEntries = $derived(
+		slotSections.map((section) => {
+			const merged = new Map<string, { slot: ColorSlot; labels: string[] }>();
+			for (const slot of colorSlots) {
+				if (slot.section !== section) continue;
+				const key = slotKey(slot);
+				const hit = merged.get(key);
+				if (hit) hit.labels.push(slot.label);
+				else merged.set(key, { slot, labels: [slot.label] });
+			}
+			return {
+				section,
+				entries: [...merged].map(([key, { slot, labels }]) => ({ key, slot, label: labels.join(" / ") }))
+			};
+		})
+	);
+
+	const pinnedCount = $derived(new Set(colorSlots.map(slotKey).filter((k) => theme.overrides[k])).size);
 
 	// Collapsible section header (native <details>/<summary>), chevron rotates via group-open
 	const summaryClass =
@@ -103,26 +125,28 @@
 							Editing the <b>day-mode</b> variants.
 						{/if}
 					</p>
-					{#each slotSections as section (section)}
-						<span class="mt-1 text-xs font-bold opacity-70">{section}</span>
-						{#each colorSlots.filter((s) => s.section === section) as slot (slot.section + slot.label)}
+					{#each sectionEntries as { section, entries } (section)}
+						<div class="mt-2">
+							<span class="text-xs font-bold opacity-70">{section}</span>
+							<p class="text-xs opacity-50">{sectionHints[section]}</p>
+						</div>
+						{#each entries as { key, slot, label } (key)}
 							<div class="flex items-center gap-2">
 								<div class="min-w-0 flex-1">
 									<ColorPicker
 										hex={slotHex(slot)}
-										label={slot.label}
+										{label}
 										isAlpha={false}
 										position="responsive"
-										onInput={(c) =>
-											onPick(c.hex, slotHex(slot), (h) => (theme.overrides[slotKey(slot)] = h))}
+										onInput={(c) => onPick(c.hex, slotHex(slot), (h) => (theme.overrides[key] = h))}
 									/>
 								</div>
-								{#if theme.overrides[slotKey(slot)]}
+								{#if theme.overrides[key]}
 									<button
 										class="btn-icon btn-icon-sm preset-outlined-surface-500"
 										title="Back to the modulated color"
-										aria-label="Reset {slot.label}"
-										onclick={() => delete theme.overrides[slotKey(slot)]}
+										aria-label="Reset {label}"
+										onclick={() => delete theme.overrides[key]}
 									>
 										&times;
 									</button>
