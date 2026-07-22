@@ -13,11 +13,17 @@ import {
 	theme
 } from "#lib/preview/theme.svelte";
 
+import { CONFIG_VERSION, type RawConfig, migrateConfig } from "./migrate";
 import { DEFAULT_METRICS } from "./params.svelte";
 import { themeParams } from "./params.svelte";
 
-/** Theme definition JSON, identical in shape to the files in themes/. */
+/**
+ * Theme definition JSON, identical in shape to the files in themes/ apart from
+ * the editor-only fields at the bottom.
+ */
 export interface ThemeConfig {
+	/** .cozy format version; absent in files written before versioning (v1). */
+	version: number;
 	name: string;
 	id: string;
 	button_rounding: number;
@@ -56,6 +62,7 @@ function resolveFamily<T extends string>(path: string, families: readonly T[], f
 export function toConfig(): ThemeConfig {
 	const p = themeParams();
 	return {
+		version: CONFIG_VERSION,
 		name: theme.name,
 		id: slug(theme.name),
 		button_rounding: theme.buttonRounding,
@@ -114,7 +121,10 @@ export function packCozy(): Blob {
 	return new Blob([zipSync(files, { level: 9 })], { type: "application/zip" });
 }
 
-/** Reads a .cozy project file and applies its config to the live theme. */
+/**
+ * Reads a .cozy project file and applies its config to the live theme,
+ * upgrading older format versions on the way in.
+ */
 export async function openCozy(file: File) {
 	const buf = new Uint8Array(await file.arrayBuffer());
 	const files = unzipSync(buf);
@@ -130,5 +140,6 @@ export async function openCozy(file: File) {
 		await addFontBytes(fileName, bytes);
 	}
 
-	applyConfig(JSON.parse(new TextDecoder().decode(configBytes)) as ThemeConfig);
+	const raw = JSON.parse(new TextDecoder().decode(configBytes)) as RawConfig;
+	applyConfig(migrateConfig(raw) as unknown as ThemeConfig);
 }
