@@ -97,7 +97,11 @@
 				<div class="flex flex-col gap-2 pt-2">
 					<p class="text-xs opacity-60">
 						Pinned colors ignore the primary and secondary colors.
-						{theme.darkMode ? "Editing the night-mode variants." : "Editing the day-mode variants."}
+						{#if theme.darkMode}
+							Editing the <b>night-mode</b> variants.
+						{:else}
+							Editing the <b>day-mode</b> variants.
+						{/if}
 					</p>
 					{#each slotSections as section (section)}
 						<span class="mt-1 text-xs font-bold opacity-70">{section}</span>
