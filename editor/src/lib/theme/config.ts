@@ -35,6 +35,9 @@ export interface ThemeConfig {
 	button_text_vertical_offset: number;
 	primary_color: ColorModulation;
 	secondary_color: ColorModulation;
+	// Editor-only extra (the shipped themes/ presets omit it and the submod
+	// ignores it - by export time every color is already baked into the PNGs).
+	color_overrides?: Record<string, string>;
 }
 
 function slug(name: string): string {
@@ -74,7 +77,8 @@ export function toConfig(): ThemeConfig {
 		button_height_adjustment: DEFAULT_METRICS.buttonHeightAdjustment,
 		button_text_vertical_offset: DEFAULT_METRICS.buttonTextVerticalOffset,
 		primary_color: { ...theme.primary },
-		secondary_color: { ...theme.secondary }
+		secondary_color: { ...theme.secondary },
+		color_overrides: { ...theme.overrides }
 	};
 }
 
@@ -91,6 +95,9 @@ export function applyConfig(config: ThemeConfig) {
 	theme.optionFont = resolveFamily<OptionFont>(config.option_font, optionFonts, "Halogen");
 	Object.assign(theme.primary, config.primary_color);
 	Object.assign(theme.secondary, config.secondary_color);
+	// Presets and older projects carry no overrides: nothing pinned, which is
+	// the stock pure-modulation palette.
+	theme.overrides = { ...config.color_overrides };
 }
 
 /**

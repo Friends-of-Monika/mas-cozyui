@@ -90,4 +90,7 @@ export function applyPreset(id: string) {
 	theme.mainFont = preset.mainFont;
 	theme.menuFont = preset.menuFont;
 	theme.optionFont = preset.optionFont;
+	// Presets are pure-modulation themes; drop any pinned colors from the theme
+	// that was being edited so the preset shows exactly as authored.
+	theme.overrides = {};
 }

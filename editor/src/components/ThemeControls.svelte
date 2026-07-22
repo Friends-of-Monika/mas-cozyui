@@ -3,9 +3,10 @@
 
 	import ColorPicker from "svelte-awesome-color-picker";
 
-	import { modulationFromColor } from "#lib/preview/colors";
+	import { modulationFromColor, overrideKey } from "#lib/preview/colors";
 	import { customFonts } from "#lib/preview/fonts.svelte";
-	import { mainFonts, menuFonts, optionFonts, patternShapes, prm, scd, theme } from "#lib/preview/theme.svelte";
+	import { type ColorSlot, colorSlots } from "#lib/preview/slots";
+	import { grp, mainFonts, menuFonts, optionFonts, patternShapes, prm, scd, theme } from "#lib/preview/theme.svelte";
 
 	// Anchor colors the pickers operate on: the textbox base fill (primary) and
 	// the menu label outline (secondary). The picker shows the anchor as modulated
@@ -31,6 +32,18 @@
 		if (hex && hex.toLowerCase() !== current.toLowerCase()) apply(hex);
 	}
 
+	// A slot addresses its light or dark base depending on night mode, so the two
+	// variants of a surface are pinned independently.
+	const slotBase = (slot: ColorSlot) => (theme.darkMode ? slot.dark : slot.light);
+	const slotKey = (slot: ColorSlot) => overrideKey(slot.channel, slot.group, ...slotBase(slot));
+	// What the surface currently renders as: the pinned color, or the modulated one.
+	const slotHex = (slot: ColorSlot) =>
+		slot.channel === "prm" ? grp(slot.group, ...slotBase(slot)) : scd(...slotBase(slot));
+
+	// Sections in slot order, so the list can be rendered with headings.
+	const slotSections = $derived([...new Set(colorSlots.map((s) => s.section))]);
+	const pinnedCount = $derived(colorSlots.filter((s) => theme.overrides[slotKey(s)]).length);
+
 	// Collapsible section header (native <details>/<summary>), chevron rotates via group-open
 	const summaryClass =
 		"flex cursor-pointer list-none items-center justify-between font-bold [&::-webkit-details-marker]:hidden";
@@ -55,25 +68,66 @@
 		</summary>
 		<div class="flex flex-col gap-2 pt-2">
 			<ColorPicker
-			hex={prm(...PRM_ANCHOR)}
-			label="Primary color"
-			isAlpha={false}
-			position="responsive"
-			onInput={(c) =>
-				onPick(c.hex, prm(...PRM_ANCHOR), (h) =>
-					Object.assign(theme.primary, modulationFromColor(h, PRM_ANCHOR))
-				)}
-		/>
-		<ColorPicker
-			hex={scd(...SCD_ANCHOR)}
-			label="Secondary color"
-			isAlpha={false}
-			position="responsive"
-			onInput={(c) =>
-				onPick(c.hex, scd(...SCD_ANCHOR), (h) =>
-					Object.assign(theme.secondary, modulationFromColor(h, SCD_ANCHOR))
-				)}
+				hex={prm(...PRM_ANCHOR)}
+				label="Primary color"
+				isAlpha={false}
+				position="responsive"
+				onInput={(c) =>
+					onPick(c.hex, prm(...PRM_ANCHOR), (h) =>
+						Object.assign(theme.primary, modulationFromColor(h, PRM_ANCHOR))
+					)}
 			/>
+			<ColorPicker
+				hex={scd(...SCD_ANCHOR)}
+				label="Secondary color"
+				isAlpha={false}
+				position="responsive"
+				onInput={(c) =>
+					onPick(c.hex, scd(...SCD_ANCHOR), (h) =>
+						Object.assign(theme.secondary, modulationFromColor(h, SCD_ANCHOR))
+					)}
+			/>
+			<details class="group/slots mt-1 flex flex-col gap-2">
+				<summary class={summaryClass}>
+					<span class="font-normal">
+						Individual colors{pinnedCount > 0 ? ` (${pinnedCount} pinned)` : ""}
+					</span>
+					<span class="transition-transform group-open/slots:rotate-90" aria-hidden="true">&rsaquo;</span>
+				</summary>
+				<div class="flex flex-col gap-2 pt-2">
+					<p class="text-xs opacity-60">
+						Pinned colors ignore the primary and secondary colors.
+						{theme.darkMode ? "Editing the night-mode variants." : "Editing the day-mode variants."}
+					</p>
+					{#each slotSections as section (section)}
+						<span class="mt-1 text-xs font-bold opacity-70">{section}</span>
+						{#each colorSlots.filter((s) => s.section === section) as slot (slot.section + slot.label)}
+							<div class="flex items-center gap-2">
+								<div class="min-w-0 flex-1">
+									<ColorPicker
+										hex={slotHex(slot)}
+										label={slot.label}
+										isAlpha={false}
+										position="responsive"
+										onInput={(c) =>
+											onPick(c.hex, slotHex(slot), (h) => (theme.overrides[slotKey(slot)] = h))}
+									/>
+								</div>
+								{#if theme.overrides[slotKey(slot)]}
+									<button
+										class="btn-icon btn-icon-sm preset-outlined-surface-500"
+										title="Back to the modulated color"
+										aria-label="Reset {slot.label}"
+										onclick={() => delete theme.overrides[slotKey(slot)]}
+									>
+										&times;
+									</button>
+								{/if}
+							</div>
+						{/each}
+					{/each}
+				</div>
+			</details>
 		</div>
 	</details>
 

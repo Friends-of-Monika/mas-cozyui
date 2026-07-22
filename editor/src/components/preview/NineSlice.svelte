@@ -3,6 +3,7 @@
      stay clean at any size (see buttonSlice / CUI_BTN_SLICE). The _d dark
      variant is used in night mode when present. -->
 <script lang="ts">
+	import { groupForPath } from "#lib/preview/colors";
 	import { theme } from "#lib/preview/theme.svelte";
 	import { applyMacros, buttonSlice } from "#lib/theme/macros";
 	import { themeParams } from "#lib/theme/params.svelte";
@@ -26,7 +27,8 @@
 	const src = $derived.by(() => {
 		const template = loadSvg(resolved);
 		if (!template) return "";
-		return `data:image/svg+xml;utf8,${encodeURIComponent(applyMacros(template, themeParams()))}`;
+		const svg = applyMacros(template, themeParams(), groupForPath(resolved));
+		return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 	});
 
 	const slice = $derived(sliceOverride ?? buttonSlice(theme.buttonRounding));

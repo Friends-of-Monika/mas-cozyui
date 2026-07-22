@@ -1,5 +1,6 @@
 import { zipSync } from "fflate";
 
+import { groupForPath } from "#lib/preview/colors";
 import { customFonts } from "#lib/preview/fonts.svelte";
 
 import { type MacroParams, applyMacros } from "./macros";
@@ -43,7 +44,8 @@ function inlineExternalSvgs(svg: string, svgs: Record<string, string>, params: M
 	return svg.replace(/xlink:href="([^"#][^"]*\.svg)"/g, (match, ref) => {
 		const template = svgs[ref];
 		if (!template) return match;
-		const processed = ensureViewBox(applyMacros(template, params));
+		// The inlined template keeps its own surface group, not the host's.
+		const processed = ensureViewBox(applyMacros(template, params, groupForPath(ref)));
 		return `xlink:href="data:image/svg+xml;utf8,${encodeURIComponent(processed)}"`;
 	});
 }
@@ -200,7 +202,7 @@ export async function exportTheme(name: string, scale: number, onProgress: OnPro
 	let rendered = 0;
 	await pool(svgEntries, 8, async ([path, template]) => {
 		const glitchPath = path.replace(/\.svg$/, ".glitch");
-		const macroed = inlineExternalSvgs(applyMacros(template, params), svgs, params);
+		const macroed = inlineExternalSvgs(applyMacros(template, params, groupForPath(path)), svgs, params);
 		const processed = await embedFont(macroed, params);
 		// preview.png must stay at base variant size even in a HiDPI build.
 		const outScale = path.endsWith("preview.svg") ? 1 : scale;

@@ -15,11 +15,50 @@ export interface ColorModulation {
 	l: number | null;
 }
 
+/**
+ * Surfaces are grouped so that the same base RGB appearing in different assets
+ * stays separately addressable: the button idle fill and the menu panel fill
+ * are both (255, 230, 244), but they are distinct colors to the user.
+ */
+export const colorGroups = ["dialogue", "button", "menu"] as const;
+export type ColorGroup = (typeof colorGroups)[number];
+
+/**
+ * Maps a theme template path to the surface group its CUI_PRM_COLOR bases
+ * belong to. Templates outside a group (text styles, misc assets) share the
+ * ungrouped keyspace, so preview and export stay in agreement.
+ */
+export function groupForPath(path: string): ColorGroup | null {
+	if (path.includes("textbox") || path.includes("namebox")) return "dialogue";
+	// Both the choice buttons (button/) and the hotkey ones (mod_assets/buttons/)
+	if (/\bbuttons?\//.test(path)) return "button";
+	if (path.includes("menu_bg") || path.includes("game_menu")) return "menu";
+	return null;
+}
+
+/** Which macro derived a color: CUI_PRM_COLOR or CUI_SCD_COLOR. */
+export type ColorChannel = "prm" | "scd";
+
+/**
+ * Identifies one derived color - the result of CUI_PRM_COLOR/CUI_SCD_COLOR on a
+ * base, within a surface group - so the palette can pin it to an absolute value
+ * instead of whatever the modulation would produce.
+ */
+export function overrideKey(
+	channel: ColorChannel,
+	group: ColorGroup | null,
+	r: number,
+	g: number,
+	b: number
+): string {
+	return `${channel}:${group ?? "base"}:${r},${g},${b}`;
+}
+
 function clamp(value: number, lower: number, upper: number): number {
 	return Math.min(Math.max(value, lower), upper);
 }
 
-function toHexByte(value: number): string {
+export function toHexByte(value: number): string {
 	return Math.round(clamp(value, 0, 255))
 		.toString(16)
 		.padStart(2, "0");
