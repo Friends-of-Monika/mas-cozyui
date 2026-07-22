@@ -4,6 +4,7 @@
      ids, and so the same output can be rasterized for export. In night mode
      the matching _d dark variant is used when present. -->
 <script lang="ts">
+	import { groupForPath } from "#lib/preview/colors";
 	import { theme } from "#lib/preview/theme.svelte";
 	import { applyMacros } from "#lib/theme/macros";
 	import { themeParams } from "#lib/theme/params.svelte";
@@ -27,7 +28,7 @@
 	const src = $derived.by(() => {
 		const template = loadSvg(resolved);
 		if (!template) return "";
-		let svg = applyMacros(template, themeParams());
+		let svg = applyMacros(template, themeParams(), groupForPath(resolved));
 		// Give a viewBox + preserveAspectRatio="none" so the SVG stretches to the
 		// <img> box the same way in every browser. Without a viewBox, Firefox
 		// letterboxes a resized SVG (Chrome stretches it), which pushed e.g. the

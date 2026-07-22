@@ -1,4 +1,11 @@
-import { type ColorModulation, modulate } from "#lib/preview/colors";
+import {
+	type ColorChannel,
+	type ColorGroup,
+	type ColorModulation,
+	modulate,
+	overrideKey,
+	toHexByte
+} from "#lib/preview/colors";
 
 /**
  * Values fed to the CUI_* template macros, mirroring the fields of the theme
@@ -10,6 +17,11 @@ import { type ColorModulation, modulate } from "#lib/preview/colors";
 export interface MacroParams {
 	primary: ColorModulation;
 	secondary: ColorModulation;
+	/**
+	 * Derived colors pinned to an absolute value, keyed by overrideKey(). Set
+	 * only in the "custom" palette mode; anything absent modulates as usual.
+	 */
+	overrides?: Record<string, string>;
 	buttonRounding: number;
 	frameRounding: number;
 	dialogueRounding: number;
@@ -43,16 +55,32 @@ export function buttonSlice(rounding: number): number {
 	return Math.min(Math.max(rounding + 1, 5), 16);
 }
 
-function colorMacro(argStr: string, mod: ColorModulation): string {
+function colorMacro(
+	argStr: string,
+	mod: ColorModulation,
+	channel: ColorChannel,
+	group: ColorGroup | null,
+	overrides?: Record<string, string>
+): string {
 	const parts = argStr.split(",").map((s) => parseInt(s.trim(), 10));
 	const [r, g, b, a] = parts;
-	return modulate(r, g, b, mod, parts.length === 4 ? a : undefined);
+	const alpha = parts.length === 4 ? a : undefined;
+
+	const pinned = overrides?.[overrideKey(channel, group, r, g, b)];
+	if (pinned) return alpha === undefined ? pinned : pinned + toHexByte(alpha);
+
+	return modulate(r, g, b, mod, alpha);
 }
 
-/** Applies the CUI_* macros in a template string, returning the final text. */
-export function applyMacros(text: string, p: MacroParams): string {
-	text = text.replace(/CUI_PRM_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p.primary));
-	text = text.replace(/CUI_SCD_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p.secondary));
+/**
+ * Applies the CUI_* macros in a template string, returning the final text.
+ * `group` is the template's surface group (see groupForPath); it only scopes
+ * the custom palette's per-color overrides, the modulation itself is global.
+ */
+export function applyMacros(text: string, p: MacroParams, group: ColorGroup | null = null): string {
+	text = text.replace(/CUI_PRM_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p.primary, "prm", group, p.overrides));
+	// Secondary bases live in the ungrouped .rpy text styles (see scd()).
+	text = text.replace(/CUI_SCD_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p.secondary, "scd", null, p.overrides));
 
 	const scale = p.scale ?? 1;
 	const scalars: Record<string, string | number | undefined> = {

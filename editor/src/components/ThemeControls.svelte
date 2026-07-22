@@ -3,9 +3,10 @@
 
 	import ColorPicker from "svelte-awesome-color-picker";
 
-	import { modulationFromColor } from "#lib/preview/colors";
+	import { modulationFromColor, overrideKey } from "#lib/preview/colors";
 	import { customFonts } from "#lib/preview/fonts.svelte";
-	import { mainFonts, menuFonts, optionFonts, patternShapes, prm, scd, theme } from "#lib/preview/theme.svelte";
+	import { type ColorSlot, colorSlots, sectionHints } from "#lib/preview/slots";
+	import { grp, mainFonts, menuFonts, optionFonts, patternShapes, prm, scd, theme } from "#lib/preview/theme.svelte";
 
 	// Anchor colors the pickers operate on: the textbox base fill (primary) and
 	// the menu label outline (secondary). The picker shows the anchor as modulated
@@ -31,6 +32,40 @@
 		if (hex && hex.toLowerCase() !== current.toLowerCase()) apply(hex);
 	}
 
+	// A slot addresses its light or dark base depending on night mode, so the two
+	// variants of a surface are pinned independently.
+	const slotBase = (slot: ColorSlot) => (theme.darkMode ? slot.dark : slot.light);
+	const slotKey = (slot: ColorSlot) => overrideKey(slot.channel, slot.group, ...slotBase(slot));
+	// What the surface currently renders as: the pinned color, or the modulated one.
+	const slotHex = (slot: ColorSlot) =>
+		slot.channel === "prm" ? grp(slot.group, ...slotBase(slot)) : scd(...slotBase(slot));
+
+	// Sections in slot order, so the list can be rendered with headings.
+	const slotSections = $derived([...new Set(colorSlots.map((s) => s.section))]);
+
+	// Two surfaces can be distinct in one mode but share a base in the other -
+	// the dark button idle and disabled fills are both (28, 26, 30). Those are
+	// one color, so they collapse into one control (labelled for both) instead of
+	// two that silently move together.
+	const sectionEntries = $derived(
+		slotSections.map((section) => {
+			const merged = new Map<string, { slot: ColorSlot; labels: string[] }>();
+			for (const slot of colorSlots) {
+				if (slot.section !== section) continue;
+				const key = slotKey(slot);
+				const hit = merged.get(key);
+				if (hit) hit.labels.push(slot.label);
+				else merged.set(key, { slot, labels: [slot.label] });
+			}
+			return {
+				section,
+				entries: [...merged].map(([key, { slot, labels }]) => ({ key, slot, label: labels.join(" / ") }))
+			};
+		})
+	);
+
+	const pinnedCount = $derived(new Set(colorSlots.map(slotKey).filter((k) => theme.overrides[k])).size);
+
 	// Collapsible section header (native <details>/<summary>), chevron rotates via group-open
 	const summaryClass =
 		"flex cursor-pointer list-none items-center justify-between font-bold [&::-webkit-details-marker]:hidden";
@@ -55,25 +90,72 @@
 		</summary>
 		<div class="flex flex-col gap-2 pt-2">
 			<ColorPicker
-			hex={prm(...PRM_ANCHOR)}
-			label="Primary color"
-			isAlpha={false}
-			position="responsive"
-			onInput={(c) =>
-				onPick(c.hex, prm(...PRM_ANCHOR), (h) =>
-					Object.assign(theme.primary, modulationFromColor(h, PRM_ANCHOR))
-				)}
-		/>
-		<ColorPicker
-			hex={scd(...SCD_ANCHOR)}
-			label="Secondary color"
-			isAlpha={false}
-			position="responsive"
-			onInput={(c) =>
-				onPick(c.hex, scd(...SCD_ANCHOR), (h) =>
-					Object.assign(theme.secondary, modulationFromColor(h, SCD_ANCHOR))
-				)}
+				hex={prm(...PRM_ANCHOR)}
+				label="Primary color"
+				isAlpha={false}
+				position="responsive"
+				onInput={(c) =>
+					onPick(c.hex, prm(...PRM_ANCHOR), (h) =>
+						Object.assign(theme.primary, modulationFromColor(h, PRM_ANCHOR))
+					)}
 			/>
+			<ColorPicker
+				hex={scd(...SCD_ANCHOR)}
+				label="Secondary color"
+				isAlpha={false}
+				position="responsive"
+				onInput={(c) =>
+					onPick(c.hex, scd(...SCD_ANCHOR), (h) =>
+						Object.assign(theme.secondary, modulationFromColor(h, SCD_ANCHOR))
+					)}
+			/>
+			<details class="group/slots mt-1 flex flex-col gap-2">
+				<summary class={summaryClass}>
+					<span class="font-normal">
+						Individual colors{pinnedCount > 0 ? ` (${pinnedCount} pinned)` : ""}
+					</span>
+					<span class="transition-transform group-open/slots:rotate-90" aria-hidden="true">&rsaquo;</span>
+				</summary>
+				<div class="flex flex-col gap-2 pt-2">
+					<p class="text-xs opacity-60">
+						Pinned colors ignore the primary and secondary colors.
+						{#if theme.darkMode}
+							Editing the <b>night-mode</b> variants.
+						{:else}
+							Editing the <b>day-mode</b> variants.
+						{/if}
+					</p>
+					{#each sectionEntries as { section, entries } (section)}
+						<div class="mt-2">
+							<span class="text-xs font-bold opacity-70">{section}</span>
+							<p class="text-xs opacity-50">{sectionHints[section]}</p>
+						</div>
+						{#each entries as { key, slot, label } (key)}
+							<div class="flex items-center gap-2">
+								<div class="min-w-0 flex-1">
+									<ColorPicker
+										hex={slotHex(slot)}
+										{label}
+										isAlpha={false}
+										position="responsive"
+										onInput={(c) => onPick(c.hex, slotHex(slot), (h) => (theme.overrides[key] = h))}
+									/>
+								</div>
+								{#if theme.overrides[key]}
+									<button
+										class="btn-icon btn-icon-sm preset-outlined-surface-500"
+										title="Back to the modulated color"
+										aria-label="Reset {label}"
+										onclick={() => delete theme.overrides[key]}
+									>
+										&times;
+									</button>
+								{/if}
+							</div>
+						{/each}
+					{/each}
+				</div>
+			</details>
 		</div>
 	</details>
 

@@ -3,6 +3,7 @@
      two-column slider block, bottom action buttons and a version tag. -->
 <script lang="ts">
 	import { palette } from "#lib/preview/palette.svelte";
+	import { theme } from "#lib/preview/theme.svelte";
 
 	import OutlineText from "../OutlineText.svelte";
 	import Stage from "../Stage.svelte";
@@ -36,7 +37,9 @@
 		selected?: boolean;
 		box?: boolean;
 	}
-	const checkGroups: { x: number; label: string; items: CheckEntry[] }[] = [
+	// "UI: Night Mode" is the in-game switch behind the preview's night mode, so
+	// it tracks it rather than sitting there unchecked.
+	const checkGroups = $derived<{ x: number; label: string; items: CheckEntry[] }[]>([
 		{
 			x: 370,
 			label: "Display",
@@ -48,7 +51,7 @@
 			items: [
 				{ label: "Change Renderer", box: false },
 				{ label: "Disable Animation" },
-				{ label: "UI: Night Mode" },
+				{ label: "UI: Night Mode", selected: theme.darkMode },
 				{ label: "UI: D/N Cycle" }
 			]
 		},
@@ -57,7 +60,7 @@
 			label: "Gameplay",
 			items: [{ label: "Unstable" }, { label: "Repeat Topics" }]
 		}
-	];
+	]);
 
 	const leftSliders = [
 		{ label: "Sunrise", value: "06:00", fraction: 0.25 },

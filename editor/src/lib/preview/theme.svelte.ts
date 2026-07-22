@@ -1,4 +1,4 @@
-import { type ColorModulation, modulate } from "./colors";
+import { type ColorChannel, type ColorGroup, type ColorModulation, modulate, overrideKey, toHexByte } from "./colors";
 
 // "none" resolves to an empty #none def in the textbox SVGs -> no pattern, plain
 // primary fill. Only the dialogue selector exposes it (menu_bg has no #none def).
@@ -34,15 +34,37 @@ export const theme = $state({
 	menuFont: "Riffic" as string,
 	optionFont: "Halogen" as string,
 	// MAS "UI: Night Mode": swaps UI elements to their dark variants
-	darkMode: false
+	darkMode: false,
+	// Derived colors pinned to an absolute "#rrggbb", keyed by overrideKey().
+	// Anything absent falls back to the primary modulation, so an empty map is
+	// the stock CozyUI palette.
+	overrides: {} as Record<string, string>
 });
 
-/** CUI_PRM_COLOR equivalent: base RGB modulated by the primary color */
-export function prm(r: number, g: number, b: number, a?: number): string {
-	return modulate(r, g, b, theme.primary, a);
+/**
+ * One derived color: the pinned override when the palette has one, otherwise
+ * the channel's modulation applied to the base.
+ */
+function derive(channel: ColorChannel, group: ColorGroup | null, r: number, g: number, b: number, a?: number): string {
+	const pinned = theme.overrides[overrideKey(channel, group, r, g, b)];
+	if (pinned) return a === undefined ? pinned : pinned + toHexByte(a);
+	return modulate(r, g, b, channel === "prm" ? theme.primary : theme.secondary, a);
 }
 
-/** CUI_SCD_COLOR equivalent: base RGB modulated by the secondary color */
+/** CUI_PRM_COLOR equivalent for a base belonging to a surface group */
+export function grp(group: ColorGroup | null, r: number, g: number, b: number, a?: number): string {
+	return derive("prm", group, r, g, b, a);
+}
+
+/** CUI_PRM_COLOR equivalent for a base outside any surface group */
+export function prm(r: number, g: number, b: number, a?: number): string {
+	return derive("prm", null, r, g, b, a);
+}
+
+/**
+ * CUI_SCD_COLOR equivalent. Secondary bases all live in the .rpy text styles,
+ * which carry no surface group, so they share the ungrouped keyspace.
+ */
 export function scd(r: number, g: number, b: number, a?: number): string {
-	return modulate(r, g, b, theme.secondary, a);
+	return derive("scd", null, r, g, b, a);
 }

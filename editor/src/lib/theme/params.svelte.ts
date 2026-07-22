@@ -64,6 +64,7 @@ export function themeParams(scale = 1): MacroParams {
 	return {
 		primary: theme.primary,
 		secondary: theme.secondary,
+		overrides: theme.overrides,
 		buttonRounding: theme.buttonRounding,
 		frameRounding: theme.frameRounding,
 		dialogueRounding: theme.dialogueRounding,
