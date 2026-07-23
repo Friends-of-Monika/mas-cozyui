@@ -160,9 +160,47 @@ def parse_macro_args(match):
 
         query += r","
 
-def preprocess_text_file(in_path, out_path, theme, scale):
-    prm_color = theme["primary_color"]
+# Surface group a template's CUI_PRM_COLOR bases belong to, so the per-surface
+# button/dialogue colors reach only their own assets. Mirrors groupForPath() in
+# the editor (editor/src/lib/preview/colors.ts) - keep the two in step.
+def group_for_path(rel_path):
+    name = rel_path.as_posix()
+
+    if "textbox" in name or "namebox" in name:
+        return "dialogue"
+
+    # The choice buttons (button/) plus the hotkey and mode-island backgrounds,
+    # which sit loose in mod_assets/ but are button surfaces all the same.
+    if re.search(r"\bbuttons?/|\b(hkb|island)_", name):
+        return "button"
+
+    if "menu_bg" in name or "game_menu" in name:
+        return "menu"
+
+    return None
+
+# A surface (or text) color takes effect only when fully set; otherwise the
+# group follows the primary. Mirrors isModulated()/modulationFor() in the editor.
+def color_or_primary(theme, key):
+    color = theme.get(key) if key else None
+
+    if color != None and color["h"] != None and color["s"] != None and color["l"] != None:
+        return color
+
+    return theme["primary_color"]
+
+# The buttons and the dialogue box may carry a fill color of their own; an
+# all-null (or absent) modulation means the group follows the primary color.
+def primary_color_for_group(theme, group):
+    return color_or_primary(theme, {"button": "button_color", "dialogue": "dialogue_color"}.get(group))
+
+def preprocess_text_file(in_path, out_path, theme, scale, group = None):
+    prm_color = primary_color_for_group(theme, group)
     scd_color = theme["secondary_color"]
+    # The text macros carry their own dialogue/button text color (all defined in
+    # the one definitions.rpy, so they can't be told apart by file group).
+    dlg_text_color = color_or_primary(theme, "dialogue_text_color")
+    btn_text_color = color_or_primary(theme, "button_text_color")
 
     macros = {
         "CUI_INCLUDE":               include_text(),
@@ -191,6 +229,11 @@ def preprocess_text_file(in_path, out_path, theme, scale):
         "CUI_BTN_TEXT_VERT_OFFSET":  stringize(theme["button_text_vertical_offset"]),
         "CUI_PRM_COLOR":             modulate_colors(prm_color["h"], prm_color["s"], prm_color["l"]),
         "CUI_SCD_COLOR":             modulate_colors(scd_color["h"], scd_color["s"], scd_color["l"]),
+        # The dialogue and button text colors: their own modulation when set,
+        # else the primary. Separate macros so the editor can recolor those text
+        # styles alone (definitions.rpy reuses the same bases elsewhere).
+        "CUI_DLG_TEXT_COLOR":        modulate_colors(dlg_text_color["h"], dlg_text_color["s"], dlg_text_color["l"]),
+        "CUI_BTN_TEXT_COLOR":        modulate_colors(btn_text_color["h"], btn_text_color["s"], btn_text_color["l"]),
         "CUI_SCALE":                 stringize(scale),
         "CUI_SCALE_INV":             stringize(1.0 / scale),
     }
@@ -313,12 +356,12 @@ def copy_dir_contents(src_dir, dst_dir, theme, scale):
 
         if file_ext == ".svg":
             log(f"Processing image {file_path}...")
-            preprocess_text_file(file_path, dst_path, theme, scale)
+            preprocess_text_file(file_path, dst_path, theme, scale, group_for_path(src_path))
             images.append(dst_path)
 
         elif file_ext in [".rpy", ".json"]:
             log(f"Processing script {file_path}...")
-            preprocess_text_file(file_path, dst_path, theme, scale)
+            preprocess_text_file(file_path, dst_path, theme, scale, group_for_path(src_path))
 
         else:
             log(f"Copying file {file_path}...")

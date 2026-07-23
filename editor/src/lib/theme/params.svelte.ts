@@ -64,6 +64,10 @@ export function themeParams(scale = 1): MacroParams {
 	return {
 		primary: theme.primary,
 		secondary: theme.secondary,
+		buttonColor: theme.buttonColor,
+		dialogueColor: theme.dialogueColor,
+		buttonTextColor: theme.buttonTextColor,
+		dialogueTextColor: theme.dialogueTextColor,
 		overrides: theme.overrides,
 		buttonRounding: theme.buttonRounding,
 		frameRounding: theme.frameRounding,

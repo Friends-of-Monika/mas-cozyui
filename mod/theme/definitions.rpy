@@ -69,14 +69,14 @@ define cozy_ui.confirm_prompt_text.dark.outlines  = []
 
 define cozy_ui.dialogue_text.vertical_offset = CUI_DLG_VERT_OFFSET()
 define cozy_ui.dialogue_text.line_spacing    = CUI_DLG_LINE_SPACING()
-define cozy_ui.dialogue_text.color           = "CUI_PRM_COLOR(248, 248, 248)"
-define cozy_ui.dialogue_text.outlines        = [(2, "CUI_PRM_COLOR(26, 26, 26)", 0, 0)]
+define cozy_ui.dialogue_text.color           = "CUI_DLG_TEXT_COLOR(248, 248, 248)"
+define cozy_ui.dialogue_text.outlines        = [(2, "CUI_DLG_TEXT_COLOR(26, 26, 26)", 0, 0)]
 
-define cozy_ui.history_name.color    = "CUI_PRM_COLOR(248, 248, 248)"
-define cozy_ui.history_name.outlines = [(2, "CUI_PRM_COLOR(26, 26, 26)", 0, 0)]
+define cozy_ui.history_name.color    = "CUI_DLG_TEXT_COLOR(248, 248, 248)"
+define cozy_ui.history_name.outlines = [(2, "CUI_DLG_TEXT_COLOR(26, 26, 26)", 0, 0)]
 
-define cozy_ui.history_text.color    = "CUI_PRM_COLOR(255, 255, 255)"
-define cozy_ui.history_text.outlines = [(2, "CUI_PRM_COLOR(26, 26, 26)", 0, 0)]
+define cozy_ui.history_text.color    = "CUI_DLG_TEXT_COLOR(255, 255, 255)"
+define cozy_ui.history_text.outlines = [(2, "CUI_DLG_TEXT_COLOR(26, 26, 26)", 0, 0)]
 
 define cozy_ui.quick_button_text.font_size               = 14
 define cozy_ui.quick_button_text.light.idle_color        = "CUI_SCD_COLOR(85, 34, 34)"
@@ -93,15 +93,15 @@ define cozy_ui.quick_button_text.dark.outlines           = []
 define cozy_ui.button.height_adjustment = CUI_BTN_HEIGHT_ADJUSTMENT()
 
 define cozy_ui.button_text.vertical_offset         = CUI_BTN_TEXT_VERT_OFFSET()
-define cozy_ui.button_text.light.idle_color        = "CUI_PRM_COLOR(56, 56, 56)"
-define cozy_ui.button_text.light.hover_color       = "CUI_PRM_COLOR(255, 170, 153)"
-define cozy_ui.button_text.light.selected_color    = "CUI_PRM_COLOR(187, 85, 136)"
-define cozy_ui.button_text.light.insensitive_color = "CUI_PRM_COLOR(170, 170, 170, 127)"
+define cozy_ui.button_text.light.idle_color        = "CUI_BTN_TEXT_COLOR(56, 56, 56)"
+define cozy_ui.button_text.light.hover_color       = "CUI_BTN_TEXT_COLOR(255, 170, 153)"
+define cozy_ui.button_text.light.selected_color    = "CUI_BTN_TEXT_COLOR(187, 85, 136)"
+define cozy_ui.button_text.light.insensitive_color = "CUI_BTN_TEXT_COLOR(170, 170, 170, 127)"
 define cozy_ui.button_text.light.outlines          = []
-define cozy_ui.button_text.dark.idle_color         = "CUI_PRM_COLOR(245, 163, 199)"
-define cozy_ui.button_text.dark.hover_color        = "CUI_PRM_COLOR(255, 189, 200)"
-define cozy_ui.button_text.dark.selected_color     = "CUI_PRM_COLOR(187, 85, 136)"
-define cozy_ui.button_text.dark.insensitive_color  = "CUI_PRM_COLOR(115, 115, 115, 127)"
+define cozy_ui.button_text.dark.idle_color         = "CUI_BTN_TEXT_COLOR(245, 163, 199)"
+define cozy_ui.button_text.dark.hover_color        = "CUI_BTN_TEXT_COLOR(255, 189, 200)"
+define cozy_ui.button_text.dark.selected_color     = "CUI_BTN_TEXT_COLOR(187, 85, 136)"
+define cozy_ui.button_text.dark.insensitive_color  = "CUI_BTN_TEXT_COLOR(115, 115, 115, 127)"
 define cozy_ui.button_text.dark.outlines           = []
 
 define cozy_ui.option_button_text.font                    = cozy_ui.expand_path("CUI_OPTION_FONT()")

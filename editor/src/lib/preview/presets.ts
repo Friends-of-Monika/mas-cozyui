@@ -2,6 +2,7 @@ import type { ColorModulation } from "./colors";
 import {
 	type MainFont,
 	type MenuFont,
+	NO_MODULATION,
 	type OptionFont,
 	type PatternShape,
 	mainFonts,
@@ -24,6 +25,11 @@ interface ThemeDefinition {
 	option_font: string;
 	primary_color: ColorModulation;
 	secondary_color: ColorModulation;
+	/** Optional in the shipped presets, which all follow the primary color. */
+	button_color?: ColorModulation;
+	dialogue_color?: ColorModulation;
+	button_text_color?: ColorModulation;
+	dialogue_text_color?: ColorModulation;
 }
 
 export interface ThemePreset {
@@ -31,6 +37,10 @@ export interface ThemePreset {
 	name: string;
 	primary: ColorModulation;
 	secondary: ColorModulation;
+	buttonColor: ColorModulation;
+	dialogueColor: ColorModulation;
+	buttonTextColor: ColorModulation;
+	dialogueTextColor: ColorModulation;
 	buttonRounding: number;
 	frameRounding: number;
 	dialogueRounding: number;
@@ -64,6 +74,10 @@ export const presets: ThemePreset[] = Object.values(definitions)
 		name: def.name,
 		primary: { ...def.primary_color },
 		secondary: { ...def.secondary_color },
+		buttonColor: { ...(def.button_color ?? NO_MODULATION()) },
+		dialogueColor: { ...(def.dialogue_color ?? NO_MODULATION()) },
+		buttonTextColor: { ...(def.button_text_color ?? NO_MODULATION()) },
+		dialogueTextColor: { ...(def.dialogue_text_color ?? NO_MODULATION()) },
 		buttonRounding: def.button_rounding,
 		frameRounding: def.frame_rounding,
 		dialogueRounding: def.dialogue_rounding,
@@ -82,6 +96,10 @@ export function applyPreset(id: string) {
 	theme.name = preset.name;
 	Object.assign(theme.primary, preset.primary);
 	Object.assign(theme.secondary, preset.secondary);
+	Object.assign(theme.buttonColor, preset.buttonColor);
+	Object.assign(theme.dialogueColor, preset.dialogueColor);
+	Object.assign(theme.buttonTextColor, preset.buttonTextColor);
+	Object.assign(theme.dialogueTextColor, preset.dialogueTextColor);
 	theme.buttonRounding = preset.buttonRounding;
 	theme.frameRounding = preset.frameRounding;
 	theme.dialogueRounding = preset.dialogueRounding;

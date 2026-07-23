@@ -6,7 +6,7 @@
  * To add a format change: bump CONFIG_VERSION and add the matching step to
  * `migrations`, keyed by the version it upgrades *from*.
  */
-export const CONFIG_VERSION = 2;
+export const CONFIG_VERSION = 3;
 
 /** A config as read from disk, before it is trusted to match ThemeConfig. */
 export type RawConfig = Record<string, unknown>;
@@ -14,7 +14,16 @@ export type RawConfig = Record<string, unknown>;
 const migrations: Record<number, (config: RawConfig) => RawConfig> = {
 	// v1 -> v2: individual derived colors can be pinned to an absolute value,
 	// overriding the primary/secondary modulation. v1 projects pinned nothing.
-	1: (config) => ({ ...config, color_overrides: {} })
+	1: (config) => ({ ...config, color_overrides: {} }),
+	// v2 -> v3: the buttons and the dialogue box (fills and text) can each carry a
+	// color of their own. v2 had only the primary, which an all-null defers to.
+	2: (config) => ({
+		...config,
+		button_color: { h: null, s: null, l: null },
+		dialogue_color: { h: null, s: null, l: null },
+		button_text_color: { h: null, s: null, l: null },
+		dialogue_text_color: { h: null, s: null, l: null }
+	})
 };
 
 /** Reads the declared format version, defaulting to the pre-versioning v1. */

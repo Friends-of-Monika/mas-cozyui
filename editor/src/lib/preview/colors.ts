@@ -20,24 +20,72 @@ export interface ColorModulation {
  * stays separately addressable: the button idle fill and the menu panel fill
  * are both (255, 230, 244), but they are distinct colors to the user.
  */
-export const colorGroups = ["dialogue", "button", "menu"] as const;
+export const colorGroups = ["dialogue", "dialogueText", "button", "buttonText", "menu"] as const;
 export type ColorGroup = (typeof colorGroups)[number];
 
 /**
  * Maps a theme template path to the surface group its CUI_PRM_COLOR bases
  * belong to. Templates outside a group (text styles, misc assets) share the
  * ungrouped keyspace, so preview and export stay in agreement.
+ *
+ * The text groups are absent here on purpose: every text style lives in the one
+ * definitions.rpy, so a path can't tell them apart. They are addressed by their
+ * own macros instead (CUI_DLG_TEXT_COLOR / CUI_BTN_TEXT_COLOR).
  */
 export function groupForPath(path: string): ColorGroup | null {
 	if (path.includes("textbox") || path.includes("namebox")) return "dialogue";
-	// Both the choice buttons (button/) and the hotkey ones (mod_assets/buttons/)
-	if (/\bbuttons?\//.test(path)) return "button";
+	// The choice buttons (button/) plus the hotkey and mode-island backgrounds,
+	// which sit loose in mod_assets/ but are button surfaces all the same.
+	if (/\bbuttons?\/|\b(hkb|island)_/.test(path)) return "button";
 	if (path.includes("menu_bg") || path.includes("game_menu")) return "menu";
 	return null;
 }
 
 /** Which macro derived a color: CUI_PRM_COLOR or CUI_SCD_COLOR. */
 export type ColorChannel = "prm" | "scd";
+
+/**
+ * A modulation only takes effect when all three parts are set (same rule as the
+ * build script); an all-null one leaves its bases alone. The per-surface colors
+ * use that to mean "no color of my own, follow the primary".
+ */
+export function isModulated(mod: ColorModulation | null | undefined): mod is ColorModulation {
+	return !!mod && mod.h !== null && mod.s !== null && mod.l !== null;
+}
+
+/**
+ * The modulations a theme applies, in the order they take precedence: the
+ * per-surface button/dialogue colors override the primary for their own group,
+ * everything else follows the primary (or the secondary, for text styles).
+ */
+export interface ThemeModulations {
+	primary: ColorModulation;
+	secondary: ColorModulation;
+	buttonColor?: ColorModulation;
+	dialogueColor?: ColorModulation;
+	buttonTextColor?: ColorModulation;
+	dialogueTextColor?: ColorModulation;
+}
+
+// The per-surface color each group defers to when it carries one of its own.
+const groupModulation: Record<string, keyof ThemeModulations> = {
+	button: "buttonColor",
+	dialogue: "dialogueColor",
+	buttonText: "buttonTextColor",
+	dialogueText: "dialogueTextColor"
+};
+
+/** Picks the modulation that governs one base, given its channel and group. */
+export function modulationFor(
+	mods: ThemeModulations,
+	channel: ColorChannel,
+	group: ColorGroup | null
+): ColorModulation {
+	if (channel === "scd") return mods.secondary;
+	const key = group ? groupModulation[group] : undefined;
+	const own = key ? mods[key] : undefined;
+	return isModulated(own as ColorModulation) ? (own as ColorModulation) : mods.primary;
+}
 
 /**
  * Identifies one derived color - the result of CUI_PRM_COLOR/CUI_SCD_COLOR on a
