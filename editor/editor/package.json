@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "deploy": "yarn run build && wrangler deploy"
+    "deploy": "yarn run build && wrangler deploy",
+    "versions:upload": "yarn run build && wrangler versions upload"
   },
   "imports": {
     "#lib/*": "./src/lib/*",

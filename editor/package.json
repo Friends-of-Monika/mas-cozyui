@@ -9,6 +9,7 @@
   "scripts": {
     "build:frontend": "yarn workspace theme-editor build",
     "build:themes": "yarn workspace theme-editor build:themes",
-    "deploy:frontend": "yarn workspace theme-editor deploy"
+    "deploy:frontend": "yarn workspace theme-editor deploy",
+    "versions:upload": "yarn workspace theme-editor versions:upload"
   }
 }
