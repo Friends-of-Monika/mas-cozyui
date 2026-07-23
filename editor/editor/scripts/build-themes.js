@@ -4,7 +4,9 @@
 //
 //   yarn build:themes           (from the editor/ workspace root or the app)
 //
-// Requires the workspace deps installed (puppeteer's Chromium in particular).
+// Requires the workspace deps installed plus puppeteer's browser, fetched once
+// with `npx puppeteer browsers install chrome` (it is not auto-downloaded on
+// install, so deploy builds like Cloudflare's don't pull a ~170MB Chrome).
 import { buildAllThemes } from "@cozyui/theme-builder/node";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";

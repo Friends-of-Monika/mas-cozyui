@@ -8,10 +8,5 @@
   ],
   "scripts": {
     "build:themes": "yarn workspace theme-editor build:themes"
-  },
-  "dependenciesMeta": {
-    "puppeteer": {
-      "built": true
-    }
   }
 }
