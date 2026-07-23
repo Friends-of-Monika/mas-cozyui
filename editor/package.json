@@ -7,6 +7,7 @@
     "theme-builder"
   ],
   "scripts": {
+    "build:frontend": "yarn workspace theme-editor build",
     "build:themes": "yarn workspace theme-editor build:themes"
   }
 }
