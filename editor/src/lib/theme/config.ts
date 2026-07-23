@@ -5,6 +5,7 @@ import { addFontBytes, customFonts } from "#lib/preview/fonts.svelte";
 import {
 	type MainFont,
 	type MenuFont,
+	NO_MODULATION,
 	type OptionFont,
 	type PatternShape,
 	mainFonts,
@@ -41,6 +42,11 @@ export interface ThemeConfig {
 	button_text_vertical_offset: number;
 	primary_color: ColorModulation;
 	secondary_color: ColorModulation;
+	/** Surface + text colors; all-null means "follow primary_color". */
+	button_color: ColorModulation;
+	dialogue_color: ColorModulation;
+	button_text_color: ColorModulation;
+	dialogue_text_color: ColorModulation;
 	// Editor-only extra (the shipped themes/ presets omit it and the submod
 	// ignores it - by export time every color is already baked into the PNGs).
 	color_overrides?: Record<string, string>;
@@ -85,6 +91,10 @@ export function toConfig(): ThemeConfig {
 		button_text_vertical_offset: DEFAULT_METRICS.buttonTextVerticalOffset,
 		primary_color: { ...theme.primary },
 		secondary_color: { ...theme.secondary },
+		button_color: { ...theme.buttonColor },
+		dialogue_color: { ...theme.dialogueColor },
+		button_text_color: { ...theme.buttonTextColor },
+		dialogue_text_color: { ...theme.dialogueTextColor },
 		color_overrides: { ...theme.overrides }
 	};
 }
@@ -102,6 +112,12 @@ export function applyConfig(config: ThemeConfig) {
 	theme.optionFont = resolveFamily<OptionFont>(config.option_font, optionFonts, "Halogen");
 	Object.assign(theme.primary, config.primary_color);
 	Object.assign(theme.secondary, config.secondary_color);
+	// Themes authored before per-surface colors (and the shipped presets) carry
+	// none: an all-null modulation, which defers to the primary.
+	Object.assign(theme.buttonColor, config.button_color ?? NO_MODULATION());
+	Object.assign(theme.dialogueColor, config.dialogue_color ?? NO_MODULATION());
+	Object.assign(theme.buttonTextColor, config.button_text_color ?? NO_MODULATION());
+	Object.assign(theme.dialogueTextColor, config.dialogue_text_color ?? NO_MODULATION());
 	// Presets and older projects carry no overrides: nothing pinned, which is
 	// the stock pure-modulation palette.
 	theme.overrides = { ...config.color_overrides };

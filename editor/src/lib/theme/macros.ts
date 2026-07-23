@@ -2,7 +2,9 @@ import {
 	type ColorChannel,
 	type ColorGroup,
 	type ColorModulation,
+	type ThemeModulations,
 	modulate,
+	modulationFor,
 	overrideKey,
 	toHexByte
 } from "#lib/preview/colors";
@@ -14,9 +16,17 @@ import {
  * modulate a base RGB through the primary/secondary color, the rest are plain
  * scalar substitutions.
  */
-export interface MacroParams {
+export interface MacroParams extends ThemeModulations {
 	primary: ColorModulation;
 	secondary: ColorModulation;
+	/**
+	 * Per-surface colors overriding the primary within their own group (see
+	 * modulationFor). All-null, or absent, means the group follows the primary.
+	 */
+	buttonColor?: ColorModulation;
+	dialogueColor?: ColorModulation;
+	buttonTextColor?: ColorModulation;
+	dialogueTextColor?: ColorModulation;
 	/**
 	 * Derived colors pinned to an absolute value, keyed by overrideKey(). Set
 	 * only in the "custom" palette mode; anything absent modulates as usual.
@@ -55,32 +65,32 @@ export function buttonSlice(rounding: number): number {
 	return Math.min(Math.max(rounding + 1, 5), 16);
 }
 
-function colorMacro(
-	argStr: string,
-	mod: ColorModulation,
-	channel: ColorChannel,
-	group: ColorGroup | null,
-	overrides?: Record<string, string>
-): string {
+function colorMacro(argStr: string, p: MacroParams, channel: ColorChannel, group: ColorGroup | null): string {
 	const parts = argStr.split(",").map((s) => parseInt(s.trim(), 10));
 	const [r, g, b, a] = parts;
 	const alpha = parts.length === 4 ? a : undefined;
 
-	const pinned = overrides?.[overrideKey(channel, group, r, g, b)];
+	const pinned = p.overrides?.[overrideKey(channel, group, r, g, b)];
 	if (pinned) return alpha === undefined ? pinned : pinned + toHexByte(alpha);
 
-	return modulate(r, g, b, mod, alpha);
+	return modulate(r, g, b, modulationFor(p, channel, group), alpha);
 }
 
 /**
  * Applies the CUI_* macros in a template string, returning the final text.
- * `group` is the template's surface group (see groupForPath); it only scopes
- * the custom palette's per-color overrides, the modulation itself is global.
+ * `group` is the template's surface group (see groupForPath): it scopes the
+ * per-color overrides and selects the per-surface button/dialogue color.
  */
 export function applyMacros(text: string, p: MacroParams, group: ColorGroup | null = null): string {
-	text = text.replace(/CUI_PRM_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p.primary, "prm", group, p.overrides));
+	text = text.replace(/CUI_PRM_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p, "prm", group));
 	// Secondary bases live in the ungrouped .rpy text styles (see scd()).
-	text = text.replace(/CUI_SCD_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p.secondary, "scd", null, p.overrides));
+	text = text.replace(/CUI_SCD_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p, "scd", null));
+	// The two text surfaces the palette exposes. They modulate exactly like
+	// CUI_PRM_COLOR but carry their own group, because the styles that use them
+	// share definitions.rpy with unrelated bases of the same value (the button
+	// text idle grey is also the confirm prompt's).
+	text = text.replace(/CUI_DLG_TEXT_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p, "prm", "dialogueText"));
+	text = text.replace(/CUI_BTN_TEXT_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p, "prm", "buttonText"));
 
 	const scale = p.scale ?? 1;
 	const scalars: Record<string, string | number | undefined> = {

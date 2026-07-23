@@ -36,8 +36,8 @@ export const palette = {
 	nameboxBottom: () => g("dialogue", [211, 197, 204], [24, 22, 23]),
 
 	// Dialogue text (no dark variant in-game)
-	dialogueColor: () => prm(248, 248, 248),
-	dialogueOutline: () => prm(26, 26, 26),
+	dialogueColor: () => grp("dialogueText", 248, 248, 248),
+	dialogueOutline: () => grp("dialogueText", 26, 26, 26),
 
 	// Say label / menu label (name, section + slider labels)
 	labelColor: () => s([255, 255, 255], [250, 235, 241]),
@@ -49,9 +49,9 @@ export const palette = {
 	quickInsensitive: () => s([170, 102, 102], [170, 102, 102]),
 
 	// Button text (button_text: choice / hotkey labels)
-	buttonTextIdle: () => p([56, 56, 56], [245, 163, 199]),
-	buttonTextHover: () => p([255, 170, 153], [255, 189, 200]),
-	buttonTextInsensitive: () => p([170, 170, 170, 127], [115, 115, 115, 127]),
+	buttonTextIdle: () => g("buttonText", [56, 56, 56], [245, 163, 199]),
+	buttonTextHover: () => g("buttonText", [255, 170, 153], [255, 189, 200]),
+	buttonTextInsensitive: () => g("buttonText", [170, 170, 170, 127], [115, 115, 115, 127]),
 
 	// Themed button backgrounds (generic button [prefix_]bg[_d].svg)
 	btnIdleFill: () => g("button", [255, 230, 244], [28, 26, 30]),

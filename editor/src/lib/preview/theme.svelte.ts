@@ -1,4 +1,15 @@
-import { type ColorChannel, type ColorGroup, type ColorModulation, modulate, overrideKey, toHexByte } from "./colors";
+import {
+	type ColorChannel,
+	type ColorGroup,
+	type ColorModulation,
+	modulate,
+	modulationFor,
+	overrideKey,
+	toHexByte
+} from "./colors";
+
+/** An unset per-surface color: falls back to the primary modulation. */
+export const NO_MODULATION = (): ColorModulation => ({ h: null, s: null, l: null });
 
 // "none" resolves to an empty #none def in the textbox SVGs -> no pattern, plain
 // primary fill. Only the dialogue selector exposes it (menu_bg has no #none def).
@@ -23,6 +34,14 @@ export const theme = $state({
 	name: "Custom",
 	primary: { h: 150, s: 0.33, l: 0.0 } as ColorModulation,
 	secondary: { h: 138, s: 0.58, l: 0.0 } as ColorModulation,
+	// Per-surface colors. Each replaces the primary modulation for its own
+	// group's bases, so the buttons or the dialogue box can carry a color of
+	// their own; all-null (the default) means "follow the primary color".
+	buttonColor: NO_MODULATION(),
+	dialogueColor: NO_MODULATION(),
+	// Text colors work the same way, over the dialogue/button text styles.
+	buttonTextColor: NO_MODULATION(),
+	dialogueTextColor: NO_MODULATION(),
 	buttonRounding: 3,
 	frameRounding: 3,
 	dialogueRounding: 10,
@@ -43,12 +62,12 @@ export const theme = $state({
 
 /**
  * One derived color: the pinned override when the palette has one, otherwise
- * the channel's modulation applied to the base.
+ * the modulation governing the base (see modulationFor) applied to it.
  */
 function derive(channel: ColorChannel, group: ColorGroup | null, r: number, g: number, b: number, a?: number): string {
 	const pinned = theme.overrides[overrideKey(channel, group, r, g, b)];
 	if (pinned) return a === undefined ? pinned : pinned + toHexByte(a);
-	return modulate(r, g, b, channel === "prm" ? theme.primary : theme.secondary, a);
+	return modulate(r, g, b, modulationFor(theme, channel, group), a);
 }
 
 /** CUI_PRM_COLOR equivalent for a base belonging to a surface group */
