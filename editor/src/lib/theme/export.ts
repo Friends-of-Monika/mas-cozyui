@@ -1,9 +1,9 @@
+import { type MacroParams, applyGlitch, applyMacros, inlineExternalSvgs, svgSize } from "@cozyui/theme-builder";
 import { zipSync } from "fflate";
 
 import { groupForPath } from "#lib/preview/colors";
 import { customFonts } from "#lib/preview/fonts.svelte";
 
-import { type MacroParams, applyMacros } from "./macros";
 import { themeParams } from "./params.svelte";
 import { glitchLoaders, jsonLoaders, loadAll, rpyLoaders, svgLoaders } from "./templates.svelte";
 
@@ -25,29 +25,6 @@ async function pool<T>(items: T[], limit: number, worker: (item: T) => Promise<v
 		}
 	}
 	await Promise.all(Array.from({ length: Math.min(limit, items.length) }, run));
-}
-
-// Gives an SVG an explicit viewBox from its width/height when it lacks one, so
-// that preserveAspectRatio on a referencing <image> has a defined aspect ratio
-// (without it, browsers stretch the image to fill).
-function ensureViewBox(svg: string): string {
-	if (/\bviewBox=/.test(svg)) return svg;
-	const { width, height } = svgSize(svg);
-	if (!width || !height) return svg;
-	return svg.replace(/<svg\b/, `<svg viewBox="0 0 ${width} ${height}"`);
-}
-
-// preview.svg embeds another template by relative path (an <image> pointing at
-// replacers/gui/textbox.svg). A standalone data: SVG can't resolve that, so we
-// inline the referenced template (macro-processed) as its own data: URI.
-function inlineExternalSvgs(svg: string, svgs: Record<string, string>, params: MacroParams): string {
-	return svg.replace(/xlink:href="([^"#][^"]*\.svg)"/g, (match, ref) => {
-		const template = svgs[ref];
-		if (!template) return match;
-		// The inlined template keeps its own surface group, not the host's.
-		const processed = ensureViewBox(applyMacros(template, params, groupForPath(ref)));
-		return `xlink:href="data:image/svg+xml;utf8,${encodeURIComponent(processed)}"`;
-	});
 }
 
 // A data: SVG can't use the page's @font-face fonts, so text-bearing templates
@@ -80,12 +57,6 @@ async function embedFont(svg: string, params: MacroParams): Promise<string> {
 	return svg.replace(/(<svg[^>]*>)/, `$1${face}`);
 }
 
-function svgSize(svg: string): { width: number; height: number } {
-	const w = svg.match(/<svg[^>]*\bwidth="([\d.]+)"/);
-	const h = svg.match(/<svg[^>]*\bheight="([\d.]+)"/);
-	return { width: w ? parseFloat(w[1]) : 0, height: h ? parseFloat(h[1]) : 0 };
-}
-
 function decodeSvg(svg: string): Promise<HTMLImageElement> {
 	return new Promise((resolve, reject) => {
 		const img = new Image();
@@ -93,46 +64,6 @@ function decodeSvg(svg: string): Promise<HTMLImageElement> {
 		img.onerror = reject;
 		img.src = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 	});
-}
-
-// Port of the glitch pixel-shift from scripts/build-themes.py: for each region
-// the source pixels are moved by (dx, dy) and alpha-blended, leaving a torn look.
-function applyGlitch(data: ImageData, glitch: string, scale: number) {
-	const { width, data: px } = data;
-	const at = (x: number, y: number) => (y * width + x) * 4;
-
-	for (const line of glitch.split("\n")) {
-		const trimmed = line.trim();
-		if (!trimmed || trimmed.startsWith("#")) continue;
-		const [x, y, w, h, dx, dy] = trimmed.split(",").map((v) => parseInt(v.trim(), 10) * scale);
-
-		// snapshot region
-		const region: [number, number, number, number][] = [];
-		for (let i = 0; i < w; i++) {
-			for (let j = 0; j < h; j++) {
-				const o = at(x + i, y + j);
-				region.push([px[o], px[o + 1], px[o + 2], px[o + 3]]);
-			}
-		}
-		// clear source alpha
-		for (let i = 0; i < w; i++) {
-			for (let j = 0; j < h; j++) {
-				px[at(x + i, y + j) + 3] = 0;
-			}
-		}
-		// mix shifted region back in
-		for (let i = 0; i < w; i++) {
-			for (let j = 0; j < h; j++) {
-				const [r, g, b, a] = region[i * h + j];
-				const o = at(x + dx + i, y + dy + j);
-				const la = px[o + 3];
-				px[o] = r;
-				px[o + 1] = g;
-				px[o + 2] = b;
-				px[o + 3] = Math.min(Math.max(((la * 0.25) | 0) + a, ((a * 0.25) | 0) + la), 255);
-			}
-		}
-	}
 }
 
 async function canvasToPng(canvas: HTMLCanvasElement): Promise<Uint8Array> {

@@ -9,16 +9,12 @@ import { grp, prm, scd, theme } from "./theme.svelte";
  */
 type RGB = [number, number, number] | [number, number, number, number];
 
-function p(light: RGB, dark: RGB): string {
-	const c = theme.darkMode ? dark : light;
-	return prm(c[0], c[1], c[2], c[3]);
-}
 function s(light: RGB, dark: RGB): string {
 	const c = theme.darkMode ? dark : light;
 	return scd(c[0], c[1], c[2], c[3]);
 }
-// Same as p(), but for a base that lives in an SVG belonging to a surface group
-// (see groupForPath) - in custom palette mode it follows that group's color.
+// Like s(), but for a base that lives in an SVG belonging to a surface group
+// (see groupForPath) - it follows that group's own color when one is set.
 function g(group: ColorGroup, light: RGB, dark: RGB): string {
 	const c = theme.darkMode ? dark : light;
 	return grp(group, c[0], c[1], c[2], c[3]);

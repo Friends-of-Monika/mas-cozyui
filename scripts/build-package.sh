@@ -102,21 +102,21 @@ if [ -d "$Dir/../$ProjectLibDir" ]; then
     cp -r "$Dir/../$ProjectLibDir/"* "$Mod"
 fi
 
-# Remove theme templates (build-time input for scripts/build-themes.py,
-# never shipped raw; built theme archives are copied below instead)
+# Remove theme templates (build-time input for the theme builder, never shipped
+# raw; built theme archives are copied below instead)
 rm -rf "$Mod/theme"
 
 # Copy shipped fonts
 cp -r "$Dir/../fonts" "$Mod/fonts"
 
-# Copy built theme archives (produced by scripts/build-themes.py)
+# Copy built theme archives (produced by `yarn build:themes` in editor/)
 ThemesDir="$Dir/../$ProjectBuildDir/themes"
 if [ -d "$ThemesDir" ]; then
     mkdir -p "$Mod/themes"
     cp "$ThemesDir/"*.zip "$Mod/themes"
 else
     echo "WARNING: no built theme archives in $ProjectBuildDir/themes;"
-    echo "run scripts/build-themes.py first. Packaging without themes."
+    echo "run 'yarn build:themes' in editor/ first. Packaging without themes."
 fi
 
 # Remove .gitkeep and README.md

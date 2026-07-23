@@ -4,9 +4,13 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "workspaces": [
+    "theme-builder"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:themes": "tsx scripts/build-themes.js",
     "preview": "yarn run build && wrangler dev",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
     "lint": "eslint .",
@@ -17,6 +21,14 @@
   "imports": {
     "#lib/*": "./src/lib/*",
     "#components/*": "./src/components/*"
+  },
+  "dependencies": {
+    "@cozyui/theme-builder": "workspace:^"
+  },
+  "dependenciesMeta": {
+    "puppeteer": {
+      "built": true
+    }
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.43.0",
@@ -41,6 +53,7 @@
     "svelte-awesome-color-picker": "^4.1.3",
     "svelte-check": "^4.7.1",
     "tailwindcss": "^4.3.2",
+    "tsx": "^4.20.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.62.1",
     "vite": "^8.1.1",
