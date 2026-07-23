@@ -10,15 +10,16 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			// Repo-root theme sources (templates + definitions), which live
-			// outside the editor package. import.meta.glob honors this alias.
-			$theme: fileURLToPath(new URL("../mod/theme", import.meta.url)),
-			$themes: fileURLToPath(new URL("../themes", import.meta.url))
+			// outside the workspace. import.meta.glob honors this alias. This file
+			// sits at editor/editor/, so the repo root is two levels up.
+			$theme: fileURLToPath(new URL("../../mod/theme", import.meta.url)),
+			$themes: fileURLToPath(new URL("../../themes", import.meta.url))
 		}
 	},
 	server: {
 		fs: {
-			// Theme sources are imported from the repo root
-			allow: [".."]
+			// Theme sources are imported from the repo root (two levels up)
+			allow: ["../.."]
 		}
 	}
 });

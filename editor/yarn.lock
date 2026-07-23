@@ -2470,6 +2470,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cozyui-editor-workspace@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "cozyui-editor-workspace@workspace:."
+  dependenciesMeta:
+    puppeteer:
+      built: true
+  languageName: unknown
+  linkType: soft
+
 "cross-spawn@npm:^7.0.6":
   version: 7.0.6
   resolution: "cross-spawn@npm:7.0.6"
@@ -4527,9 +4536,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"theme-editor@workspace:.":
+"theme-editor@workspace:editor":
   version: 0.0.0-use.local
-  resolution: "theme-editor@workspace:."
+  resolution: "theme-editor@workspace:editor"
   dependencies:
     "@cloudflare/vite-plugin": "npm:^1.43.0"
     "@cozyui/theme-builder": "workspace:^"
@@ -4559,9 +4568,6 @@ __metadata:
     typescript-eslint: "npm:^8.62.1"
     vite: "npm:^8.1.1"
     wrangler: "npm:^4.107.0"
-  dependenciesMeta:
-    puppeteer:
-      built: true
   languageName: unknown
   linkType: soft
 
