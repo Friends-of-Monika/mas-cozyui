@@ -1,49 +1,15 @@
 {
-  "packageManager": "yarn@4.17.0",
-  "name": "theme-editor",
+  "name": "cozyui-editor-workspace",
   "private": true,
-  "version": "1.0.0",
-  "type": "module",
+  "packageManager": "yarn@4.17.0",
+  "workspaces": [
+    "editor",
+    "theme-builder"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "yarn run build && wrangler dev",
-    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "deploy": "yarn run build && wrangler deploy"
-  },
-  "imports": {
-    "#lib/*": "./src/lib/*",
-    "#components/*": "./src/components/*"
-  },
-  "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.43.0",
-    "@eslint/js": "^10.0.1",
-    "@skeletonlabs/skeleton": "^4.15.2",
-    "@skeletonlabs/skeleton-svelte": "^4.15.2",
-    "@sveltejs/vite-plugin-svelte": "^7.1.2",
-    "@tailwindcss/vite": "^4.3.2",
-    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
-    "@tsconfig/svelte": "^5.0.8",
-    "@types/node": "^24.13.2",
-    "eslint": "^10.6.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-svelte": "^3.20.0",
-    "fflate": "^0.8.3",
-    "globals": "^17.7.0",
-    "hsluv": "^1.0.2",
-    "prettier": "^3.9.4",
-    "prettier-plugin-svelte": "^4.1.1",
-    "prettier-plugin-tailwindcss": "^0.8.0",
-    "svelte": "^5.56.4",
-    "svelte-awesome-color-picker": "^4.1.3",
-    "svelte-check": "^4.7.1",
-    "tailwindcss": "^4.3.2",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "^8.62.1",
-    "vite": "^8.1.1",
-    "wrangler": "^4.107.0"
+    "build:frontend": "yarn workspace theme-editor build",
+    "build:themes": "yarn workspace theme-editor build:themes",
+    "deploy:frontend": "yarn workspace theme-editor deploy",
+    "versions:upload": "yarn workspace theme-editor versions:upload"
   }
 }

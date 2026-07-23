@@ -8,8 +8,6 @@
 
 	import type { ExportProgress } from "#lib/theme/export";
 
-	import ThemedButton from "./preview/ThemedButton.svelte";
-
 	let {
 		open,
 		progress,

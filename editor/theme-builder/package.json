@@ -1,0 +1,25 @@
+{
+  "name": "@cozyui/theme-builder",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./colors": "./src/colors.ts",
+    "./macros": "./src/macros.ts",
+    "./migrate": "./src/migrate.ts",
+    "./svg": "./src/svg.ts",
+    "./glitch": "./src/glitch.ts",
+    "./node": "./src/node/index.ts"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "hsluv": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/fontkit": "^2.0.8",
+    "@types/node": "^24.13.2",
+    "fontkit": "^2.0.4",
+    "puppeteer": "^24.0.0"
+  }
+}

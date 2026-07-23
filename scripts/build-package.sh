@@ -102,21 +102,34 @@ if [ -d "$Dir/../$ProjectLibDir" ]; then
     cp -r "$Dir/../$ProjectLibDir/"* "$Mod"
 fi
 
-# Remove theme templates (build-time input for scripts/build-themes.py,
-# never shipped raw; built theme archives are copied below instead)
+# Remove theme templates (build-time input for the theme builder, never shipped
+# raw; built theme archives are copied below instead)
 rm -rf "$Mod/theme"
 
 # Copy shipped fonts
 cp -r "$Dir/../fonts" "$Mod/fonts"
 
-# Copy built theme archives (produced by scripts/build-themes.py)
+# Copy built theme archives (produced by `yarn build:themes` in editor/). When
+# none are present yet, build them first - this pulls the heavier path (yarn +
+# puppeteer's Chromium in the editor/ workspace), so it only runs on demand.
 ThemesDir="$Dir/../$ProjectBuildDir/themes"
-if [ -d "$ThemesDir" ]; then
+EditorDir="$Dir/../editor"
+
+if ! ls "$ThemesDir/"*.zip >/dev/null 2>&1; then
+    if command -v yarn >/dev/null 2>&1; then
+        echo "No built theme archives found; running 'yarn build:themes' in editor/..."
+        (cd "$EditorDir" && yarn build:themes) || echo "WARNING: theme build failed."
+    else
+        echo "WARNING: yarn not found, cannot build themes automatically."
+    fi
+fi
+
+if ls "$ThemesDir/"*.zip >/dev/null 2>&1; then
     mkdir -p "$Mod/themes"
     cp "$ThemesDir/"*.zip "$Mod/themes"
 else
     echo "WARNING: no built theme archives in $ProjectBuildDir/themes;"
-    echo "run scripts/build-themes.py first. Packaging without themes."
+    echo "run 'yarn build:themes' in editor/ first. Packaging without themes."
 fi
 
 # Remove .gitkeep and README.md

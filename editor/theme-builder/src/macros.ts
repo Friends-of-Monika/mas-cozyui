@@ -7,7 +7,7 @@ import {
 	modulationFor,
 	overrideKey,
 	toHexByte
-} from "#lib/preview/colors";
+} from "./colors";
 
 /**
  * Values fed to the CUI_* template macros, mirroring the fields of the theme
