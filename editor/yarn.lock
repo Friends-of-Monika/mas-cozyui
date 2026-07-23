@@ -2473,9 +2473,6 @@ __metadata:
 "cozyui-editor-workspace@workspace:.":
   version: 0.0.0-use.local
   resolution: "cozyui-editor-workspace@workspace:."
-  dependenciesMeta:
-    puppeteer:
-      built: true
   languageName: unknown
   linkType: soft
 
