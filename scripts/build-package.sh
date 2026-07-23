@@ -109,9 +109,22 @@ rm -rf "$Mod/theme"
 # Copy shipped fonts
 cp -r "$Dir/../fonts" "$Mod/fonts"
 
-# Copy built theme archives (produced by `yarn build:themes` in editor/)
+# Copy built theme archives (produced by `yarn build:themes` in editor/). When
+# none are present yet, build them first - this pulls the heavier path (yarn +
+# puppeteer's Chromium in the editor/ workspace), so it only runs on demand.
 ThemesDir="$Dir/../$ProjectBuildDir/themes"
-if [ -d "$ThemesDir" ]; then
+EditorDir="$Dir/../editor"
+
+if ! ls "$ThemesDir/"*.zip >/dev/null 2>&1; then
+    if command -v yarn >/dev/null 2>&1; then
+        echo "No built theme archives found; running 'yarn build:themes' in editor/..."
+        (cd "$EditorDir" && yarn build:themes) || echo "WARNING: theme build failed."
+    else
+        echo "WARNING: yarn not found, cannot build themes automatically."
+    fi
+fi
+
+if ls "$ThemesDir/"*.zip >/dev/null 2>&1; then
     mkdir -p "$Mod/themes"
     cp "$ThemesDir/"*.zip "$Mod/themes"
 else
