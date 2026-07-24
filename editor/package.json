@@ -1,7 +1,7 @@
 {
   "name": "cozyui-editor-workspace",
   "private": true,
-  "packageManager": "yarn@4.17.0",
+  "packageManager": "yarn@4.17.1",
   "workspaces": [
     "editor",
     "theme-builder"
