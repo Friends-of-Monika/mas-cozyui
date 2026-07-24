@@ -77,11 +77,14 @@
 	const titleize = <T extends string>(items: readonly T[]) =>
 		items.map((v) => ({ value: v, label: v.charAt(0).toUpperCase() + v.slice(1) }));
 
-	// Font selectors list the built-ins plus any user-added custom fonts.
+	// Font selectors list the built-ins plus any user-added custom fonts. Each
+	// item previews itself in the font it names.
+	const fontOptions = <T extends string>(items: readonly T[]) =>
+		items.map((v) => ({ value: v, label: v, font: v }));
 	const custom = $derived(customFonts.map((f) => f.family));
-	const mainFontOptions = $derived(toOptions([...mainFonts, ...custom]));
-	const menuFontOptions = $derived(toOptions([...menuFonts, ...custom]));
-	const optionFontOptions = $derived(toOptions([...optionFonts, ...custom]));
+	const mainFontOptions = $derived(fontOptions([...mainFonts, ...custom]));
+	const menuFontOptions = $derived(fontOptions([...menuFonts, ...custom]));
+	const optionFontOptions = $derived(fontOptions([...optionFonts, ...custom]));
 
 	// The picker fires onInput both on user picks and when its hex prop changes
 	// programmatically (preset/open). Skip the echo - writing it back would
