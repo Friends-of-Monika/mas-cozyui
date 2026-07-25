@@ -50,18 +50,21 @@ init 999 style radio_button_text_dark:
     kerning cozy_ui.option_button_text.font_kerning
     size    cozy_ui.option_button_text.font_size
 
-# Fancy check button
+# Fancy check button - what the settings screen actually renders its check/radio
+# options with (style_prefix "generic_fancy_check"), so it carries the option
+# font. NOTE: this style is also shared by the selector sidebar's "Outfit Mode"
+# toggle, which therefore follows the option font too.
 init 999 style generic_fancy_check_button_text:
     yoffset cozy_ui.button_text.vertical_offset
-    font    cozy_ui.common.font
-    kerning cozy_ui.common.font_kerning
-    size    cozy_ui.common.font_size
+    font    cozy_ui.option_button_text.font
+    kerning cozy_ui.option_button_text.font_kerning
+    size    cozy_ui.option_button_text.font_size
 
 init 999 style generic_fancy_check_button_text_dark:
     yoffset cozy_ui.button_text.vertical_offset
-    font    cozy_ui.common.font
-    kerning cozy_ui.common.font_kerning
-    size    cozy_ui.common.font_size
+    font    cozy_ui.option_button_text.font
+    kerning cozy_ui.option_button_text.font_kerning
+    size    cozy_ui.option_button_text.font_size
 
 
 
