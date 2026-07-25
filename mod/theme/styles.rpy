@@ -70,14 +70,18 @@ init 999 style generic_fancy_check_button_dark:
 
 init 999 style generic_fancy_check_button_text:
     yalign         0.5
-    font           gui.default_font
+    # Settings check/radio options use the option font (this style is shared with
+    # the selector sidebar's Outfit Mode toggle, which follows it too). Set here
+    # as well as in fonts.rpy since styles.rpy loads last and would otherwise
+    # clobber it back to the main font.
+    font           cozy_ui.option_button_text.font
     color          cozy_ui.fancy_check_button_text.light.idle_color
     hover_color    cozy_ui.fancy_check_button_text.light.hover_color
     selected_color cozy_ui.fancy_check_button_text.light.selected_color
 
 init 999 style generic_fancy_check_button_text_dark:
     yalign         0.5
-    font           gui.default_font
+    font           cozy_ui.option_button_text.font
     color          cozy_ui.fancy_check_button_text.dark.idle_color
     hover_color    cozy_ui.fancy_check_button_text.dark.hover_color
     selected_color cozy_ui.fancy_check_button_text.dark.selected_color

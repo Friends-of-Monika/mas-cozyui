@@ -104,7 +104,14 @@ define cozy_ui.button_text.dark.selected_color     = "CUI_BTN_TEXT_COLOR(187, 85
 define cozy_ui.button_text.dark.insensitive_color  = "CUI_BTN_TEXT_COLOR(115, 115, 115, 127)"
 define cozy_ui.button_text.dark.outlines           = []
 
-define cozy_ui.option_button_text.font                    = cozy_ui.expand_path("CUI_OPTION_FONT()")
+# The option (settings check/radio) labels can be localized, so the chosen font
+# only owns the Latin range; CJK and the rest fall back like cozy_ui.common.font.
+define cozy_ui.option_button_text.font                    = FontGroup().add(
+    cozy_ui.expand_path("CUI_OPTION_FONT()")     , 0x0020, 0x00ff).add( # Chosen font (Latin)
+    "mod_assets/font/SourceHanSansK-Regular.otf" , 0xac00, 0xd7a3).add( # Korean
+    "mod_assets/font/SourceHanSansSC-Regular.otf", 0x4e00, 0x9faf).add( # Simplified chinese
+    "mod_assets/font/mplus-2p-regular.ttf"       , 0x3000, 0x4dff).add( # Japanese and others
+    "gui/font/Aller_Rg.ttf"                      , 0x0000, 0xffff)      # Fallback
 define cozy_ui.option_button_text.font_kerning            = 0.0
 define cozy_ui.option_button_text.font_size               = 24
 define cozy_ui.option_button_text.light.idle_color        = "CUI_SCD_COLOR(170, 170, 170)"
