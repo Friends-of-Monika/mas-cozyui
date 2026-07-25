@@ -1,6 +1,9 @@
 import type { ColorModulation } from "../colors";
 import type { MacroParams } from "../macros";
 
+/** Default music-list font (base-game asset) when a theme omits music_font. */
+export const DEFAULT_MUSIC_FONT = "mod_assets/font/mplus-2p-regular.ttf";
+
 /**
  * The theme definition JSON (themes/*.json) as the builder reads it. Matches the
  * editor's ThemeConfig, minus the editor-only extras; the per-surface color
@@ -17,6 +20,8 @@ export interface ThemeDefinition {
 	main_font: { regular: string; italic: string; bold: string; bold_italic: string };
 	menu_font: string;
 	option_font: string;
+	/** Optional: the shipped presets omit it and fall back to the mplus default. */
+	music_font?: string;
 	main_font_kerning: number;
 	dialogue_vertical_offset: number;
 	dialogue_line_spacing: number;
@@ -55,6 +60,7 @@ export function definitionToMacroParams(
 		mainFontKerning: def.main_font_kerning,
 		menuFont: def.menu_font,
 		optionFont: def.option_font,
+		musicFont: def.music_font ?? DEFAULT_MUSIC_FONT,
 		dialogueVerticalOffset: def.dialogue_vertical_offset,
 		dialogueLineSpacing: def.dialogue_line_spacing,
 		buttonHeightAdjustment: def.button_height_adjustment,

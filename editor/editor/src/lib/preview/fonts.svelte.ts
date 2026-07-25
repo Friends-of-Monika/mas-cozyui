@@ -63,6 +63,7 @@ export function removeFont(family: string): void {
 	if (theme.mainFont === family) theme.mainFont = "Nunito";
 	if (theme.menuFont === family) theme.menuFont = "Riffic";
 	if (theme.optionFont === family) theme.optionFont = "Halogen";
+	if (theme.musicFont === family) theme.musicFont = "M+ 2p";
 }
 
 /** Looks up a custom font by family name. */

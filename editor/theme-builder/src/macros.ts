@@ -46,6 +46,7 @@ export interface MacroParams extends ThemeModulations {
 	mainFontKerning?: number;
 	menuFont?: string;
 	optionFont?: string;
+	musicFont?: string;
 	dialogueVerticalOffset?: number;
 	dialogueLineSpacing?: number;
 	buttonHeightAdjustment?: number;
@@ -110,6 +111,7 @@ export function applyMacros(text: string, p: MacroParams, group: ColorGroup | nu
 		"CUI_MAIN_FONT_KERNING()": p.mainFontKerning,
 		"CUI_MENU_FONT()": p.menuFont,
 		"CUI_OPTION_FONT()": p.optionFont,
+		"CUI_MUSIC_FONT()": p.musicFont,
 		"CUI_DLG_VERT_OFFSET()": p.dialogueVerticalOffset,
 		"CUI_DLG_LINE_SPACING()": p.dialogueLineSpacing,
 		"CUI_BTN_HEIGHT_ADJUSTMENT()": p.buttonHeightAdjustment,

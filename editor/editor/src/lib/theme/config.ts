@@ -3,14 +3,10 @@ import { unzipSync, zipSync } from "fflate";
 import type { ColorModulation } from "#lib/preview/colors";
 import { addFontBytes, customFonts } from "#lib/preview/fonts.svelte";
 import {
-	type MainFont,
-	type MenuFont,
+	type Font,
 	NO_MODULATION,
-	type OptionFont,
 	type PatternShape,
-	mainFonts,
-	menuFonts,
-	optionFonts,
+	fonts,
 	theme
 } from "#lib/preview/theme.svelte";
 
@@ -35,6 +31,8 @@ export interface ThemeConfig {
 	main_font: { regular: string; italic: string; bold: string; bold_italic: string };
 	menu_font: string;
 	option_font: string;
+	/** Music-list font; absent in pre-v4 projects (defaults to mplus). */
+	music_font: string;
 	main_font_kerning: number;
 	dialogue_vertical_offset: number;
 	dialogue_line_spacing: number;
@@ -84,6 +82,7 @@ export function toConfig(): ThemeConfig {
 		},
 		menu_font: p.menuFont ?? "",
 		option_font: p.optionFont ?? "",
+		music_font: p.musicFont ?? "",
 		main_font_kerning: DEFAULT_METRICS.mainFontKerning,
 		dialogue_vertical_offset: DEFAULT_METRICS.dialogueVerticalOffset,
 		dialogue_line_spacing: DEFAULT_METRICS.dialogueLineSpacing,
@@ -107,9 +106,11 @@ export function applyConfig(config: ThemeConfig) {
 	theme.dialogueRounding = config.dialogue_rounding;
 	theme.menuPatternShape = config.menu_pattern_shape as PatternShape;
 	theme.dialoguePatternShape = config.dialogue_pattern_shape as PatternShape;
-	theme.mainFont = resolveFamily<MainFont>(config.main_font.regular, mainFonts, "Nunito");
-	theme.menuFont = resolveFamily<MenuFont>(config.menu_font, menuFonts, "Riffic");
-	theme.optionFont = resolveFamily<OptionFont>(config.option_font, optionFonts, "Halogen");
+	theme.mainFont = resolveFamily<Font>(config.main_font.regular, fonts, "Nunito");
+	theme.menuFont = resolveFamily<Font>(config.menu_font, fonts, "Riffic");
+	theme.optionFont = resolveFamily<Font>(config.option_font, fonts, "Halogen");
+	// Pre-v4 projects carry no music_font; default to the mplus family.
+	theme.musicFont = resolveFamily<Font>(config.music_font ?? "", fonts, "M+ 2p");
 	Object.assign(theme.primary, config.primary_color);
 	Object.assign(theme.secondary, config.secondary_color);
 	// Themes authored before per-surface colors (and the shipped presets) carry

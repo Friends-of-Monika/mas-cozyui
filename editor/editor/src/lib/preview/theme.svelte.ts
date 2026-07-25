@@ -16,14 +16,12 @@ export const NO_MODULATION = (): ColorModulation => ({ h: null, s: null, l: null
 export const patternShapes = ["none", "dot", "heart", "rhombus", "sparkle", "star"] as const;
 export type PatternShape = (typeof patternShapes)[number];
 
-// Font families registered in app.css; Riffic/Halogen come from a local
-// DDLC extraction and gracefully fall back to Nunito when absent
-export const mainFonts = ["Nunito", "Asap"] as const;
-export const menuFonts = ["Riffic", "Nunito", "Asap"] as const;
-export const optionFonts = ["Halogen", "Nunito", "Asap"] as const;
-export type MainFont = (typeof mainFonts)[number];
-export type MenuFont = (typeof menuFonts)[number];
-export type OptionFont = (typeof optionFonts)[number];
+// Built-in font families registered in app.css, shared by every font selector
+// (a user-added custom font joins the same pool). Riffic/Halogen come from a
+// local DDLC extraction, "M+ 2p" is the base-game mplus-2p (broad glyph
+// coverage); all gracefully fall back to Nunito when absent.
+export const fonts = ["Nunito", "Asap", "Riffic", "Halogen", "M+ 2p"] as const;
+export type Font = (typeof fonts)[number];
 
 /**
  * Live-editable theme state, mirroring the fields of the theme definition
@@ -47,11 +45,12 @@ export const theme = $state({
 	dialogueRounding: 10,
 	menuPatternShape: "dot" as PatternShape,
 	dialoguePatternShape: "dot" as PatternShape,
-	// Font fields hold a family name: a built-in (MainFont/MenuFont/OptionFont)
-	// or a user-added custom font family (see fonts.svelte).
+	// Font fields hold a family name from the shared pool: a built-in (see
+	// `fonts`) or a user-added custom font family (see fonts.svelte).
 	mainFont: "Nunito" as string,
 	menuFont: "Riffic" as string,
 	optionFont: "Halogen" as string,
+	musicFont: "M+ 2p" as string,
 	// MAS "UI: Night Mode": swaps UI elements to their dark variants
 	darkMode: false,
 	// Derived colors pinned to an absolute "#rrggbb", keyed by overrideKey().

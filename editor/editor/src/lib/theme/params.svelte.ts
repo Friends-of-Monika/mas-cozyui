@@ -1,10 +1,12 @@
 import { customFont } from "#lib/preview/fonts.svelte";
-import { type MainFont, theme } from "#lib/preview/theme.svelte";
+import { theme } from "#lib/preview/theme.svelte";
 
 import type { MacroParams } from "./macros";
 
-// Main font file sets (mirrors the main_font block of the theme JSONs)
-export const MAIN_FONTS: Record<MainFont, { regular: string; italic: string; bold: string; boldItalic: string }> = {
+// Multi-weight main font sets (mirrors the main_font block of the theme JSONs).
+// Only families with distinct italic/bold faces live here; other pool fonts
+// (Riffic/Halogen/M+ 2p, and custom fonts) map every weight to a single file.
+export const MAIN_FONTS: Record<string, { regular: string; italic: string; bold: string; boldItalic: string }> = {
 	Nunito: {
 		regular: "%SUBMOD_DIR%/fonts/Nunito-SemiBold.ttf",
 		italic: "%SUBMOD_DIR%/fonts/Nunito-SemiBoldItalic.ttf",
@@ -19,13 +21,17 @@ export const MAIN_FONTS: Record<MainFont, { regular: string; italic: string; bol
 	}
 };
 
-// DDLC base-game font paths for the menu/option fonts
+// DDLC / base-game font paths for the menu/option/music fonts
 export const DDLC_FONT_PATH: Record<string, string> = {
 	Riffic: "gui/font/RifficFree-Bold.ttf",
 	Halogen: "gui/font/Halogen.ttf",
 	Nunito: "%SUBMOD_DIR%/fonts/Nunito-SemiBold.ttf",
-	Asap: "%SUBMOD_DIR%/fonts/Asap-Medium.ttf"
+	Asap: "%SUBMOD_DIR%/fonts/Asap-Medium.ttf",
+	"M+ 2p": "mod_assets/font/mplus-2p-regular.ttf"
 };
+
+// Default music-list font (base-game mplus-2p) when none is resolved.
+export const DEFAULT_MUSIC_FONT = "mod_assets/font/mplus-2p-regular.ttf";
 
 // Offset/kerning values not yet exposed in the editor UI (Default theme values)
 export const DEFAULT_METRICS = {
@@ -47,8 +53,10 @@ function customPath(family: string): string | undefined {
 
 // Resolves the main_font style set for a family, built-in or custom.
 function mainFontSet(family: string): { regular: string; italic: string; bold: string; boldItalic: string } {
-	if (family in MAIN_FONTS) return MAIN_FONTS[family as MainFont];
-	const path = customPath(family);
+	if (family in MAIN_FONTS) return MAIN_FONTS[family];
+	// Single-file pool fonts (Riffic/Halogen/M+ 2p) and custom fonts use one file
+	// for every weight - there is no separate italic/bold face to draw on.
+	const path = DDLC_FONT_PATH[family] ?? customPath(family);
 	if (path) return { regular: path, italic: path, bold: path, boldItalic: path };
 	return MAIN_FONTS.Nunito;
 }
@@ -81,6 +89,7 @@ export function themeParams(scale = 1): MacroParams {
 		mainFontName: theme.mainFont,
 		menuFont: fontPath(theme.menuFont, DDLC_FONT_PATH.Riffic),
 		optionFont: fontPath(theme.optionFont, DDLC_FONT_PATH.Halogen),
+		musicFont: fontPath(theme.musicFont, DEFAULT_MUSIC_FONT),
 		...DEFAULT_METRICS,
 		scale
 	};

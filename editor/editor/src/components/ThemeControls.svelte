@@ -15,9 +15,7 @@
 	import {
 		NO_MODULATION,
 		grp,
-		mainFonts,
-		menuFonts,
-		optionFonts,
+		fonts,
 		patternShapes,
 		prm,
 		scd,
@@ -73,18 +71,13 @@
 
 	const surfaceHex = (s: Surface) => grp(s.group, ...s.anchor);
 
-	const toOptions = <T extends string>(items: readonly T[]) => items.map((v) => ({ value: v, label: v }));
 	const titleize = <T extends string>(items: readonly T[]) =>
 		items.map((v) => ({ value: v, label: v.charAt(0).toUpperCase() + v.slice(1) }));
 
-	// Font selectors list the built-ins plus any user-added custom fonts. Each
-	// item previews itself in the font it names.
-	const fontOptions = <T extends string>(items: readonly T[]) =>
-		items.map((v) => ({ value: v, label: v, font: v }));
+	// Every font selector shares one pool: the built-ins plus any user-added
+	// custom fonts. Each item previews itself in the font it names.
 	const custom = $derived(customFonts.map((f) => f.family));
-	const mainFontOptions = $derived(fontOptions([...mainFonts, ...custom]));
-	const menuFontOptions = $derived(fontOptions([...menuFonts, ...custom]));
-	const optionFontOptions = $derived(fontOptions([...optionFonts, ...custom]));
+	const fontOptions = $derived([...fonts, ...custom].map((v) => ({ value: v, label: v, font: v })));
 
 	// The picker fires onInput both on user picks and when its hex prop changes
 	// programmatically (preset/open). Skip the echo - writing it back would
@@ -271,18 +264,23 @@
 		<div class="flex flex-col gap-2 pt-2">
 			<label class="label">
 				<span>Main font</span>
-				<SelectMenu bind:value={theme.mainFont} options={mainFontOptions} />
+				<SelectMenu bind:value={theme.mainFont} options={fontOptions} />
 				<span class="text-xs opacity-60">Dialogue, buttons, menus and the quick menu</span>
 			</label>
 			<label class="label">
 				<span>Menu font</span>
-				<SelectMenu bind:value={theme.menuFont} options={menuFontOptions} />
+				<SelectMenu bind:value={theme.menuFont} options={fontOptions} />
 				<span class="text-xs opacity-60">Name box and settings menu titles</span>
 			</label>
 			<label class="label">
 				<span>Option font</span>
-				<SelectMenu bind:value={theme.optionFont} options={optionFontOptions} />
+				<SelectMenu bind:value={theme.optionFont} options={fontOptions} />
 				<span class="text-xs opacity-60">Settings check/radio options</span>
+			</label>
+			<label class="label">
+				<span>Music font</span>
+				<SelectMenu bind:value={theme.musicFont} options={fontOptions} />
+				<span class="text-xs opacity-60">Music selector song list</span>
 			</label>
 		</div>
 	</details>

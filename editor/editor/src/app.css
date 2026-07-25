@@ -84,6 +84,14 @@
 	font-style: italic;
 }
 
+/* mplus-2p: the base-game music-list font (broad glyph coverage). */
+@font-face {
+	font-family: "M+ 2p";
+	src: url("/fonts/mplus-2p-regular.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
 /* Families are driven by the live theme state via CSS variables set on the
    preview stage root; fallbacks match the defaults */
 .preview-font {
@@ -98,6 +106,10 @@
 .preview-option-font {
 	font-family: var(--preview-option-font, "Halogen"), "Nunito", sans-serif;
 	line-height: 1.25;
+}
+
+.preview-music-font {
+	font-family: var(--preview-music-font, "M+ 2p"), "Nunito", sans-serif;
 }
 
 /* Dark theme for svelte-awesome-color-picker popups (defaults are light-on-light
