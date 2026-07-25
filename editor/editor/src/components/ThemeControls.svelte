@@ -73,7 +73,6 @@
 
 	const surfaceHex = (s: Surface) => grp(s.group, ...s.anchor);
 
-	const toOptions = <T extends string>(items: readonly T[]) => items.map((v) => ({ value: v, label: v }));
 	const titleize = <T extends string>(items: readonly T[]) =>
 		items.map((v) => ({ value: v, label: v.charAt(0).toUpperCase() + v.slice(1) }));
 
