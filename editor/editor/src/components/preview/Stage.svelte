@@ -22,6 +22,7 @@
 			style:--preview-main-font={theme.mainFont}
 			style:--preview-menu-font={theme.menuFont}
 			style:--preview-option-font={theme.optionFont}
+			style:--preview-music-font={theme.musicFont}
 		>
 			{@render children()}
 		</div>

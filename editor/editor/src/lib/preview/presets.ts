@@ -2,11 +2,13 @@ import type { ColorModulation } from "./colors";
 import {
 	type MainFont,
 	type MenuFont,
+	type MusicFont,
 	NO_MODULATION,
 	type OptionFont,
 	type PatternShape,
 	mainFonts,
 	menuFonts,
+	musicFonts,
 	optionFonts,
 	theme
 } from "./theme.svelte";
@@ -23,6 +25,8 @@ interface ThemeDefinition {
 	main_font: { regular: string };
 	menu_font: string;
 	option_font: string;
+	/** Optional in the shipped presets, which default to the mplus music font. */
+	music_font?: string;
 	primary_color: ColorModulation;
 	secondary_color: ColorModulation;
 	/** Optional in the shipped presets, which all follow the primary color. */
@@ -49,6 +53,7 @@ export interface ThemePreset {
 	mainFont: MainFont;
 	menuFont: MenuFont;
 	optionFont: OptionFont;
+	musicFont: MusicFont;
 }
 
 // Maps a font file path from the theme definition to a registered family name
@@ -85,7 +90,8 @@ export const presets: ThemePreset[] = Object.values(definitions)
 		dialoguePatternShape: def.dialogue_pattern_shape as PatternShape,
 		mainFont: familyOf(def.main_font.regular, mainFonts, "Nunito"),
 		menuFont: familyOf(def.menu_font, menuFonts, "Riffic"),
-		optionFont: familyOf(def.option_font, optionFonts, "Halogen")
+		optionFont: familyOf(def.option_font, optionFonts, "Halogen"),
+		musicFont: familyOf(def.music_font ?? "", musicFonts, "M+ 2p")
 	}))
 	.sort((a, b) => order(a).localeCompare(order(b)));
 
@@ -108,6 +114,7 @@ export function applyPreset(id: string) {
 	theme.mainFont = preset.mainFont;
 	theme.menuFont = preset.menuFont;
 	theme.optionFont = preset.optionFont;
+	theme.musicFont = preset.musicFont;
 	// Presets are pure-modulation themes; drop any pinned colors from the theme
 	// that was being edited so the preset shows exactly as authored.
 	theme.overrides = {};

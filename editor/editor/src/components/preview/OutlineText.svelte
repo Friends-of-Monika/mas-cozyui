@@ -5,7 +5,7 @@
 
 	import { outlineShadows } from "#lib/preview/outline";
 
-	type Font = "menu" | "main" | "option";
+	type Font = "menu" | "main" | "option" | "music";
 
 	let {
 		size,
@@ -24,7 +24,8 @@
 	const fontClass: Record<Font, string> = {
 		menu: "preview-name-font",
 		main: "preview-font",
-		option: "preview-option-font"
+		option: "preview-option-font",
+		music: "preview-music-font"
 	};
 </script>
 

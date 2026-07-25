@@ -6,7 +6,7 @@
  * To add a format change: bump CONFIG_VERSION and add the matching step to
  * `migrations`, keyed by the version it upgrades *from*.
  */
-export const CONFIG_VERSION = 3;
+export const CONFIG_VERSION = 4;
 
 /** A config as read from disk, before it is trusted to match ThemeConfig. */
 export type RawConfig = Record<string, unknown>;
@@ -23,7 +23,10 @@ const migrations: Record<number, (config: RawConfig) => RawConfig> = {
 		dialogue_color: { h: null, s: null, l: null },
 		button_text_color: { h: null, s: null, l: null },
 		dialogue_text_color: { h: null, s: null, l: null }
-	})
+	}),
+	// v3 -> v4: the music selector's font is now theme-controlled. v3 projects
+	// used the fixed mplus-2p font, so default to it.
+	3: (config) => ({ ...config, music_font: "mod_assets/font/mplus-2p-regular.ttf" })
 };
 
 /** Reads the declared format version, defaulting to the pre-versioning v1. */

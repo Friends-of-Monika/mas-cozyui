@@ -50,7 +50,15 @@ define cozy_ui.menu_button_text.dark.idle_outlines         = [(4, "CUI_SCD_COLOR
 define cozy_ui.menu_button_text.dark.hover_outlines        = [(4, "CUI_SCD_COLOR(201, 105, 172)", 0, 0), (2, "CUI_SCD_COLOR(201, 105, 172)", 2, 2)]
 define cozy_ui.menu_button_text.dark.insensitive_outlines  = [(4, "CUI_SCD_COLOR(186, 120, 166)", 0, 0), (2, "CUI_SCD_COLOR(186, 120, 166)", 2, 2)]
 
-define cozy_ui.music_menu_button_text.font                       = "mod_assets/font/mplus-2p-regular.ttf"
+# The song list can carry arbitrary Unicode (custom BGM titles), so the chosen
+# font only owns the Latin range; CJK and the rest fall back the same way
+# cozy_ui.common.font does, with mplus-2p as the wide-glyph fallback.
+define cozy_ui.music_menu_button_text.font                       = FontGroup().add(
+    cozy_ui.expand_path("CUI_MUSIC_FONT()")      , 0x0020, 0x00ff).add( # Chosen font (Latin)
+    "mod_assets/font/SourceHanSansK-Regular.otf" , 0xac00, 0xd7a3).add( # Korean
+    "mod_assets/font/SourceHanSansSC-Regular.otf", 0x4e00, 0x9faf).add( # Simplified chinese
+    "mod_assets/font/mplus-2p-regular.ttf"       , 0x3000, 0x4dff).add( # Japanese and others
+    "gui/font/Aller_Rg.ttf"                      , 0x0000, 0xffff)      # Fallback
 define cozy_ui.music_menu_button_text.font_kerning               = 0.0
 define cozy_ui.music_menu_button_text.font_size                  = 24
 define cozy_ui.music_menu_button_text.light.color                = "CUI_SCD_COLOR(255, 255, 255)"

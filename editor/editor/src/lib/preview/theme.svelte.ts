@@ -21,9 +21,14 @@ export type PatternShape = (typeof patternShapes)[number];
 export const mainFonts = ["Nunito", "Asap"] as const;
 export const menuFonts = ["Riffic", "Nunito", "Asap"] as const;
 export const optionFonts = ["Halogen", "Nunito", "Asap"] as const;
+// Music-list font. "M+ 2p" is the base-game mplus-2p (broad glyph coverage,
+// the historical default); it owns only the Latin range in-game, with CJK
+// fallbacks behind it (see definitions.rpy).
+export const musicFonts = ["M+ 2p", "Nunito", "Asap"] as const;
 export type MainFont = (typeof mainFonts)[number];
 export type MenuFont = (typeof menuFonts)[number];
 export type OptionFont = (typeof optionFonts)[number];
+export type MusicFont = (typeof musicFonts)[number];
 
 /**
  * Live-editable theme state, mirroring the fields of the theme definition
@@ -52,6 +57,7 @@ export const theme = $state({
 	mainFont: "Nunito" as string,
 	menuFont: "Riffic" as string,
 	optionFont: "Halogen" as string,
+	musicFont: "M+ 2p" as string,
 	// MAS "UI: Night Mode": swaps UI elements to their dark variants
 	darkMode: false,
 	// Derived colors pinned to an absolute "#rrggbb", keyed by overrideKey().

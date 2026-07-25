@@ -17,6 +17,7 @@
 		grp,
 		mainFonts,
 		menuFonts,
+		musicFonts,
 		optionFonts,
 		patternShapes,
 		prm,
@@ -84,6 +85,7 @@
 	const mainFontOptions = $derived(fontOptions([...mainFonts, ...custom]));
 	const menuFontOptions = $derived(fontOptions([...menuFonts, ...custom]));
 	const optionFontOptions = $derived(fontOptions([...optionFonts, ...custom]));
+	const musicFontOptions = $derived(fontOptions([...musicFonts, ...custom]));
 
 	// The picker fires onInput both on user picks and when its hex prop changes
 	// programmatically (preset/open). Skip the echo - writing it back would
@@ -282,6 +284,11 @@
 				<span>Option font</span>
 				<SelectMenu bind:value={theme.optionFont} options={optionFontOptions} />
 				<span class="text-xs opacity-60">Settings check/radio options</span>
+			</label>
+			<label class="label">
+				<span>Music font</span>
+				<SelectMenu bind:value={theme.musicFont} options={musicFontOptions} />
+				<span class="text-xs opacity-60">Music selector song list</span>
 			</label>
 		</div>
 	</details>
