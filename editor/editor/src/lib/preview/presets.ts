@@ -1,15 +1,9 @@
 import type { ColorModulation } from "./colors";
 import {
-	type MainFont,
-	type MenuFont,
-	type MusicFont,
+	type Font,
 	NO_MODULATION,
-	type OptionFont,
 	type PatternShape,
-	mainFonts,
-	menuFonts,
-	musicFonts,
-	optionFonts,
+	fonts,
 	theme
 } from "./theme.svelte";
 
@@ -50,10 +44,10 @@ export interface ThemePreset {
 	dialogueRounding: number;
 	menuPatternShape: PatternShape;
 	dialoguePatternShape: PatternShape;
-	mainFont: MainFont;
-	menuFont: MenuFont;
-	optionFont: OptionFont;
-	musicFont: MusicFont;
+	mainFont: Font;
+	menuFont: Font;
+	optionFont: Font;
+	musicFont: Font;
 }
 
 // Maps a font file path from the theme definition to a registered family name
@@ -88,10 +82,10 @@ export const presets: ThemePreset[] = Object.values(definitions)
 		dialogueRounding: def.dialogue_rounding,
 		menuPatternShape: def.menu_pattern_shape as PatternShape,
 		dialoguePatternShape: def.dialogue_pattern_shape as PatternShape,
-		mainFont: familyOf(def.main_font.regular, mainFonts, "Nunito"),
-		menuFont: familyOf(def.menu_font, menuFonts, "Riffic"),
-		optionFont: familyOf(def.option_font, optionFonts, "Halogen"),
-		musicFont: familyOf(def.music_font ?? "", musicFonts, "M+ 2p")
+		mainFont: familyOf(def.main_font.regular, fonts, "Nunito"),
+		menuFont: familyOf(def.menu_font, fonts, "Riffic"),
+		optionFont: familyOf(def.option_font, fonts, "Halogen"),
+		musicFont: familyOf(def.music_font ?? "", fonts, "M+ 2p")
 	}))
 	.sort((a, b) => order(a).localeCompare(order(b)));
 
