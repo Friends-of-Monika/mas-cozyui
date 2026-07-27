@@ -179,6 +179,9 @@ export const colorSlots: ColorSlot[] = [
 	{ label: "Panel fill", section: "Calendar", channel: "prm", group: "calendar", light: [255, 230, 244], dark: [150, 114, 133] },
 	{ label: "Header fill", section: "Calendar", channel: "prm", group: "calendar", light: [255, 176, 237], dark: [150, 87, 130] },
 	{ label: "Close button", section: "Calendar", channel: "prm", group: "calendar", light: [255, 216, 235], dark: [150, 107, 128] },
+	// The grey wash over out-of-month (inactive) day cells. Its base is neutral, so
+	// it stays grey under any modulation until pinned to a color of its own.
+	{ label: "Inactive cells", section: "Calendar", channel: "prm", group: "calendar", light: [161, 161, 161], dark: [95, 80, 88] },
 	// The shared border of the panel, day cells and weekday headers.
 	scdSlot("Calendar", "Cell border", [250, 153, 228], [146, 76, 125]),
 	scdSlot("Calendar", "Today border", [186, 83, 152], [84, 32, 84]),

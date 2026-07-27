@@ -10,7 +10,7 @@
     <g fill="none" stroke="CUI_SCD_COLOR(250, 153, 228)" stroke-opacity="0.86" stroke-width="1">
         <rect x="0.5" y="0.5" width="127" height="64" rx="0" />
     </g>
-    <g fill="rgb(161, 161, 161)" fill-opacity="0.66" stroke="rgb(170, 160, 168)" stroke-opacity="0.52" stroke-width="1">
+    <g fill="CUI_PRM_COLOR(161, 161, 161)" fill-opacity="0.66" stroke="rgb(170, 160, 168)" stroke-opacity="0.52" stroke-width="1">
         <rect x="1.5" y="1.5" width="125" height="62" rx="0" />
     </g>
 </svg>
