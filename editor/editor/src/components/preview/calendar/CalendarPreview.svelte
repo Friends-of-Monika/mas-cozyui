@@ -70,7 +70,25 @@
 		today: "calendar_today_bg",
 		disabled: "calendar_day_disabled_bg"
 	};
+
+	// The close and month/year arrow buttons brighten to their _hover asset while
+	// pointed at (MASButtonDisplayable hover state).
+	let hovered = $state<string | null>(null);
 </script>
+
+<!-- A hoverable button that swaps to its _hover asset while pointed at. -->
+{#snippet hoverBtn(id: string, base: string, left: number, top: number, w: number, h: number)}
+	<div
+		role="presentation"
+		class="absolute"
+		style:left="{left}px"
+		style:top="{top}px"
+		onpointerenter={() => (hovered = id)}
+		onpointerleave={() => (hovered = null)}
+	>
+		<RealAsset path="{cal}/{base}{hovered === id ? '_hover' : ''}{n}.svg" width={w} height={h} />
+	</div>
+{/snippet}
 
 <Stage>
 	<img src={skyMask} alt="" class="absolute inset-0" width={STAGE_W} height={STAGE_H} />
@@ -85,9 +103,7 @@
 	</div>
 
 	<!-- Close button (X glyph blanked by CozyUI) -->
-	<div class="absolute" style:left="1041px" style:top="60px">
-		<RealAsset path="{cal}/calendar_close{n}.svg" width={74} height={74} />
-	</div>
+	{@render hoverBtn("close", "calendar_close", 1041, 60, 74, 74)}
 
 	<!-- Title, centered over the internal area -->
 	<div
@@ -100,14 +116,10 @@
 	</div>
 
 	<!-- Month selector: < July > centered in a 250px band at INIT_X+100 -->
-	<div class="absolute" style:left="{INIT_X + 100}px" style:top="{SELECTOR_Y}px">
-		<RealAsset path="{cal}/calendar_left_arrow{n}.svg" width={ARROW} height={ARROW} />
-	</div>
-	<div class="absolute" style:left="{INIT_X + 330}px" style:top="{SELECTOR_Y}px">
-		<RealAsset path="{cal}/calendar_right_arrow{n}.svg" width={ARROW} height={ARROW} />
-	</div>
+	{@render hoverBtn("m<", "calendar_left_arrow", INIT_X + 100, SELECTOR_Y, ARROW, ARROW)}
+	{@render hoverBtn("m>", "calendar_right_arrow", INIT_X + 330, SELECTOR_Y, ARROW, ARROW)}
 	<div
-		class="absolute flex justify-center"
+		class="pointer-events-none absolute flex justify-center"
 		style:left="{INIT_X + 100}px"
 		style:top="{LABEL_Y}px"
 		style:width="250px"
@@ -116,14 +128,10 @@
 	</div>
 
 	<!-- Year selector: < 2026 > centered in a 250px band at the internal right -->
-	<div class="absolute" style:left="{INIT_X + INTERNAL_W - ARROW - 330}px" style:top="{SELECTOR_Y}px">
-		<RealAsset path="{cal}/calendar_left_arrow{n}.svg" width={ARROW} height={ARROW} />
-	</div>
-	<div class="absolute" style:left="{INIT_X + INTERNAL_W - ARROW - 100}px" style:top="{SELECTOR_Y}px">
-		<RealAsset path="{cal}/calendar_right_arrow{n}.svg" width={ARROW} height={ARROW} />
-	</div>
+	{@render hoverBtn("y<", "calendar_left_arrow", INIT_X + INTERNAL_W - ARROW - 330, SELECTOR_Y, ARROW, ARROW)}
+	{@render hoverBtn("y>", "calendar_right_arrow", INIT_X + INTERNAL_W - ARROW - 100, SELECTOR_Y, ARROW, ARROW)}
 	<div
-		class="absolute flex justify-center"
+		class="pointer-events-none absolute flex justify-center"
 		style:left="{INIT_X + INTERNAL_W - 350}px"
 		style:top="{LABEL_Y}px"
 		style:width="250px"
