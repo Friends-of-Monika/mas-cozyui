@@ -179,6 +179,7 @@ export const colorSlots: ColorSlot[] = [
 	{ label: "Panel fill", section: "Calendar", channel: "prm", group: "calendar", light: [255, 230, 244], dark: [150, 114, 133] },
 	{ label: "Header fill", section: "Calendar", channel: "prm", group: "calendar", light: [255, 176, 237], dark: [150, 87, 130] },
 	{ label: "Close button", section: "Calendar", channel: "prm", group: "calendar", light: [255, 216, 235], dark: [150, 107, 128] },
+	{ label: "Close button (hovered)", section: "Calendar", channel: "prm", group: "calendar", light: [255, 236, 247], dark: [150, 117, 135] },
 	// The grey wash over out-of-month (inactive) day cells. Its base is neutral, so
 	// it stays grey under any modulation until pinned to a color of its own.
 	{ label: "Inactive cells", section: "Calendar", channel: "prm", group: "calendar", light: [161, 161, 161], dark: [95, 80, 88] },
@@ -188,5 +189,6 @@ export const colorSlots: ColorSlot[] = [
 	scdSlot("Calendar", "Today border (hovered)", [255, 167, 203], [228, 145, 206]),
 	scdSlot("Calendar", "Arrows", [197, 95, 163], [119, 52, 94]),
 	scdSlot("Calendar", "Arrows (hovered)", [230, 119, 200], [139, 64, 114]),
-	scdSlot("Calendar", "Close mark", [255, 160, 225], [150, 79, 123])
+	scdSlot("Calendar", "Close mark", [255, 160, 225], [150, 79, 123]),
+	scdSlot("Calendar", "Close mark (hovered)", [255, 189, 242], [150, 94, 132])
 ];
