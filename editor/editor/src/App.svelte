@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AppMenu from "#components/AppMenu.svelte";
 	import ThemeControls from "#components/ThemeControls.svelte";
+	import CalendarPreview from "#components/preview/calendar/CalendarPreview.svelte";
 	import MenuPreview from "#components/preview/menu/MenuPreview.svelte";
 	import ModalPreview from "#components/preview/modal/ModalPreview.svelte";
 	import MusicPreview from "#components/preview/music/MusicPreview.svelte";
@@ -24,7 +25,7 @@
 		>
 			<div class="border-surface-200-800 mb-4 flex items-end justify-between border-b">
 				<Tabs.List class="relative flex gap-1">
-					{#each [{ value: "scene", label: "Talk" }, { value: "settings", label: "Settings" }, { value: "menu", label: "Menu" }, { value: "music", label: "Music" }, { value: "modal", label: "Modal" }] as t (t.value)}
+					{#each [{ value: "scene", label: "Talk" }, { value: "settings", label: "Settings" }, { value: "menu", label: "Menu" }, { value: "music", label: "Music" }, { value: "calendar", label: "Calendar" }, { value: "modal", label: "Modal" }] as t (t.value)}
 						<Tabs.Trigger
 							value={t.value}
 							class="data-[state=active]:text-primary-500 cursor-pointer px-4 py-2 font-semibold opacity-60 transition-opacity hover:opacity-100 data-[state=active]:opacity-100"
@@ -61,6 +62,9 @@
 			</Tabs.Content>
 			<Tabs.Content value="music">
 				<MusicPreview />
+			</Tabs.Content>
+			<Tabs.Content value="calendar">
+				<CalendarPreview />
 			</Tabs.Content>
 			<Tabs.Content value="modal">
 				<ModalPreview />

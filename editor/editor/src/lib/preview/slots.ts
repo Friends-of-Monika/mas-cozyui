@@ -34,7 +34,8 @@ export const sectionHints: Record<string, string> = {
 	"Buttons": "Backgrounds of the talk/choice buttons and the hotkey buttons",
 	"Menu screen": "The settings screen backdrop and its curved side panel",
 	"Quick menu": "Buttons in the bottom of the dialog box",
-	"Text & labels": "Monika's name, settings labels and the side menu buttons"
+	"Text & labels": "Monika's name, settings labels and the side menu buttons",
+	"Calendar": "The calendar panel, day cells, arrows and close button"
 };
 
 export const colorSlots: ColorSlot[] = [
@@ -170,5 +171,24 @@ export const colorSlots: ColorSlot[] = [
 	scdSlot("Text & labels", "Text fill", [255, 255, 255], [250, 235, 241]),
 	scdSlot("Text & labels", "Text outline", [187, 85, 153], [126, 53, 104]),
 	scdSlot("Text & labels", "Menu button outline (hovered)", [255, 170, 204], [201, 105, 172]),
-	scdSlot("Text & labels", "Menu button outline (current)", [255, 204, 238], [186, 120, 166])
+	scdSlot("Text & labels", "Menu button outline (current)", [255, 204, 238], [186, 120, 166]),
+
+	// calendar/*.svg. Fills are the calendar's own PRM group; the borders/arrows/
+	// close mark are secondary (scd), like every other outline. The day-cell fills
+	// are transparent (only the border shows), so there is no cell-fill control.
+	{ label: "Panel fill", section: "Calendar", channel: "prm", group: "calendar", light: [255, 230, 244], dark: [150, 114, 133] },
+	{ label: "Header fill", section: "Calendar", channel: "prm", group: "calendar", light: [255, 176, 237], dark: [150, 87, 130] },
+	{ label: "Close button", section: "Calendar", channel: "prm", group: "calendar", light: [255, 216, 235], dark: [150, 107, 128] },
+	{ label: "Close button (hovered)", section: "Calendar", channel: "prm", group: "calendar", light: [255, 236, 247], dark: [150, 117, 135] },
+	// The grey wash over out-of-month (inactive) day cells. Its base is neutral, so
+	// it stays grey under any modulation until pinned to a color of its own.
+	{ label: "Inactive cells", section: "Calendar", channel: "prm", group: "calendar", light: [161, 161, 161], dark: [95, 80, 88] },
+	// The shared border of the panel, day cells and weekday headers.
+	scdSlot("Calendar", "Cell border", [250, 153, 228], [146, 76, 125]),
+	scdSlot("Calendar", "Today border", [186, 83, 152], [84, 32, 84]),
+	scdSlot("Calendar", "Today border (hovered)", [255, 167, 203], [228, 145, 206]),
+	scdSlot("Calendar", "Arrows", [197, 95, 163], [119, 52, 94]),
+	scdSlot("Calendar", "Arrows (hovered)", [230, 119, 200], [139, 64, 114]),
+	scdSlot("Calendar", "Close mark", [255, 160, 225], [150, 79, 123]),
+	scdSlot("Calendar", "Close mark (hovered)", [255, 189, 242], [150, 94, 132])
 ];

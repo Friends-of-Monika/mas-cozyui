@@ -7,10 +7,28 @@
 #
 ################################################################################
 init -999 python in cozy_ui:
+    import re
+    import store
+
     from renpy.display.im import Image
     from renpy.display.transform import Transform
 
+    # The wall calendar button. MAS picks its idle art from the room's time-of-day
+    # filter and hardcodes a single (day) hover sprite, so at night the idle is
+    # dark but the hover flips to the day art. Follow the UI's dark-mode state
+    # instead (matching the calendar modal), and supply a night hover, by mapping
+    # every calendar_button_{normal,hover}[-n].png to the current mode.
+    _CAL_BUTTON_RE = re.compile(r"(calendar_button_(?:normal|hover))(?:-n)?\.png$")
+
+    def _cozy_calendar_button(filename):
+        m = _CAL_BUTTON_RE.search(filename)
+        if m is None:
+            return filename
+        suffix = "-n" if getattr(store.mas_globals, "dark_mode", False) else ""
+        return filename[:m.start()] + m.group(1) + suffix + ".png"
+
     def cozy_path(filename):
+        filename = _cozy_calendar_button(filename)
         replacer_filename = expand_path("%SUBMOD_DIR%/themes/active/replacers") + "/%s" % filename
 
         has_replacement = renpy.loadable(replacer_filename)

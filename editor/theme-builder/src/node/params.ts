@@ -22,6 +22,10 @@ export interface ThemeDefinition {
 	option_font: string;
 	/** Optional: the shipped presets omit it and fall back to the mplus default. */
 	music_font?: string;
+	/** Optional: the shipped presets omit it and fall back to the main font. */
+	calendar_font?: string;
+	/** Optional: the calendar's text color; presets omit it (defaults to black). */
+	calendar_text_color?: string;
 	main_font_kerning: number;
 	dialogue_vertical_offset: number;
 	dialogue_line_spacing: number;
@@ -33,6 +37,7 @@ export interface ThemeDefinition {
 	dialogue_color?: ColorModulation;
 	button_text_color?: ColorModulation;
 	dialogue_text_color?: ColorModulation;
+	calendar_color?: ColorModulation;
 }
 
 /** Maps a theme definition to the CUI_* macro values, at a given render scale. */
@@ -47,6 +52,7 @@ export function definitionToMacroParams(
 		dialogueColor: def.dialogue_color,
 		buttonTextColor: def.button_text_color,
 		dialogueTextColor: def.dialogue_text_color,
+		calendarColor: def.calendar_color,
 		buttonRounding: def.button_rounding,
 		frameRounding: def.frame_rounding,
 		dialogueRounding: def.dialogue_rounding,
@@ -61,6 +67,9 @@ export function definitionToMacroParams(
 		menuFont: def.menu_font,
 		optionFont: def.option_font,
 		musicFont: def.music_font ?? DEFAULT_MUSIC_FONT,
+		// The calendar's text is the main font unless a theme overrides it.
+		calendarFont: def.calendar_font ?? def.main_font.regular,
+		calendarTextColor: def.calendar_text_color ?? "#000000",
 		dialogueVerticalOffset: def.dialogue_vertical_offset,
 		dialogueLineSpacing: def.dialogue_line_spacing,
 		buttonHeightAdjustment: def.button_height_adjustment,

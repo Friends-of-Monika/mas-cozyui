@@ -23,6 +23,7 @@
 			style:--preview-menu-font={theme.menuFont}
 			style:--preview-option-font={theme.optionFont}
 			style:--preview-music-font={theme.musicFont}
+			style:--preview-calendar-font={theme.calendarFont}
 		>
 			{@render children()}
 		</div>

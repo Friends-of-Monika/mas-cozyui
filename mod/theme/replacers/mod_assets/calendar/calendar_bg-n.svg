@@ -9,11 +9,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="900" height="514">
     <defs>
         <pattern id="background" x="0" y="0" width="900" height="514" patternUnits="userSpaceOnUse">
-            <rect width="900" height="514" fill="rgb(150, 114, 133)" />
-            <rect width="900" height="59" fill="rgb(150, 87, 130)" />
+            <rect width="900" height="514" fill="CUI_CAL_NIGHT_PRM(150, 114, 133)" />
+            <rect width="900" height="59" fill="CUI_CAL_NIGHT_PRM(150, 87, 130)" />
         </pattern>
     </defs>
-    <g fill="url(#background)" stroke="rgb(146, 76, 125)" stroke-width="3">
+    <g fill="url(#background)" stroke="CUI_CAL_NIGHT_SCD(146, 76, 125)" stroke-width="3">
         <rect x="1.5" y="1.5" width="897" height="584" rx="39" />
         <line x1="3" y1="512.5" x2="897" y2="512.5" />
     </g>

@@ -5,7 +5,7 @@
 
 	import { outlineShadows } from "#lib/preview/outline";
 
-	type Font = "menu" | "main" | "option" | "music";
+	type Font = "menu" | "main" | "option" | "music" | "calendar";
 
 	let {
 		size,
@@ -25,7 +25,8 @@
 		menu: "preview-name-font",
 		main: "preview-font",
 		option: "preview-option-font",
-		music: "preview-music-font"
+		music: "preview-music-font",
+		calendar: "preview-calendar-font"
 	};
 </script>
 

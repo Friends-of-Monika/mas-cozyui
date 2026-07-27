@@ -1,0 +1,68 @@
+<!--============================================================================
+=
+= Copyright (c) 2026 Friends of Monika
+=
+= See LICENSE file for the licensing information
+=
+= The wall calendar button: the whole calendar modal composited from the
+= calendar replacer art, sized 60x35 so the build downscales it (MAS's
+= calendar_button sprite size). Colours follow the theme through the inlined
+= art; the -n variant references the night art, hover adds a faint brighten.
+=============================================================================-->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="60" height="35" viewBox="190 103 900 514">
+    <image xlink:href="replacers/mod_assets/calendar/calendar_bg.svg" x="190" y="103" width="900" height="514" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_left_arrow.svg" x="292" y="165" width="20" height="20" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_left_arrow.svg" x="738" y="165" width="20" height="20" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_right_arrow.svg" x="522" y="165" width="20" height="20" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_right_arrow.svg" x="968" y="165" width="20" height="20" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_name_bg.svg" x="192" y="190" width="128" height="35" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_name_bg.svg" x="320" y="190" width="128" height="35" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_name_bg.svg" x="448" y="190" width="128" height="35" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_name_bg.svg" x="576" y="190" width="128" height="35" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_name_bg.svg" x="704" y="190" width="128" height="35" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_name_bg.svg" x="832" y="190" width="128" height="35" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_name_bg.svg" x="960" y="190" width="128" height="35" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="192" y="225" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="320" y="225" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="448" y="225" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="576" y="225" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="704" y="225" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="832" y="225" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="960" y="225" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="192" y="290" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="320" y="290" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="448" y="290" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="576" y="290" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="704" y="290" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="832" y="290" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="960" y="290" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="192" y="355" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="320" y="355" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="448" y="355" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="576" y="355" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="704" y="355" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="832" y="355" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="960" y="355" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="192" y="420" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="320" y="420" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="448" y="420" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="576" y="420" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="704" y="420" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="832" y="420" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="960" y="420" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="192" y="485" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="320" y="485" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="448" y="485" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="576" y="485" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="704" y="485" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="832" y="485" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="960" y="485" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="192" y="550" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="320" y="550" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="448" y="550" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="576" y="550" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="704" y="550" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="832" y="550" width="128" height="65" preserveAspectRatio="none" />
+    <image xlink:href="replacers/mod_assets/calendar/calendar_day_bg.svg" x="960" y="550" width="128" height="65" preserveAspectRatio="none" />
+    <rect x="190" y="103" width="900" height="514" rx="39" fill="rgb(255, 255, 255)" fill-opacity="0.15" />
+</svg>

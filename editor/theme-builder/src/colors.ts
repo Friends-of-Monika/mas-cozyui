@@ -20,7 +20,7 @@ export interface ColorModulation {
  * stays separately addressable: the button idle fill and the menu panel fill
  * are both (255, 230, 244), but they are distinct colors to the user.
  */
-export const colorGroups = ["dialogue", "dialogueText", "button", "buttonText", "menu"] as const;
+export const colorGroups = ["dialogue", "dialogueText", "button", "buttonText", "menu", "calendar"] as const;
 export type ColorGroup = (typeof colorGroups)[number];
 
 /**
@@ -38,6 +38,7 @@ export function groupForPath(path: string): ColorGroup | null {
 	// which sit loose in mod_assets/ but are button surfaces all the same.
 	if (/\bbuttons?\/|\b(hkb|island)_/.test(path)) return "button";
 	if (path.includes("menu_bg") || path.includes("game_menu")) return "menu";
+	if (path.includes("calendar")) return "calendar";
 	return null;
 }
 
@@ -65,6 +66,7 @@ export interface ThemeModulations {
 	dialogueColor?: ColorModulation;
 	buttonTextColor?: ColorModulation;
 	dialogueTextColor?: ColorModulation;
+	calendarColor?: ColorModulation;
 }
 
 // The per-surface color each group defers to when it carries one of its own.
@@ -72,7 +74,8 @@ const groupModulation: Record<string, keyof ThemeModulations> = {
 	button: "buttonColor",
 	dialogue: "dialogueColor",
 	buttonText: "buttonTextColor",
-	dialogueText: "dialogueTextColor"
+	dialogueText: "dialogueTextColor",
+	calendar: "calendarColor"
 };
 
 /** Picks the modulation that governs one base, given its channel and group. */
@@ -134,6 +137,30 @@ export function modulationFromColor(hex: string, anchor: [number, number, number
 		s: s0 === 0 ? 1 : s / s0,
 		l: (l - l0) / 100
 	};
+}
+
+/**
+ * Hue-only recolor: replaces a base color's hue while keeping its own
+ * saturation and lightness. Used for the calendar's night art, whose bases are
+ * mid-toned (unlike the near-black night art elsewhere); a full modulate() would
+ * multiply their saturation down and wash them out to pale grey, so at night the
+ * calendar only follows the theme's hue and keeps its rich mauve tone. A null
+ * hue leaves the base untouched.
+ */
+export function tint(r: number, g: number, b: number, hue: number | null, a?: number): string {
+	let rgb: [number, number, number] = [r, g, b];
+	if (hue !== null) {
+		const conv = new Hsluv();
+		conv.rgb_r = r / 255;
+		conv.rgb_g = g / 255;
+		conv.rgb_b = b / 255;
+		conv.rgbToHsluv();
+		conv.hsluv_h = clamp(hue, 0, 360);
+		conv.hsluvToRgb();
+		rgb = [conv.rgb_r * 255, conv.rgb_g * 255, conv.rgb_b * 255];
+	}
+	const hex = `#${toHexByte(rgb[0])}${toHexByte(rgb[1])}${toHexByte(rgb[2])}`;
+	return a === undefined ? hex : hex + toHexByte(a);
 }
 
 /**

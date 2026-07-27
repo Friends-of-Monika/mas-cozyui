@@ -76,6 +76,7 @@ export function themeParams(scale = 1): MacroParams {
 		dialogueColor: theme.dialogueColor,
 		buttonTextColor: theme.buttonTextColor,
 		dialogueTextColor: theme.dialogueTextColor,
+		calendarColor: theme.calendarColor,
 		overrides: theme.overrides,
 		buttonRounding: theme.buttonRounding,
 		frameRounding: theme.frameRounding,
@@ -90,6 +91,8 @@ export function themeParams(scale = 1): MacroParams {
 		menuFont: fontPath(theme.menuFont, DDLC_FONT_PATH.Riffic),
 		optionFont: fontPath(theme.optionFont, DDLC_FONT_PATH.Halogen),
 		musicFont: fontPath(theme.musicFont, DEFAULT_MUSIC_FONT),
+		calendarFont: fontPath(theme.calendarFont, DDLC_FONT_PATH.Nunito),
+		calendarTextColor: theme.calendarTextColor,
 		...DEFAULT_METRICS,
 		scale
 	};

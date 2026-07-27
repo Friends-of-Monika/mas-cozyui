@@ -15,10 +15,12 @@
 	import {
 		NO_MODULATION,
 		grp,
+		grpNight,
 		fonts,
 		patternShapes,
 		prm,
 		scd,
+		scdNight,
 		theme
 	} from "#lib/preview/theme.svelte";
 
@@ -69,6 +71,16 @@
 		}
 	];
 
+	// The calendar's whole-surface color, shown in its own Calendar subsection
+	// (together with its text color and pinned slots) rather than up with the
+	// other surfaces, so every calendar control lives in one place.
+	const calendarSurface: Surface = {
+		label: "Calendar color",
+		group: "calendar",
+		anchor: [255, 230, 244],
+		mod: () => theme.calendarColor
+	};
+
 	const surfaceHex = (s: Surface) => grp(s.group, ...s.anchor);
 
 	const titleize = <T extends string>(items: readonly T[]) =>
@@ -90,9 +102,14 @@
 	// variants of a surface are pinned independently.
 	const slotBase = (slot: ColorSlot) => (theme.darkMode ? slot.dark : slot.light);
 	const slotKey = (slot: ColorSlot) => overrideKey(slot.channel, slot.group, ...slotBase(slot));
-	// What the surface currently renders as: the pinned color, or the modulated one.
-	const slotHex = (slot: ColorSlot) =>
-		slot.channel === "prm" ? grp(slot.group, ...slotBase(slot)) : scd(...slotBase(slot));
+	// What the surface currently renders as: the pinned color, or the derived one.
+	// The calendar's night art is tinted (hue only), not modulated, so its night
+	// slots preview through the tint path to match what the SVG actually renders.
+	const slotHex = (slot: ColorSlot) => {
+		const night = theme.darkMode && slot.section === "Calendar";
+		if (slot.channel === "prm") return night ? grpNight(slot.group, ...slotBase(slot)) : grp(slot.group, ...slotBase(slot));
+		return night ? scdNight(...slotBase(slot)) : scd(...slotBase(slot));
+	};
 
 	// Sections in slot order, so the list can be rendered with headings.
 	const slotSections = $derived([...new Set(colorSlots.map((s) => s.section))]);
@@ -117,6 +134,11 @@
 			};
 		})
 	);
+
+	// The calendar has its own subsection combining its surface color, text color
+	// and pinned slots, so its slots are pulled out of the generic per-screen list.
+	const calendarSlots = $derived(sectionEntries.find((s) => s.section === "Calendar")?.entries ?? []);
+	const otherSections = $derived(sectionEntries.filter((s) => s.section !== "Calendar"));
 
 	const pinnedCount = $derived(new Set(colorSlots.map(slotKey).filter((k) => theme.overrides[k])).size);
 
@@ -144,6 +166,33 @@
 				title="Back to the modulated color"
 				aria-label="Reset {label}"
 				onclick={() => delete theme.overrides[key]}
+			>
+				&times;
+			</button>
+		{/if}
+	</div>
+{/snippet}
+
+<!-- One whole-surface color: a modulation on a group's bases replacing the
+     primary, with a reset back to "follow the primary". -->
+{#snippet surfaceRow(surface: Surface)}
+	<div class="flex items-center gap-2">
+		<div class="min-w-0 flex-1">
+			<ColorPicker
+				hex={surfaceHex(surface)}
+				label={surface.label}
+				isAlpha={false}
+				position="responsive"
+				onInput={(c) =>
+					onPick(c.hex, surfaceHex(surface), (h) => Object.assign(surface.mod(), modulationFromColor(h, surface.anchor)))}
+			/>
+		</div>
+		{#if isModulated(surface.mod())}
+			<button
+				class="btn-icon btn-icon-sm preset-outlined-surface-500"
+				title="Back to the primary color"
+				aria-label="Reset {surface.label}"
+				onclick={() => Object.assign(surface.mod(), NO_MODULATION())}
 			>
 				&times;
 			</button>
@@ -215,34 +264,12 @@
 							<p class="text-xs opacity-50">{hint}</p>
 						</div>
 						{#each items as surface (surface.group)}
-							<div class="flex items-center gap-2">
-								<div class="min-w-0 flex-1">
-									<ColorPicker
-										hex={surfaceHex(surface)}
-										label={surface.label}
-										isAlpha={false}
-										position="responsive"
-										onInput={(c) =>
-											onPick(c.hex, surfaceHex(surface), (h) =>
-												Object.assign(surface.mod(), modulationFromColor(h, surface.anchor))
-											)}
-									/>
-								</div>
-								{#if isModulated(surface.mod())}
-									<button
-										class="btn-icon btn-icon-sm preset-outlined-surface-500"
-										title="Back to the primary color"
-										aria-label="Reset {surface.label}"
-										onclick={() => Object.assign(surface.mod(), NO_MODULATION())}
-									>
-										&times;
-									</button>
-								{/if}
-							</div>
+							{@render surfaceRow(surface)}
 						{/each}
 					{/each}
 
-					{#each sectionEntries as { section, entries } (section)}
+					<!-- Per-screen pinned slots (the calendar's own subsection follows). -->
+					{#each otherSections as { section, entries } (section)}
 						<div class="mt-2">
 							<span class="text-xs font-bold opacity-70">{section}</span>
 							<p class="text-xs opacity-50">{sectionHints[section]}</p>
@@ -250,6 +277,38 @@
 						{#each entries as { key, slot, label } (key)}
 							{@render pinRow(key, slot, label)}
 						{/each}
+					{/each}
+
+					<!-- Calendar: every calendar control in one place - its whole-surface
+					     color, its (absolute) text color, then its pinned slots. -->
+					<div class="mt-2">
+						<span class="text-xs font-bold opacity-70">Calendar</span>
+						<p class="text-xs opacity-50">{sectionHints["Calendar"]}</p>
+					</div>
+					{@render surfaceRow(calendarSurface)}
+					<div class="flex items-center gap-2">
+						<div class="min-w-0 flex-1">
+							<ColorPicker
+								hex={theme.calendarTextColor}
+								label="Text color"
+								isAlpha={false}
+								position="responsive"
+								onInput={(c) => onPick(c.hex, theme.calendarTextColor, (h) => (theme.calendarTextColor = h))}
+							/>
+						</div>
+						{#if theme.calendarTextColor.toLowerCase() !== "#000000"}
+							<button
+								class="btn-icon btn-icon-sm preset-outlined-surface-500"
+								title="Back to black"
+								aria-label="Reset Text color"
+								onclick={() => (theme.calendarTextColor = "#000000")}
+							>
+								&times;
+							</button>
+						{/if}
+					</div>
+					{#each calendarSlots as { key, slot, label } (key)}
+						{@render pinRow(key, slot, label)}
 					{/each}
 				</div>
 			</details>
@@ -281,6 +340,11 @@
 				<span>Music font</span>
 				<SelectMenu bind:value={theme.musicFont} options={fontOptions} />
 				<span class="text-xs opacity-60">Music selector song list</span>
+			</label>
+			<label class="label">
+				<span>Calendar font</span>
+				<SelectMenu bind:value={theme.calendarFont} options={fontOptions} />
+				<span class="text-xs opacity-60">Calendar title, dates and day names</span>
 			</label>
 		</div>
 	</details>

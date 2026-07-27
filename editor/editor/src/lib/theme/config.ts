@@ -33,6 +33,10 @@ export interface ThemeConfig {
 	option_font: string;
 	/** Music-list font; absent in pre-v4 projects (defaults to mplus). */
 	music_font: string;
+	/** Calendar font; absent in pre-v5 projects (defaults to the main font). */
+	calendar_font: string;
+	/** Calendar text color; absent in pre-v5 projects (defaults to black). */
+	calendar_text_color: string;
 	main_font_kerning: number;
 	dialogue_vertical_offset: number;
 	dialogue_line_spacing: number;
@@ -45,6 +49,7 @@ export interface ThemeConfig {
 	dialogue_color: ColorModulation;
 	button_text_color: ColorModulation;
 	dialogue_text_color: ColorModulation;
+	calendar_color: ColorModulation;
 	// Editor-only extra (the shipped themes/ presets omit it and the submod
 	// ignores it - by export time every color is already baked into the PNGs).
 	color_overrides?: Record<string, string>;
@@ -83,6 +88,8 @@ export function toConfig(): ThemeConfig {
 		menu_font: p.menuFont ?? "",
 		option_font: p.optionFont ?? "",
 		music_font: p.musicFont ?? "",
+		calendar_font: p.calendarFont ?? "",
+		calendar_text_color: theme.calendarTextColor,
 		main_font_kerning: DEFAULT_METRICS.mainFontKerning,
 		dialogue_vertical_offset: DEFAULT_METRICS.dialogueVerticalOffset,
 		dialogue_line_spacing: DEFAULT_METRICS.dialogueLineSpacing,
@@ -94,6 +101,7 @@ export function toConfig(): ThemeConfig {
 		dialogue_color: { ...theme.dialogueColor },
 		button_text_color: { ...theme.buttonTextColor },
 		dialogue_text_color: { ...theme.dialogueTextColor },
+		calendar_color: { ...theme.calendarColor },
 		color_overrides: { ...theme.overrides }
 	};
 }
@@ -111,6 +119,10 @@ export function applyConfig(config: ThemeConfig) {
 	theme.optionFont = resolveFamily<Font>(config.option_font, fonts, "Halogen");
 	// Pre-v4 projects carry no music_font; default to the mplus family.
 	theme.musicFont = resolveFamily<Font>(config.music_font ?? "", fonts, "M+ 2p");
+	// Pre-v5 projects carry no calendar_font; default to the main font family.
+	theme.calendarFont = resolveFamily<Font>(config.calendar_font ?? "", fonts, "Nunito");
+	// Pre-v5 projects carry no calendar_text_color; MAS drew it black.
+	theme.calendarTextColor = config.calendar_text_color ?? "#000000";
 	Object.assign(theme.primary, config.primary_color);
 	Object.assign(theme.secondary, config.secondary_color);
 	// Themes authored before per-surface colors (and the shipped presets) carry
@@ -119,6 +131,8 @@ export function applyConfig(config: ThemeConfig) {
 	Object.assign(theme.dialogueColor, config.dialogue_color ?? NO_MODULATION());
 	Object.assign(theme.buttonTextColor, config.button_text_color ?? NO_MODULATION());
 	Object.assign(theme.dialogueTextColor, config.dialogue_text_color ?? NO_MODULATION());
+	// Pre-v5 projects (and presets) carry no calendar color: follow the primary.
+	Object.assign(theme.calendarColor, config.calendar_color ?? NO_MODULATION());
 	// Presets and older projects carry no overrides: nothing pinned, which is
 	// the stock pure-modulation palette.
 	theme.overrides = { ...config.color_overrides };
