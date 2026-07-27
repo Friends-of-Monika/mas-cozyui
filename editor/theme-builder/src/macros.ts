@@ -49,6 +49,8 @@ export interface MacroParams extends ThemeModulations {
 	optionFont?: string;
 	musicFont?: string;
 	calendarFont?: string;
+	/** The calendar's date/label text color, an absolute "#rrggbb". */
+	calendarTextColor?: string;
 	dialogueVerticalOffset?: number;
 	dialogueLineSpacing?: number;
 	buttonHeightAdjustment?: number;
@@ -115,6 +117,7 @@ export function applyMacros(text: string, p: MacroParams, group: ColorGroup | nu
 		"CUI_OPTION_FONT()": p.optionFont,
 		"CUI_MUSIC_FONT()": p.musicFont,
 		"CUI_CALENDAR_FONT()": p.calendarFont,
+		"CUI_CALENDAR_TEXT_COLOR()": p.calendarTextColor,
 		"CUI_DLG_VERT_OFFSET()": p.dialogueVerticalOffset,
 		"CUI_DLG_LINE_SPACING()": p.dialogueLineSpacing,
 		"CUI_BTN_HEIGHT_ADJUSTMENT()": p.buttonHeightAdjustment,

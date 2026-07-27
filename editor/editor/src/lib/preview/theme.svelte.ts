@@ -42,6 +42,9 @@ export const theme = $state({
 	dialogueTextColor: NO_MODULATION(),
 	// The calendar's own surface color, over its themed panel/cell bases.
 	calendarColor: NO_MODULATION(),
+	// The calendar's date/label text, an absolute color (MAS draws it black; not
+	// modulated, since black is a degenerate modulation anchor).
+	calendarTextColor: "#000000" as string,
 	buttonRounding: 3,
 	frameRounding: 3,
 	dialogueRounding: 10,

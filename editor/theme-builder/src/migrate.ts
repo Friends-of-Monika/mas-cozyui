@@ -27,15 +27,17 @@ const migrations: Record<number, (config: RawConfig) => RawConfig> = {
 	// v3 -> v4: the music selector's font is now theme-controlled. v3 projects
 	// used the fixed mplus-2p font, so default to it.
 	3: (config) => ({ ...config, music_font: "mod_assets/font/mplus-2p-regular.ttf" }),
-	// v4 -> v5: the calendar's colors and font are now theme-controlled. v4
-	// projects rendered it in the primary color and the main font, so follow the
-	// primary (all-null) and reuse the project's main font.
+	// v4 -> v5: the calendar's colors, font and text color are now theme-controlled.
+	// v4 projects rendered it in the primary color, the main font and MAS's fixed
+	// black, so follow the primary (all-null), reuse the project's main font and
+	// default the text to black.
 	4: (config) => ({
 		...config,
 		calendar_color: { h: null, s: null, l: null },
 		calendar_font:
 			((config.main_font as { regular?: string } | undefined)?.regular) ??
-			"%SUBMOD_DIR%/fonts/Nunito-SemiBold.ttf"
+			"%SUBMOD_DIR%/fonts/Nunito-SemiBold.ttf",
+		calendar_text_color: "#000000"
 	})
 };
 

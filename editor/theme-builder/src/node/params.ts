@@ -24,6 +24,8 @@ export interface ThemeDefinition {
 	music_font?: string;
 	/** Optional: the shipped presets omit it and fall back to the main font. */
 	calendar_font?: string;
+	/** Optional: the calendar's text color; presets omit it (defaults to black). */
+	calendar_text_color?: string;
 	main_font_kerning: number;
 	dialogue_vertical_offset: number;
 	dialogue_line_spacing: number;
@@ -67,6 +69,7 @@ export function definitionToMacroParams(
 		musicFont: def.music_font ?? DEFAULT_MUSIC_FONT,
 		// The calendar's text is the main font unless a theme overrides it.
 		calendarFont: def.calendar_font ?? def.main_font.regular,
+		calendarTextColor: def.calendar_text_color ?? "#000000",
 		dialogueVerticalOffset: def.dialogue_vertical_offset,
 		dialogueLineSpacing: def.dialogue_line_spacing,
 		buttonHeightAdjustment: def.button_height_adjustment,

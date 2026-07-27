@@ -44,10 +44,11 @@
 	const SELECTOR_Y = INIT_Y + 10; // arrow row
 	const LABEL_Y = INIT_Y + 8; // month/year label row
 
-	// Title white by day, black by night (MAS hardcodes this); everything else is
-	// DAY_NUMBER_COLOR (#000000).
+	// Title white by day, black by night (MAS hardcodes this). Every other label
+	// (dates, day names, month/year) uses the theme's calendar text color, which
+	// MAS draws black by default.
 	const titleColor = $derived(theme.darkMode ? "#000000" : "#ffffff");
-	const ink = "#000000";
+	const ink = $derived(theme.calendarTextColor);
 
 	// Weekday header, Monday-first (matches the game's configured week start).
 	const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -72,10 +73,21 @@
 		today: "calendar_today_bg",
 		disabled: "calendar_day_disabled_bg"
 	};
+	// In-month day/today cells are buttons and brighten on hover; the greyed
+	// out-of-month (disabled) cells are not hoverable.
+	const cellHoverBg: Record<Kind, string> = {
+		day: "calendar_day_hover_bg",
+		today: "calendar_today_hover_bg",
+		disabled: "calendar_day_disabled_bg"
+	};
 
 	// The close and month/year arrow buttons brighten to their _hover asset while
 	// pointed at (MASButtonDisplayable hover state).
 	let hovered = $state<string | null>(null);
+	// Which day cell is hovered (row-col), so it can swap to its hover asset.
+	let hoveredCell = $state<string | null>(null);
+	const cellAsset = (kind: Kind, id: string) =>
+		kind !== "disabled" && hoveredCell === id ? cellHoverBg[kind] : cellBg[kind];
 </script>
 
 <!-- A hoverable button that swaps to its _hover asset while pointed at. -->
@@ -151,15 +163,18 @@
 		</div>
 	{/each}
 
-	<!-- 6x7 day grid -->
+	<!-- 6x7 day grid. In-month cells are buttons (hover); disabled ones are not. -->
 	{#each rows as row, i (i)}
 		{#each row as cell, j (j)}
 			<div
+				role="presentation"
 				class="absolute"
 				style:left="{INIT_X + j * DAY_W}px"
 				style:top="{GRID_Y + i * DAY_H}px"
+				onpointerenter={() => cell.kind !== "disabled" && (hoveredCell = `${i}-${j}`)}
+				onpointerleave={() => (hoveredCell = null)}
 			>
-				<RealAsset path="{cal}/{cellBg[cell.kind]}{n}.svg" width={DAY_W} height={DAY_H} />
+				<RealAsset path="{cal}/{cellAsset(cell.kind, `${i}-${j}`)}{n}.svg" width={DAY_W} height={DAY_H} />
 				<!-- day number, right-aligned near the top (pos 121,5 xanchor 1.0) -->
 				<div class="absolute" style:right="7px" style:top="5px">
 					<OutlineText size={13} color={ink} font="calendar">{cell.n}</OutlineText>

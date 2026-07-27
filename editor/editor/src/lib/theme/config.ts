@@ -35,6 +35,8 @@ export interface ThemeConfig {
 	music_font: string;
 	/** Calendar font; absent in pre-v5 projects (defaults to the main font). */
 	calendar_font: string;
+	/** Calendar text color; absent in pre-v5 projects (defaults to black). */
+	calendar_text_color: string;
 	main_font_kerning: number;
 	dialogue_vertical_offset: number;
 	dialogue_line_spacing: number;
@@ -87,6 +89,7 @@ export function toConfig(): ThemeConfig {
 		option_font: p.optionFont ?? "",
 		music_font: p.musicFont ?? "",
 		calendar_font: p.calendarFont ?? "",
+		calendar_text_color: theme.calendarTextColor,
 		main_font_kerning: DEFAULT_METRICS.mainFontKerning,
 		dialogue_vertical_offset: DEFAULT_METRICS.dialogueVerticalOffset,
 		dialogue_line_spacing: DEFAULT_METRICS.dialogueLineSpacing,
@@ -118,6 +121,8 @@ export function applyConfig(config: ThemeConfig) {
 	theme.musicFont = resolveFamily<Font>(config.music_font ?? "", fonts, "M+ 2p");
 	// Pre-v5 projects carry no calendar_font; default to the main font family.
 	theme.calendarFont = resolveFamily<Font>(config.calendar_font ?? "", fonts, "Nunito");
+	// Pre-v5 projects carry no calendar_text_color; MAS drew it black.
+	theme.calendarTextColor = config.calendar_text_color ?? "#000000";
 	Object.assign(theme.primary, config.primary_color);
 	Object.assign(theme.secondary, config.secondary_color);
 	// Themes authored before per-surface colors (and the shipped presets) carry

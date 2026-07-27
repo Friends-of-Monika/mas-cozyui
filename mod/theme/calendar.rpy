@@ -13,6 +13,10 @@ init 999 python in cozy_ui.calendar:
     from renpy.text.text import Text
     from store import MASCalendar, gui
 
+    # The month/year, weekday and day-number labels all read this class constant
+    # for their color; point it at the theme's calendar text color.
+    MASCalendar.DAY_NUMBER_COLOR = store.cozy_ui.calendar.text_color
+
     old_init = MASCalendar.__init__
 
     def monkey_init(self, *args, **kwargs):
