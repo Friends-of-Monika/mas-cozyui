@@ -1,5 +1,5 @@
-<!-- Preference slider: Riffic label (optionally with a value), the themed
-     straight-line track, and the themed slider thumb - from the real assets. -->
+<!-- Preference slider: a menu-font label (optionally with a value) and the
+     themed track and thumb, from the real assets. -->
 <script lang="ts">
 	import { palette } from "#lib/preview/palette.svelte";
 

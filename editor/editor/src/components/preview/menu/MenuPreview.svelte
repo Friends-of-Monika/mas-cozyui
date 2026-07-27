@@ -1,7 +1,5 @@
-<!-- In-story choice menu preview (Ren'Py `menu`). Centered vbox of choice
-     buttons, styled from the CozyUI button/ Frame assets (same as the talk
-     menu, style choice_button) with button_text colors. No textbox or hotkey
-     column here. See styles.rpy `choice_button` / layout.rpy `choice_vbox`. -->
+<!-- In-story choice menu preview (Ren'Py `menu`): a centered column of themed
+     choice buttons. No textbox or hotkey column. -->
 <script lang="ts">
 	import { backgrounds } from "#lib/preview/backgrounds";
 	import { STAGE_H, STAGE_W } from "#lib/preview/layout";

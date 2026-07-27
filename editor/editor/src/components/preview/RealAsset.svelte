@@ -1,8 +1,7 @@
-<!-- Renders an actual CozyUI theme SVG template (mod/theme/**) with the live
-     theme baked in via the CUI_* macro engine. Emitted as a self-contained
-     data: URI so multiple assets on the page don't clash on shared element
-     ids, and so the same output can be rasterized for export. In night mode
-     the matching _d dark variant is used when present. -->
+<!-- Renders a CozyUI theme SVG (mod/theme/**) with the live theme baked in via
+     the CUI_* macro engine, as a self-contained data: URI (so assets don't
+     clash on shared element ids, and the output can be rasterized for export).
+     Uses the _d dark variant in night mode when present. -->
 <script lang="ts">
 	import { groupForPath } from "#lib/preview/colors";
 	import { theme } from "#lib/preview/theme.svelte";

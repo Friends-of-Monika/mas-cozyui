@@ -2,9 +2,8 @@
 	let { idPrefix }: { idPrefix: string } = $props();
 </script>
 
-<!-- Pattern tile shapes shared by themed surfaces; adapted from the CozyUI
-     textbox SVG templates (mod/theme/replacers/gui/textbox*.svg). The empty
-     "none" shape lets a surface opt out of any pattern (plain fill). -->
+<!-- Pattern tile shapes shared by themed surfaces (from the CozyUI textbox
+     SVGs). The empty "none" shape lets a surface opt out (plain fill). -->
 <svg id="{idPrefix}-none" width="1" height="1"></svg>
 <svg id="{idPrefix}-dot" width="1" height="1">
 	<circle cx="0.5" cy="0.5" r="0.5" />

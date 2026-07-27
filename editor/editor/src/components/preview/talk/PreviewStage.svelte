@@ -1,6 +1,5 @@
-<!-- MAS scene preview. Layers (back to front): weather sky mask, spaceroom,
-     [Monika sprite: TODO], hotkey buttons, textbox (+namebox, dialogue, quick
-     menu), talk menu -->
+<!-- MAS scene preview. Layers back to front: sky mask, spaceroom, hotkey
+     buttons, textbox (+ namebox, dialogue, quick menu), talk menu. -->
 <script lang="ts">
 	import { backgrounds } from "#lib/preview/backgrounds";
 	import {

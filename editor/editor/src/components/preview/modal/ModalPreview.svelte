@@ -1,8 +1,6 @@
-<!-- MAS confirm-screen preview. The room is dimmed by the confirm overlay
-     (gui/overlay/confirm.svg), with a themed frame (gui/frame.svg, drawn as a
-     9-slice so its corners track frame_rounding) holding the prompt and the
-     Yes/No buttons. Buttons use the same outlined menu-font style as the game
-     menu navigation (see NavColumn), matching DDLC. No hotkey column here. -->
+<!-- MAS confirm-screen preview: the room dimmed by the confirm overlay, with a
+     themed 9-slice frame (corners track frame_rounding) holding the prompt and
+     Yes/No buttons. Buttons use the menu-font style. No hotkey column. -->
 <script lang="ts">
 	import { backgrounds } from "#lib/preview/backgrounds";
 	import { STAGE_H, STAGE_W } from "#lib/preview/layout";
@@ -19,8 +17,7 @@
 	const skyMask = $derived(theme.darkMode ? backgrounds.skyNight : backgrounds.skyDay);
 	const room = $derived(theme.darkMode ? backgrounds.roomNight : backgrounds.roomDay);
 
-	// The frame is a 9-slice, so its border slice follows frame_rounding the same
-	// way button slices follow button_rounding.
+	// The frame's 9-slice border follows frame_rounding.
 	const frameSlice = $derived(buttonSlice(theme.frameRounding));
 
 	let hovered = $state<string | null>(null);

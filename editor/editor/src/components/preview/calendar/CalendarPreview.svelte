@@ -1,15 +1,6 @@
-<!-- MAS calendar (MASCalendar) preview, themed live. The calendar is a custom
-     Displayable drawn over a translucent black mask (Solid #000000B2) covering
-     the room: bg panel, month/year selectors with arrow buttons, a weekday
-     header row and a 6x7 day grid. All of the SVG surfaces are CozyUI theme
-     replacers (mod_assets/calendar/*) whose fills follow the theme (its own
-     Calendar color, or the primary) and whose borders follow the secondary.
-     Every label is drawn in the theme's calendar font (CUI_CALENDAR_FONT, applied
-     in the game by calendar.rpy swapping gui.default_font while MASCalendar builds
-     its Text displayables). MAS's own hardcoded text colors remain: a white title
-     (black in night mode) and black number/label text. In night mode MAS swaps to
-     the -n asset variants (also themed). The close button's
-     "X" glyph is blanked by CozyUI (calendar.rpy), so only the SVG shows. Layout
+<!-- MASCalendar preview over the dimmed room: panel, month/year selectors,
+     weekday header and a 6x7 day grid. Surfaces are the calendar SVG replacers
+     (-n variants in night mode); labels use the theme's calendar font. Layout
      coordinates mirror MASCalendar's blit offsets on the 1280x720 stage. -->
 <script lang="ts">
 	import { backgrounds } from "#lib/preview/backgrounds";
@@ -23,9 +14,8 @@
 	const skyMask = $derived(theme.darkMode ? backgrounds.skyNight : backgrounds.skyDay);
 	const room = $derived(theme.darkMode ? backgrounds.roomNight : backgrounds.roomDay);
 
-	// MAS swaps to the -n asset variant in night mode. (RealAsset's own _d dark
-	// swap doesn't apply here - the calendar uses the older -n naming - so the
-	// suffix is spelled out in each path.)
+	// Night mode uses the -n asset variant (the calendar's own naming, not
+	// RealAsset's _d), so the suffix is spelled out in each path.
 	const n = $derived(theme.darkMode ? "-n" : "");
 	const cal = "replacers/mod_assets/calendar";
 
@@ -44,9 +34,8 @@
 	const SELECTOR_Y = INIT_Y + 10; // arrow row
 	const LABEL_Y = INIT_Y + 8; // month/year label row
 
-	// Title white by day, black by night (MAS hardcodes this). Every other label
-	// (dates, day names, month/year) uses the theme's calendar text color, which
-	// MAS draws black by default.
+	// Title is white by day, black by night (MAS hardcodes this); every other
+	// label uses the theme's calendar text color.
 	const titleColor = $derived(theme.darkMode ? "#000000" : "#ffffff");
 	const ink = $derived(theme.calendarTextColor);
 

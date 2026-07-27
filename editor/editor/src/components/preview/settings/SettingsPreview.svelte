@@ -1,6 +1,6 @@
-<!-- MAS settings (preferences) screen preview, themed live. Layout mirrors the
-     in-game screen: curved nav panel on the left, three checkbox groups over a
-     two-column slider block, bottom action buttons and a version tag. -->
+<!-- MAS settings (preferences) screen preview: curved nav panel on the left,
+     three checkbox groups over a two-column slider block, bottom action buttons
+     and a version tag. -->
 <script lang="ts">
 	import { palette } from "#lib/preview/palette.svelte";
 	import { theme } from "#lib/preview/theme.svelte";

@@ -1,8 +1,6 @@
-<!-- Export-progress modal, built on Skeleton's (Zag) Dialog: modal focus trap +
-     scroll lock, portalled to <body>. It is deliberately non-dismissable while
-     exporting - closeOnEscape/closeOnInteractOutside are off and the only close
-     affordance (CloseTrigger) is disabled until `done` - so the export can't be
-     abandoned midway. Enter is animated via a data-state keyframe. -->
+<!-- Export-progress modal (Skeleton Dialog). Non-dismissable while exporting:
+     escape/outside-close are off and the close button stays disabled until
+     `done`, so the export can't be abandoned midway. -->
 <script lang="ts">
 	import { Dialog, Portal } from "@skeletonlabs/skeleton-svelte";
 

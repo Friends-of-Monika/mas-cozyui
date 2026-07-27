@@ -1,7 +1,6 @@
-<!-- Game-menu background for the settings screen. Layers:
-     - full-screen fill + themed pattern (gui menu_bg.svg: white + pattern tint)
-     - white wash (game_menu overlay: prm white @ 0.5 over the room)
-     - the big off-screen circle forming the curved left panel -->
+<!-- Game-menu background for the settings screen: a full-screen fill + themed
+     pattern, a white wash over the room, and the big off-screen circle that
+     forms the curved left panel. -->
 <script lang="ts">
 	import { STAGE_H, STAGE_W } from "#lib/preview/layout";
 	import { palette } from "#lib/preview/palette.svelte";

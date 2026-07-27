@@ -1,7 +1,6 @@
-<!-- Renders a real theme SVG as a CSS border-image 9-slice, matching Ren'Py's
-     Frame(asset, Borders(slice,...)). The slice tracks the rounding so corners
-     stay clean at any size (see buttonSlice / CUI_BTN_SLICE). The _d dark
-     variant is used in night mode when present. -->
+<!-- Renders a theme SVG as a CSS border-image 9-slice, matching Ren'Py's
+     Frame(asset, Borders(...)). The slice tracks the rounding so corners stay
+     clean at any size. Uses the _d dark variant in night mode when present. -->
 <script lang="ts">
 	import { groupForPath } from "#lib/preview/colors";
 	import { theme } from "#lib/preview/theme.svelte";

@@ -1,6 +1,5 @@
 <!-- Left navigation column of the game menu: the screen title and the
-     navigation buttons (menu_button_text: menu font, secondary fill + outline;
-     the current page is insensitive/lighter). -->
+     navigation buttons (menu font; the current page is lighter/insensitive). -->
 <script lang="ts">
 	import { palette } from "#lib/preview/palette.svelte";
 

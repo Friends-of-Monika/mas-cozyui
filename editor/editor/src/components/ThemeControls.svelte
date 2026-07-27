@@ -24,18 +24,14 @@
 		theme
 	} from "#lib/preview/theme.svelte";
 
-	// Anchor colors the pickers operate on: the textbox base fill (primary) and
-	// the menu label outline (secondary). The picker shows the anchor as modulated
-	// by the current theme (one-way), and a pick writes back the modulation that
-	// maps the anchor onto the chosen color - so presets/opens stay reflected.
+	// Anchor colors the primary/secondary pickers map onto: the textbox fill and
+	// the menu label outline. The picker shows the anchor modulated by the theme; a
+	// pick writes back the modulation mapping the anchor onto the chosen color.
 	const PRM_ANCHOR: [number, number, number] = [255, 168, 210];
 	const SCD_ANCHOR: [number, number, number] = [187, 85, 153];
-	// Each surface gets a color of its own, applied to its group's bases in place
-	// of the primary; unset means "follow primary", so a picker starts on the
-	// primary's result and offers a reset. The anchor is a representative base of
-	// the group - the picker shows it modulated, and a pick writes the modulation
-	// that maps it onto the chosen color. (Text idle bases are grey, so their
-	// pickers mostly shift the colored hover/selected states - see the hint.)
+	// Each surface carries its own color, applied to its group's bases in place of
+	// the primary; unset means "follow primary". (Text idle bases are grey, so
+	// their pickers mostly shift the colored hover/selected states - see the hint.)
 	interface Surface {
 		label: string;
 		group: ColorGroup;
