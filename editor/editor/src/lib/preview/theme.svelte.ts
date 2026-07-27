@@ -40,6 +40,8 @@ export const theme = $state({
 	// Text colors work the same way, over the dialogue/button text styles.
 	buttonTextColor: NO_MODULATION(),
 	dialogueTextColor: NO_MODULATION(),
+	// The calendar's own surface color, over its themed panel/cell bases.
+	calendarColor: NO_MODULATION(),
 	buttonRounding: 3,
 	frameRounding: 3,
 	dialogueRounding: 10,
@@ -51,6 +53,8 @@ export const theme = $state({
 	menuFont: "Riffic" as string,
 	optionFont: "Halogen" as string,
 	musicFont: "M+ 2p" as string,
+	// Calendar text; defaults to the main font (the stock calendar look).
+	calendarFont: "Nunito" as string,
 	// MAS "UI: Night Mode": swaps UI elements to their dark variants
 	darkMode: false,
 	// Derived colors pinned to an absolute "#rrggbb", keyed by overrideKey().

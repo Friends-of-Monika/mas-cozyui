@@ -112,6 +112,10 @@
 	font-family: var(--preview-music-font, "M+ 2p"), "Nunito", sans-serif;
 }
 
+.preview-calendar-font {
+	font-family: var(--preview-calendar-font, "Nunito"), sans-serif;
+}
+
 /* Dark theme for svelte-awesome-color-picker popups (defaults are light-on-light
    against the Skeleton dark surface) */
 .color-picker {

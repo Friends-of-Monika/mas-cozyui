@@ -2,11 +2,13 @@
      Displayable drawn over a translucent black mask (Solid #000000B2) covering
      the room: bg panel, month/year selectors with arrow buttons, a weekday
      header row and a 6x7 day grid. All of the SVG surfaces are CozyUI theme
-     replacers (mod_assets/calendar/*), and every label is drawn in gui.default_font
-     - i.e. the theme's main font - so the whole screen follows the theme's main
-     font. Colors are baked into the SVGs (not per-theme) plus MAS's own hard
-     coded text colors: a white title (black in night mode) and black number/label
-     text. In night mode MAS swaps to the -n asset variants. The close button's
+     replacers (mod_assets/calendar/*) whose fills follow the theme (its own
+     Calendar color, or the primary) and whose borders follow the secondary.
+     Every label is drawn in the theme's calendar font (CUI_CALENDAR_FONT, applied
+     in the game by calendar.rpy swapping gui.default_font while MASCalendar builds
+     its Text displayables). MAS's own hardcoded text colors remain: a white title
+     (black in night mode) and black number/label text. In night mode MAS swaps to
+     the -n asset variants (also themed). The close button's
      "X" glyph is blanked by CozyUI (calendar.rpy), so only the SVG shows. Layout
      coordinates mirror MASCalendar's blit offsets on the 1280x720 stage. -->
 <script lang="ts">
@@ -112,7 +114,7 @@
 		style:top="115px"
 		style:width="{INTERNAL_W}px"
 	>
-		<OutlineText size={33} color={titleColor} font="main">Calendar</OutlineText>
+		<OutlineText size={33} color={titleColor} font="calendar">Calendar</OutlineText>
 	</div>
 
 	<!-- Month selector: < July > centered in a 250px band at INIT_X+100 -->
@@ -124,7 +126,7 @@
 		style:top="{LABEL_Y}px"
 		style:width="250px"
 	>
-		<OutlineText size={21} color={ink} font="main">July</OutlineText>
+		<OutlineText size={21} color={ink} font="calendar">July</OutlineText>
 	</div>
 
 	<!-- Year selector: < 2026 > centered in a 250px band at the internal right -->
@@ -136,7 +138,7 @@
 		style:top="{LABEL_Y}px"
 		style:width="250px"
 	>
-		<OutlineText size={21} color={ink} font="main">2026</OutlineText>
+		<OutlineText size={21} color={ink} font="calendar">2026</OutlineText>
 	</div>
 
 	<!-- Weekday header row -->
@@ -144,7 +146,7 @@
 		<div class="absolute" style:left="{INIT_X + i * DAY_W}px" style:top="{NAME_ROW_Y}px">
 			<RealAsset path="{cal}/calendar_day_name_bg{n}.svg" width={DAY_W} height={NAME_H} />
 			<div class="absolute inset-0 flex items-center justify-center">
-				<OutlineText size={17} color={ink} font="main">{name}</OutlineText>
+				<OutlineText size={17} color={ink} font="calendar">{name}</OutlineText>
 			</div>
 		</div>
 	{/each}
@@ -160,7 +162,7 @@
 				<RealAsset path="{cal}/{cellBg[cell.kind]}{n}.svg" width={DAY_W} height={DAY_H} />
 				<!-- day number, right-aligned near the top (pos 121,5 xanchor 1.0) -->
 				<div class="absolute" style:right="7px" style:top="5px">
-					<OutlineText size={13} color={ink} font="main">{cell.n}</OutlineText>
+					<OutlineText size={13} color={ink} font="calendar">{cell.n}</OutlineText>
 				</div>
 			</div>
 		{/each}

@@ -7,15 +7,25 @@
 #
 ################################################################################
 
-# MASFIX: monkey patch for calendar close button
+# MASFIX: monkey patch for calendar close button + theme-controlled font
 init 999 python in cozy_ui.calendar:
+    import store
     from renpy.text.text import Text
-    from store import MASCalendar
+    from store import MASCalendar, gui
 
     old_init = MASCalendar.__init__
 
     def monkey_init(self, *args, **kwargs):
-        old_init(self, *args, **kwargs)
+        # MASCalendar builds all of its Text displayables (title, month/year,
+        # day names and numbers) with font=gui.default_font. Swap in the theme's
+        # calendar font for the duration of construction so they follow the theme
+        # without having to rebuild each Text afterwards, then restore it.
+        original_font = gui.default_font
+        gui.default_font = store.cozy_ui.calendar.font
+        try:
+            old_init(self, *args, **kwargs)
+        finally:
+            gui.default_font = original_font
 
         empty_text = Text("")
 

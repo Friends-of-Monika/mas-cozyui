@@ -20,7 +20,7 @@ export interface ColorModulation {
  * stays separately addressable: the button idle fill and the menu panel fill
  * are both (255, 230, 244), but they are distinct colors to the user.
  */
-export const colorGroups = ["dialogue", "dialogueText", "button", "buttonText", "menu"] as const;
+export const colorGroups = ["dialogue", "dialogueText", "button", "buttonText", "menu", "calendar"] as const;
 export type ColorGroup = (typeof colorGroups)[number];
 
 /**
@@ -38,6 +38,7 @@ export function groupForPath(path: string): ColorGroup | null {
 	// which sit loose in mod_assets/ but are button surfaces all the same.
 	if (/\bbuttons?\/|\b(hkb|island)_/.test(path)) return "button";
 	if (path.includes("menu_bg") || path.includes("game_menu")) return "menu";
+	if (path.includes("calendar")) return "calendar";
 	return null;
 }
 
@@ -65,6 +66,7 @@ export interface ThemeModulations {
 	dialogueColor?: ColorModulation;
 	buttonTextColor?: ColorModulation;
 	dialogueTextColor?: ColorModulation;
+	calendarColor?: ColorModulation;
 }
 
 // The per-surface color each group defers to when it carries one of its own.
@@ -72,7 +74,8 @@ const groupModulation: Record<string, keyof ThemeModulations> = {
 	button: "buttonColor",
 	dialogue: "dialogueColor",
 	buttonText: "buttonTextColor",
-	dialogueText: "dialogueTextColor"
+	dialogueText: "dialogueTextColor",
+	calendar: "calendarColor"
 };
 
 /** Picks the modulation that governs one base, given its channel and group. */

@@ -6,7 +6,7 @@
  * To add a format change: bump CONFIG_VERSION and add the matching step to
  * `migrations`, keyed by the version it upgrades *from*.
  */
-export const CONFIG_VERSION = 4;
+export const CONFIG_VERSION = 5;
 
 /** A config as read from disk, before it is trusted to match ThemeConfig. */
 export type RawConfig = Record<string, unknown>;
@@ -26,7 +26,17 @@ const migrations: Record<number, (config: RawConfig) => RawConfig> = {
 	}),
 	// v3 -> v4: the music selector's font is now theme-controlled. v3 projects
 	// used the fixed mplus-2p font, so default to it.
-	3: (config) => ({ ...config, music_font: "mod_assets/font/mplus-2p-regular.ttf" })
+	3: (config) => ({ ...config, music_font: "mod_assets/font/mplus-2p-regular.ttf" }),
+	// v4 -> v5: the calendar's colors and font are now theme-controlled. v4
+	// projects rendered it in the primary color and the main font, so follow the
+	// primary (all-null) and reuse the project's main font.
+	4: (config) => ({
+		...config,
+		calendar_color: { h: null, s: null, l: null },
+		calendar_font:
+			((config.main_font as { regular?: string } | undefined)?.regular) ??
+			"%SUBMOD_DIR%/fonts/Nunito-SemiBold.ttf"
+	})
 };
 
 /** Reads the declared format version, defaulting to the pre-versioning v1. */

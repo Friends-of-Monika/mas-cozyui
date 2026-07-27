@@ -27,6 +27,7 @@ export interface MacroParams extends ThemeModulations {
 	dialogueColor?: ColorModulation;
 	buttonTextColor?: ColorModulation;
 	dialogueTextColor?: ColorModulation;
+	calendarColor?: ColorModulation;
 	/**
 	 * Derived colors pinned to an absolute value, keyed by overrideKey(). Set
 	 * only in the "custom" palette mode; anything absent modulates as usual.
@@ -47,6 +48,7 @@ export interface MacroParams extends ThemeModulations {
 	menuFont?: string;
 	optionFont?: string;
 	musicFont?: string;
+	calendarFont?: string;
 	dialogueVerticalOffset?: number;
 	dialogueLineSpacing?: number;
 	buttonHeightAdjustment?: number;
@@ -112,6 +114,7 @@ export function applyMacros(text: string, p: MacroParams, group: ColorGroup | nu
 		"CUI_MENU_FONT()": p.menuFont,
 		"CUI_OPTION_FONT()": p.optionFont,
 		"CUI_MUSIC_FONT()": p.musicFont,
+		"CUI_CALENDAR_FONT()": p.calendarFont,
 		"CUI_DLG_VERT_OFFSET()": p.dialogueVerticalOffset,
 		"CUI_DLG_LINE_SPACING()": p.dialogueLineSpacing,
 		"CUI_BTN_HEIGHT_ADJUSTMENT()": p.buttonHeightAdjustment,

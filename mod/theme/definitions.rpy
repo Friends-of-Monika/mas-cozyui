@@ -61,6 +61,17 @@ define cozy_ui.music_menu_button_text.font                       = FontGroup().a
     "gui/font/Aller_Rg.ttf"                      , 0x0000, 0xffff)      # Fallback
 define cozy_ui.music_menu_button_text.font_kerning               = 0.0
 define cozy_ui.music_menu_button_text.font_size                  = 24
+
+# The calendar's day/month names can be localized, so the chosen font only owns
+# the Latin range; CJK and the rest fall back like cozy_ui.common.font. Applied
+# in calendar.rpy, which swaps gui.default_font to this while MASCalendar builds
+# its title, month/year, day-name and day-number Text displayables.
+define cozy_ui.calendar.font                                     = FontGroup().add(
+    cozy_ui.expand_path("CUI_CALENDAR_FONT()")   , 0x0020, 0x00ff).add( # Chosen font (Latin)
+    "mod_assets/font/SourceHanSansK-Regular.otf" , 0xac00, 0xd7a3).add( # Korean
+    "mod_assets/font/SourceHanSansSC-Regular.otf", 0x4e00, 0x9faf).add( # Simplified chinese
+    "mod_assets/font/mplus-2p-regular.ttf"       , 0x3000, 0x4dff).add( # Japanese and others
+    "gui/font/Aller_Rg.ttf"                      , 0x0000, 0xffff)      # Fallback
 define cozy_ui.music_menu_button_text.light.color                = "CUI_SCD_COLOR(255, 255, 255)"
 define cozy_ui.music_menu_button_text.light.idle_outlines        = [(3, "CUI_SCD_COLOR(187, 85, 153)", 0, 0), (1, "CUI_SCD_COLOR(187, 85, 153)", 1, 1)]
 define cozy_ui.music_menu_button_text.light.hover_outlines       = [(3, "CUI_SCD_COLOR(255, 170, 204)", 0, 0), (1, "CUI_SCD_COLOR(255, 170, 204)", 1, 1)]

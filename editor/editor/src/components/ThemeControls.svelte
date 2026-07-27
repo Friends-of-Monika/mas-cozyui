@@ -66,6 +66,11 @@
 					mod: () => theme.buttonTextColor
 				}
 			]
+		},
+		{
+			section: "Calendar",
+			hint: "The calendar panel, day cells and headers (borders follow the secondary color)",
+			items: [{ label: "Calendar color", group: "calendar", anchor: [255, 230, 244], mod: () => theme.calendarColor }]
 		}
 	];
 
@@ -281,6 +286,11 @@
 				<span>Music font</span>
 				<SelectMenu bind:value={theme.musicFont} options={fontOptions} />
 				<span class="text-xs opacity-60">Music selector song list</span>
+			</label>
+			<label class="label">
+				<span>Calendar font</span>
+				<SelectMenu bind:value={theme.calendarFont} options={fontOptions} />
+				<span class="text-xs opacity-60">Calendar title, dates and day names</span>
 			</label>
 		</div>
 	</details>
