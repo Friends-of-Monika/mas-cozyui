@@ -6,6 +6,7 @@ import {
 	modulate,
 	modulationFor,
 	overrideKey,
+	tint,
 	toHexByte
 } from "./colors";
 
@@ -82,11 +83,33 @@ function colorMacro(argStr: string, p: MacroParams, channel: ColorChannel, group
 }
 
 /**
+ * Like colorMacro but hue-only (see tint): the calendar's night art keeps its
+ * own mauve saturation/lightness and just follows the theme's hue, so a themed
+ * primary/secondary doesn't wash the mid-toned night panel to grey. Pins still
+ * win, keyed exactly as their day counterparts so a pinned color applies to both.
+ */
+function nightColorMacro(argStr: string, p: MacroParams, channel: ColorChannel, group: ColorGroup | null): string {
+	const parts = argStr.split(",").map((s) => parseInt(s.trim(), 10));
+	const [r, g, b, a] = parts;
+	const alpha = parts.length === 4 ? a : undefined;
+
+	const pinned = p.overrides?.[overrideKey(channel, group, r, g, b)];
+	if (pinned) return alpha === undefined ? pinned : pinned + toHexByte(alpha);
+
+	return tint(r, g, b, modulationFor(p, channel, group).h, alpha);
+}
+
+/**
  * Applies the CUI_* macros in a template string, returning the final text.
  * `group` is the template's surface group (see groupForPath): it scopes the
  * per-color overrides and selects the per-surface button/dialogue color.
  */
 export function applyMacros(text: string, p: MacroParams, group: ColorGroup | null = null): string {
+	// The calendar's night art tints (hue only) instead of modulating, so it keeps
+	// its mauve tone. Run before the generic color macros (distinct names, but be
+	// explicit about order).
+	text = text.replace(/CUI_CAL_NIGHT_PRM\(([^)]*)\)/g, (_m, a) => nightColorMacro(a, p, "prm", "calendar"));
+	text = text.replace(/CUI_CAL_NIGHT_SCD\(([^)]*)\)/g, (_m, a) => nightColorMacro(a, p, "scd", null));
 	text = text.replace(/CUI_PRM_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p, "prm", group));
 	// Secondary bases live in the ungrouped .rpy text styles (see scd()).
 	text = text.replace(/CUI_SCD_COLOR\(([^)]*)\)/g, (_m, a) => colorMacro(a, p, "scd", null));

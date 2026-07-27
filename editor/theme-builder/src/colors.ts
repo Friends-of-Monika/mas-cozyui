@@ -140,6 +140,30 @@ export function modulationFromColor(hex: string, anchor: [number, number, number
 }
 
 /**
+ * Hue-only recolor: replaces a base color's hue while keeping its own
+ * saturation and lightness. Used for the calendar's night art, whose bases are
+ * mid-toned (unlike the near-black night art elsewhere); a full modulate() would
+ * multiply their saturation down and wash them out to pale grey, so at night the
+ * calendar only follows the theme's hue and keeps its rich mauve tone. A null
+ * hue leaves the base untouched.
+ */
+export function tint(r: number, g: number, b: number, hue: number | null, a?: number): string {
+	let rgb: [number, number, number] = [r, g, b];
+	if (hue !== null) {
+		const conv = new Hsluv();
+		conv.rgb_r = r / 255;
+		conv.rgb_g = g / 255;
+		conv.rgb_b = b / 255;
+		conv.rgbToHsluv();
+		conv.hsluv_h = clamp(hue, 0, 360);
+		conv.hsluvToRgb();
+		rgb = [conv.rgb_r * 255, conv.rgb_g * 255, conv.rgb_b * 255];
+	}
+	const hex = `#${toHexByte(rgb[0])}${toHexByte(rgb[1])}${toHexByte(rgb[2])}`;
+	return a === undefined ? hex : hex + toHexByte(a);
+}
+
+/**
  * Applies a color modulation to a base RGB color (0-255 components) and
  * returns a CSS hex color. Alpha (0-255), when given, is appended as-is.
  */

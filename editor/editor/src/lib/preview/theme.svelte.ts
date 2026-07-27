@@ -5,6 +5,7 @@ import {
 	modulate,
 	modulationFor,
 	overrideKey,
+	tint,
 	toHexByte
 } from "./colors";
 
@@ -92,4 +93,26 @@ export function prm(r: number, g: number, b: number, a?: number): string {
  */
 export function scd(r: number, g: number, b: number, a?: number): string {
 	return derive("scd", null, r, g, b, a);
+}
+
+/**
+ * The hue-only night variant of derive (see tint): the pinned override when set,
+ * otherwise the base tinted to the governing modulation's hue. Used to preview
+ * the calendar's night colors, which the CUI_CAL_NIGHT_* macros tint rather than
+ * modulate.
+ */
+function deriveNight(channel: ColorChannel, group: ColorGroup | null, r: number, g: number, b: number, a?: number): string {
+	const pinned = theme.overrides[overrideKey(channel, group, r, g, b)];
+	if (pinned) return a === undefined ? pinned : pinned + toHexByte(a);
+	return tint(r, g, b, modulationFor(theme, channel, group).h, a);
+}
+
+/** CUI_CAL_NIGHT_PRM equivalent (hue-only, calendar group). */
+export function grpNight(group: ColorGroup | null, r: number, g: number, b: number, a?: number): string {
+	return deriveNight("prm", group, r, g, b, a);
+}
+
+/** CUI_CAL_NIGHT_SCD equivalent (hue-only, ungrouped secondary). */
+export function scdNight(r: number, g: number, b: number, a?: number): string {
+	return deriveNight("scd", null, r, g, b, a);
 }

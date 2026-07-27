@@ -15,10 +15,12 @@
 	import {
 		NO_MODULATION,
 		grp,
+		grpNight,
 		fonts,
 		patternShapes,
 		prm,
 		scd,
+		scdNight,
 		theme
 	} from "#lib/preview/theme.svelte";
 
@@ -100,9 +102,14 @@
 	// variants of a surface are pinned independently.
 	const slotBase = (slot: ColorSlot) => (theme.darkMode ? slot.dark : slot.light);
 	const slotKey = (slot: ColorSlot) => overrideKey(slot.channel, slot.group, ...slotBase(slot));
-	// What the surface currently renders as: the pinned color, or the modulated one.
-	const slotHex = (slot: ColorSlot) =>
-		slot.channel === "prm" ? grp(slot.group, ...slotBase(slot)) : scd(...slotBase(slot));
+	// What the surface currently renders as: the pinned color, or the derived one.
+	// The calendar's night art is tinted (hue only), not modulated, so its night
+	// slots preview through the tint path to match what the SVG actually renders.
+	const slotHex = (slot: ColorSlot) => {
+		const night = theme.darkMode && slot.section === "Calendar";
+		if (slot.channel === "prm") return night ? grpNight(slot.group, ...slotBase(slot)) : grp(slot.group, ...slotBase(slot));
+		return night ? scdNight(...slotBase(slot)) : scd(...slotBase(slot));
+	};
 
 	// Sections in slot order, so the list can be rendered with headings.
 	const slotSections = $derived([...new Set(colorSlots.map((s) => s.section))]);
