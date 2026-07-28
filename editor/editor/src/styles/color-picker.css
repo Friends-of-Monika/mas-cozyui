@@ -1,0 +1,9 @@
+/* Dark theme for svelte-awesome-color-picker popups (defaults are light-on-light
+   against the Skeleton dark surface). */
+.color-picker {
+	--cp-bg-color: var(--color-surface-900);
+	--cp-border-color: var(--color-surface-600);
+	--cp-text-color: var(--color-surface-50);
+	--cp-input-color: var(--color-surface-700);
+	--cp-button-hover-color: var(--color-surface-600);
+}
