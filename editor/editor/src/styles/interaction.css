@@ -1,5 +1,5 @@
-/* Previews are mock UI, not documents: block text selection and image drag
-   app-wide, keeping selection only where the user types. */
+/* Previews are mock UI, not documents: block text selection app-wide, keeping
+   it only where the user types. (Image drag is suppressed in App.svelte.) */
 :root {
 	-webkit-user-select: none;
 	user-select: none;
@@ -10,8 +10,4 @@ textarea,
 [contenteditable]:not([contenteditable="false"]) {
 	-webkit-user-select: text;
 	user-select: text;
-}
-
-img {
-	-webkit-user-drag: none;
 }

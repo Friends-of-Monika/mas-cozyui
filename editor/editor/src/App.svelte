@@ -14,6 +14,10 @@
 	import { ui } from "#lib/preview/ui.svelte";
 </script>
 
+<!-- Previews are a mock UI: suppress native image/link dragging everywhere
+     ({-webkit-user-drag} only covers Blink, so this catches Firefox too). -->
+<svelte:window ondragstart={(e) => e.preventDefault()} />
+
 <main class="container mx-auto flex h-screen flex-col gap-4 overflow-hidden p-8">
 	<h1 class="h1">CozyUI Theme Editor</h1>
 	<AppMenu />
