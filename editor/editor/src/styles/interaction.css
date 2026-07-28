@@ -1,0 +1,17 @@
+/* Previews are mock UI, not documents: block text selection and image drag
+   app-wide, keeping selection only where the user types. */
+:root {
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+input,
+textarea,
+[contenteditable]:not([contenteditable="false"]) {
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+img {
+	-webkit-user-drag: none;
+}

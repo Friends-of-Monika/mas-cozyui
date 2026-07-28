@@ -1,0 +1,80 @@
+/* Preview fonts. Bold files serve {b} markup; regular files register
+   as normal weight so preview text can avoid numeric weights that would
+   fake-bold Asap (no 600 face). */
+@font-face {
+	font-family: "Riffic";
+	src: url("/fonts/RifficFree-Bold.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Halogen";
+	src: url("/fonts/Halogen.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Aller";
+	src: url("/fonts/Aller_Rg.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Nunito";
+	src: url("/fonts/Nunito-SemiBold.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Nunito";
+	src: url("/fonts/Nunito-SemiBoldItalic.ttf") format("truetype");
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "Nunito";
+	src: url("/fonts/Nunito-Bold.ttf") format("truetype");
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Asap";
+	src: url("/fonts/Asap-Medium.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Asap";
+	src: url("/fonts/Asap-MediumItalic.ttf") format("truetype");
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "Asap";
+	src: url("/fonts/Asap-Bold.ttf") format("truetype");
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Asap";
+	src: url("/fonts/Asap-BoldItalic.ttf") format("truetype");
+	font-weight: bold;
+	font-style: italic;
+}
+
+/* mplus-2p: the base-game music-list font (broad glyph coverage). */
+@font-face {
+	font-family: "M+ 2p";
+	src: url("/fonts/mplus-2p-regular.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}

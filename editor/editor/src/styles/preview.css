@@ -1,0 +1,23 @@
+/* Families come from CSS variables set on the preview stage root by the live
+   theme; fallbacks match the defaults. */
+.preview-font {
+	font-family: var(--preview-main-font, "Nunito"), sans-serif;
+	line-height: 1.25;
+}
+
+.preview-name-font {
+	font-family: var(--preview-menu-font, "Riffic"), "Nunito", sans-serif;
+}
+
+.preview-option-font {
+	font-family: var(--preview-option-font, "Halogen"), "Nunito", sans-serif;
+	line-height: 1.25;
+}
+
+.preview-music-font {
+	font-family: var(--preview-music-font, "M+ 2p"), "Nunito", sans-serif;
+}
+
+.preview-calendar-font {
+	font-family: var(--preview-calendar-font, "Nunito"), sans-serif;
+}
