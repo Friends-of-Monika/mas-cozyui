@@ -10,7 +10,7 @@
 ################################################################################
 # Init
 ################################################################################
-init python:
+init 999 python:
     config.font_replacement_map[cozy_ui.common.font_regular, False, True] = (cozy_ui.common.font_italic, False, False)
     config.font_replacement_map[cozy_ui.common.font_regular, True, False] = (cozy_ui.common.font_bold, False, False)
     config.font_replacement_map[cozy_ui.common.font_regular, True, True] = (cozy_ui.common.font_bold_italic, False, False)
