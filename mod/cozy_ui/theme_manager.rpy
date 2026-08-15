@@ -44,7 +44,15 @@ init -10 python in cozy_ui:
             self._remove_current_theme()
 
         def get_current_theme(self):
-            return self._themes[self.settings["selected_theme_index"]]
+            # A theme that was removed (or that failed to load) leaves a stale
+            # index behind in settings.json.
+            index = self.settings["selected_theme_index"]
+
+            if index >= len(self._themes):
+                index = 0
+                self.settings["selected_theme_index"] = index
+
+            return self._themes[index]
 
         def get_current_theme_name(self):
             return self.get_current_theme()["name"]
@@ -109,7 +117,19 @@ init -10 python in cozy_ui:
             for paths in variants.values():
                 # Read the metadata/preview from whichever variant is present.
                 info_source = paths["path"] or paths["hidpi_path"]
-                theme_info = self._get_theme_info(info_source, paths["path"], paths["hidpi_path"])
+
+                try:
+                    theme_info = self._get_theme_info(info_source, paths["path"], paths["hidpi_path"])
+                except Exception as e:
+                    # Themes are user-supplied files; a broken one must not take
+                    # the submod (and with it the whole game) down at init time.
+                    # Name the file in the log so it can be found and removed.
+                    self._log(
+                        "Skipping broken theme file '%s': %s" % (os.path.basename(info_source), e),
+                        level = "error"
+                    )
+                    continue
+
                 self._themes.append(theme_info)
 
             # FIXME: there should be a better way to put the Default theme above the others
@@ -125,6 +145,21 @@ init -10 python in cozy_ui:
 
             self._themes.sort(key = comparator)
 
+        # A theme archive is expected to be flat, with info.json at its root, but
+        # one that was unpacked and re-zipped (Windows Explorer does this) nests
+        # everything in a folder, so find info.json and take its folder as root.
+        def _get_theme_root(self, theme_arc):
+            candidates = [
+                file_path for file_path in theme_arc.namelist()
+                if file_path.rsplit("/", 1)[-1] == "info.json"
+            ]
+
+            if not candidates:
+                raise ValueError("archive contains no info.json, is it a theme?")
+
+            root = min(candidates, key = lambda file_path: file_path.count("/"))
+            return root[:-len("info.json")]
+
         def _get_theme_info(self, info_source, path, hidpi_path):
             result = {
                 "path": path,
@@ -132,18 +167,16 @@ init -10 python in cozy_ui:
             }
 
             with ZipFile(info_source, "r") as theme_arc:
-                with theme_arc.open("info.json", "r") as info_json:
-                    result.update(json.load(info_json))
+                root = self._get_theme_root(theme_arc)
 
-                preview_path = theme_arc.extract("preview.png", _themes_dir)
+                with theme_arc.open(root + "info.json", "r") as info_json:
+                    result.update(json.load(info_json))
 
                 theme_preview_file_name = "%s_preview.png" % result["id"]
                 theme_preview_path = os.path.join(_themes_dir, theme_preview_file_name)
 
-                if os.path.exists(theme_preview_path):
-                    os.remove(theme_preview_path)
-
-                os.rename(preview_path, theme_preview_path)
+                with open(theme_preview_path, "wb") as preview_file:
+                    preview_file.write(theme_arc.read(root + "preview.png"))
 
                 result["preview"] = "%s/themes/%s" % (_submod_path, theme_preview_file_name)
 
@@ -169,15 +202,41 @@ init -10 python in cozy_ui:
                 theme_path = theme["path"] or theme["hidpi_path"]
 
             with ZipFile(theme_path, "r") as theme_arc:
+                root = self._get_theme_root(theme_arc)
+
                 for file_path in theme_arc.namelist():
-                    if os.path.basename(file_path) in ignored_files:
-                        self._log("Skipping %s..." % file_path)
+                    if file_path.endswith("/") or not file_path.startswith(root):
                         continue
 
-                    self._log("Installing %s..." % file_path)
-                    theme_arc.extract(file_path, _active_dir)
+                    # Install relative to the archive root, so a nested theme
+                    # lands in active/ directly instead of active/<folder>/.
+                    rel_path = file_path[len(root):]
+
+                    if os.path.basename(rel_path) in ignored_files:
+                        self._log("Skipping %s..." % rel_path)
+                        continue
+
+                    self._log("Installing %s..." % rel_path)
+                    self._extract(theme_arc, file_path, rel_path)
 
             self._log("Theme installed.")
+
+        def _extract(self, theme_arc, member, rel_path):
+            parts = rel_path.split("/")
+
+            # Themes come from the internet; never let one write outside active/.
+            if os.path.isabs(rel_path) or ".." in parts:
+                self._log("Refusing to extract %s..." % rel_path, level = "warning")
+                return
+
+            dest_path = os.path.join(_active_dir, *parts)
+            dest_dir = os.path.dirname(dest_path)
+
+            if not os.path.isdir(dest_dir):
+                os.makedirs(dest_dir)
+
+            with open(dest_path, "wb") as dest_file:
+                dest_file.write(theme_arc.read(member))
 
         def _remove_current_theme(self):
             if os.path.isdir(_active_dir):
