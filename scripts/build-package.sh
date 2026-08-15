@@ -26,6 +26,10 @@ PrefixPath="Submods"
 # Format string for the file name of your submod .zip file.
 ZipFileFormat="%s-%s.zip"
 
+# Whether to allow packaging when no built theme archives are available. Can be
+# overridden from the environment: AllowNoThemes=true ./build-package.sh
+AllowNoThemes="${AllowNoThemes:-false}"
+
 # Various folders in the project layout, only change if you moved any of the
 # folders listed here anywhere or renamed them.
 ProjectScriptsDir="scripts"
@@ -118,9 +122,9 @@ EditorDir="$Dir/../editor"
 if ! ls "$ThemesDir/"*.zip >/dev/null 2>&1; then
     if command -v yarn >/dev/null 2>&1; then
         echo "No built theme archives found; running 'yarn build:themes' in editor/..."
-        (cd "$EditorDir" && yarn build:themes) || echo "WARNING: theme build failed."
+        (cd "$EditorDir" && yarn build:themes) || echo "Theme build failed."
     else
-        echo "WARNING: yarn not found, cannot build themes automatically."
+        echo "yarn not found, cannot build themes automatically."
     fi
 fi
 
@@ -128,8 +132,16 @@ if ls "$ThemesDir/"*.zip >/dev/null 2>&1; then
     mkdir -p "$Mod/themes"
     cp "$ThemesDir/"*.zip "$Mod/themes"
 else
-    echo "WARNING: no built theme archives in $ProjectBuildDir/themes;"
-    echo "run 'yarn build:themes' in editor/ first. Packaging without themes."
+    if [ "$AllowNoThemes" != "true" ]; then
+        echo "Cannot build submod! No theme archives in $ProjectBuildDir/themes."
+        echo "Run 'yarn build:themes' in editor/ first (it needs Chrome; point"
+        echo "PUPPETEER_EXECUTABLE_PATH at a local one if the bundled one is missing)."
+        echo "To package anyway, re-run with AllowNoThemes=true."
+        rm -rf "$Temp"
+        exit 2
+    fi
+
+    echo "WARNING: packaging without themes (AllowNoThemes=true)."
 fi
 
 # Remove .gitkeep and README.md

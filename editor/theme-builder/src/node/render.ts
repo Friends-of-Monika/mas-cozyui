@@ -1,6 +1,36 @@
+import { existsSync } from "node:fs";
 import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import { svgSize } from "../svg";
+
+// Chrome builds puppeteer downloads into its own cache are easy to end up
+// without (a half-extracted download leaves the folder in place but without the
+// binary, and the installer is picky about the Node it runs on). Any recent
+// Chrome renders these SVGs identically, so fall back to a system one.
+const SYSTEM_CHROME_PATHS = [
+	"/usr/bin/chromium",
+	"/usr/bin/chromium-browser",
+	"/usr/bin/google-chrome-stable",
+	"/usr/bin/google-chrome",
+	"/opt/google/chrome/chrome",
+	"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+	"/Applications/Chromium.app/Contents/MacOS/Chromium"
+];
+
+function resolveExecutablePath(): string | undefined {
+	const configured = process.env.PUPPETEER_EXECUTABLE_PATH;
+	if (configured) return configured;
+
+	// Prefer puppeteer's own Chrome when it is actually installed.
+	try {
+		const bundled = puppeteer.executablePath();
+		if (bundled && existsSync(bundled)) return undefined;
+	} catch {
+		// No browser configured at all; fall through to the system ones.
+	}
+
+	return SYSTEM_CHROME_PATHS.find((path) => existsSync(path));
+}
 
 /**
  * SVG -> PNG rasterizer backed by headless Chrome, so the built theme assets go
@@ -14,7 +44,10 @@ export class Rasterizer {
 	) {}
 
 	static async launch(): Promise<Rasterizer> {
-		const browser = await puppeteer.launch({ headless: true, protocolTimeout: 60000 });
+		const executablePath = resolveExecutablePath();
+		if (executablePath) console.log(`BUILD: Using browser at ${executablePath}`);
+
+		const browser = await puppeteer.launch({ headless: true, protocolTimeout: 60000, executablePath });
 		const page = await browser.newPage();
 		// tsx/esbuild compiles with keepNames, wrapping functions in a `__name(fn,
 		// name)` helper. page.evaluate serializes our (compiled) render function, so
