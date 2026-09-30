@@ -40,8 +40,114 @@ init -10 python in cozy_ui:
             self._fetch_themes()
             self.load_settings()
 
+        def _reload_definitions(self):
+            """Re-executes definitions.rpy in the global store to update all theme variables and colors."""
+            defs_path = os.path.join(_active_dir, "definitions.rpy")
+            if not os.path.isfile(defs_path):
+                return
+            try:
+                with open(defs_path, "r") as f:
+                    code = []
+                    for line in f:
+                        stripped = line.strip()
+                        if stripped.startswith("define "):
+                            code.append(line.replace("define ", "", 1))
+                        else:
+                            code.append(line)
+                exec("".join(code), store.__dict__)
+            except Exception as e:
+                self._log("Definitions reload error: %s" % e, level = "warning")
+
+        def _reload_styles(self):
+            """Parses and re-applies style properties from styles.rpy directly to store.style objects."""
+            import re
+            styles_path = os.path.join(_active_dir, "styles.rpy")
+            if not os.path.isfile(styles_path):
+                return
+            try:
+                current_style = None
+                with open(styles_path, "r") as f:
+                    for line in f:
+                        stripped = line.strip()
+                        if not stripped or stripped.startswith("#"):
+                            continue
+
+                        if stripped.startswith("define "):
+                            try:
+                                exec(stripped.replace("define ", "", 1), store.__dict__)
+                            except Exception:
+                                pass
+                            continue
+
+                        m = re.match(r"^init \d+ style (\w+):", stripped)
+                        if m:
+                            current_style = getattr(store.style, m.group(1), None)
+                            continue
+
+                        if current_style is not None and line.startswith("    ") and not line.startswith("        "):
+                            parts = stripped.split(None, 1)
+                            if len(parts) == 2:
+                                prop, expr = parts
+                                try:
+                                    val = eval(expr, store.__dict__)
+                                    setattr(current_style, prop, val)
+                                except Exception:
+                                    pass
+            except Exception as e:
+                self._log("Styles reload error: %s" % e, level = "warning")
+
+        def reload_theme(self):
+            """
+            Hot-reloads the current theme assets in memory:
+            1. Updates in-memory replacer texture mapping.
+            2. Re-executes definitions.rpy to update all cozy_ui.* variables (colors, fonts, outlines).
+            3. Re-applies all styles from styles.rpy directly to store.style.
+            4. Updates MASCalendar.DAY_NUMBER_COLOR.
+            5. Clears image surfaces, render caches, and rebuilds styles.
+            """
+            # 1. Reload texture replacers into memory
+            reload_func = globals().get("reload_replacers", getattr(store.cozy_ui, "reload_replacers", None))
+            if callable(reload_func):
+                try:
+                    reload_func()
+                except Exception as e:
+                    self._log("Texture reload error: %s" % e, level = "warning")
+
+            # 2. Re-execute definitions.rpy to update theme colors/variables in Python
+            self._reload_definitions()
+
+            # 3. Re-apply styles from styles.rpy into store.style
+            self._reload_styles()
+
+            # 4. Update calendar day color
+            try:
+                if hasattr(store, "MASCalendar") and hasattr(store.cozy_ui.calendar, "text_color"):
+                    store.MASCalendar.DAY_NUMBER_COLOR = store.cozy_ui.calendar.text_color
+            except Exception:
+                pass
+
+            # 5. Clear image & render caches and rebuild styles
+            try:
+                import renpy.display.im as im
+                im.cache.clear()
+            except Exception:
+                pass
+
+            try:
+                renpy.display.render.free_memory()
+            except Exception:
+                pass
+
+            try:
+                renpy.style.rebuild()
+            except Exception as e:
+                self._log("Style rebuild error: %s" % e, level = "warning")
+
+            self._log("Hot-swap reload complete.")
+
         def disable(self):
             self._remove_current_theme()
+            self.reload_theme()
 
         def get_current_theme(self):
             # A theme that was removed (or that failed to load) leaves a stale
@@ -80,6 +186,7 @@ init -10 python in cozy_ui:
         def install(self):
             self._remove_current_theme()
             self._install_theme(self.get_current_theme())
+            self.reload_theme()
 
         def load_settings(self):
             if not os.path.exists(_config_path):
