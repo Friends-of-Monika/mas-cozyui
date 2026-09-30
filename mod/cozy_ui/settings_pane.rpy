@@ -9,17 +9,32 @@
 
 default persistent.cozy_ui_show_preview = False
 
+init -1 python in cozy_ui:
+    def apply_current_theme():
+        theme_mgr.install()
+        theme_mgr.save_settings()
+        try:
+            renpy.notify(_("Theme applied."))
+        except Exception:
+            pass
+        renpy.restart_interaction()
+
+    def disable_current_theme():
+        theme_mgr.disable()
+        theme_mgr.save_settings()
+        try:
+            renpy.notify(_("Theme disabled."))
+        except Exception:
+            pass
+        renpy.restart_interaction()
+
 label cozy_ui_apply:
-    $ persistent.closed_self = True
-    $ cozy_ui.theme_mgr.install()
-    $ cozy_ui.theme_mgr.save_settings()
-    $ renpy.quit()
+    $ cozy_ui.apply_current_theme()
+    return
 
 label cozy_ui_disable:
-    $ persistent.closed_self = True
-    $ cozy_ui.theme_mgr.disable()
-    $ cozy_ui.theme_mgr.save_settings()
-    $ renpy.quit()
+    $ cozy_ui.disable_current_theme()
+    return
 
 label cozy_ui_glitch:
     show screen tear(20, 0.1, 0.1, 0, 40)
@@ -91,12 +106,12 @@ screen cozy_ui_settings_pane():
                         $ apply_glitched = renpy.random.random() < glitch_chance
                         $ apply_name = _("Apply") if not apply_glitched else glitchtext(10)
                         $ apply_width = 100 if not apply_glitched else 150
-                        $ apply_action = Show(screen = "dialog", message = _("Please restart the game."), ok_action = Jump("cozy_ui_apply"))
+                        $ apply_action = Function(cozy_ui.apply_current_theme)
 
                         $ disable_glitched = renpy.random.random() < glitch_chance
                         $ disable_name = _("Disable") if not disable_glitched else glitchtext(10)
                         $ disable_width = 100 if not disable_glitched else 150
-                        $ disable_action = Show(screen = "dialog", message = _("Please restart the game."), ok_action = Jump("cozy_ui_disable"))
+                        $ disable_action = Function(cozy_ui.disable_current_theme)
 
                         textbutton apply_name:
                             style "navigation_button"
