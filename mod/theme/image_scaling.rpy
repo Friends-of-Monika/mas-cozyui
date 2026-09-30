@@ -13,6 +13,11 @@ init -999 python in cozy_ui:
     from renpy.display.im import Image
     from renpy.display.transform import Transform
 
+    try:
+        basestring
+    except NameError:
+        basestring = str
+
     # The wall calendar button. MAS picks its idle art from the room's time-of-day
     # filter and hardcodes a single (day) hover sprite, so at night the idle is
     # dark but the hover flips to the day art. Follow the UI's dark-mode state
@@ -58,6 +63,18 @@ init -999 python in cozy_ui:
                         _replacer_map[rel[:-4] + ".svg"] = replacer_path
                     elif rel.endswith(".svg"):
                         _replacer_map[rel[:-4] + ".png"] = replacer_path
+
+        # Evict all image surfaces and displayable render caches from RAM/VRAM
+        try:
+            import renpy.display.im as im
+            im.cache.clear()
+        except Exception:
+            pass
+
+        try:
+            renpy.display.render.free_memory()
+        except Exception:
+            pass
 
         try:
             renpy.display.image.image_cache.clear()
