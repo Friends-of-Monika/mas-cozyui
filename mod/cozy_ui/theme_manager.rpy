@@ -40,8 +40,29 @@ init -10 python in cozy_ui:
             self._fetch_themes()
             self.load_settings()
 
+        def reload_theme(self):
+            """
+            Hot-reloads the current theme assets in memory:
+            1. Updates in-memory replacer texture mapping and flushes Ren'Py image cache.
+            2. Rebuilds Ren'Py styles.
+            """
+            reload_func = globals().get("reload_replacers", getattr(store.cozy_ui, "reload_replacers", None))
+            if callable(reload_func):
+                try:
+                    reload_func()
+                except Exception as e:
+                    self._log("Texture reload error: %s" % e, level = "warning")
+
+            try:
+                renpy.style.rebuild()
+            except Exception as e:
+                self._log("Style rebuild error: %s" % e, level = "warning")
+
+            self._log("Hot-swap reload complete.")
+
         def disable(self):
             self._remove_current_theme()
+            self.reload_theme()
 
         def get_current_theme(self):
             # A theme that was removed (or that failed to load) leaves a stale
@@ -80,6 +101,7 @@ init -10 python in cozy_ui:
         def install(self):
             self._remove_current_theme()
             self._install_theme(self.get_current_theme())
+            self.reload_theme()
 
         def load_settings(self):
             if not os.path.exists(_config_path):
